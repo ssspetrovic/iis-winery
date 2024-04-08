@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import WinemakerRegistrationAPIView, ManagerRegistrationAPIView, WinemakerUpdateAPIView, ManagerUpdateAPIView, AdminUpdateAPIView, WorkersAPIView
+from .views import WinemakerRegistrationAPIView, ManagerRegistrationAPIView, WinemakerUpdateAPIView, ManagerUpdateAPIView, AdminUpdateAPIView, WorkersAPIView, ReportCreateAPIView, ReportListAPIView, ReportDetailAPIView, LogoutAPIView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -14,5 +14,9 @@ urlpatterns = [
     path('update/winemaker/<str:username>/', WinemakerUpdateAPIView.as_view(), name='winemaker-update'), 
     path('update/manager/<str:username>/', ManagerUpdateAPIView.as_view(), name='manager-update'),  
     path('update/admin/<str:username>/', AdminUpdateAPIView.as_view(), name='admin-update'),
-    path('api/workers/', WorkersAPIView.as_view(), name='all-workers')
+    path('api/workers/', WorkersAPIView.as_view(), name='all-workers'),
+    path('report/', ReportCreateAPIView.as_view(), name='report'),
+    path('report/list/', ReportListAPIView.as_view(), name='report_list'),
+    path('report/<int:pk>/reply/', ReportDetailAPIView.as_view(), name='reply'),
+    path('logout/', LogoutAPIView.as_view(), name='logout'),
 ]
