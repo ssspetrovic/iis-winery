@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from .models import User, Customer, Manager, Winemaker, Admin
 from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -27,6 +27,11 @@ class ManagerViewSet(viewsets.ModelViewSet):
     serializer_class = ManagerSerializer
 
 
+class IsAdminUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == User.Role.ADMIN
+
+
 class WorkersAPIView(APIView):
     def get(self, request, *args, **kwargs):
         winemakers = Winemaker.objects.all()
@@ -40,7 +45,7 @@ class WorkersAPIView(APIView):
 
 class WinemakerRegistrationAPIView(generics.CreateAPIView):
     serializer_class = WinemakerSerializer
-    permission_classes = [IsAuthenticated]  # Samo administratori mogu pristupiti ovom pogledu
+    permission_classes = [IsAdminUser]  # Samo administratori mogu pristupiti ovom pogledu
 
     def post(self, request, *args, **kwargs):
         if request.user.role == 'ADMIN':
@@ -51,7 +56,7 @@ class WinemakerRegistrationAPIView(generics.CreateAPIView):
 
 class ManagerRegistrationAPIView(generics.CreateAPIView):
     serializer_class = ManagerSerializer
-    permission_classes = [IsAuthenticated]  # Samo administratori mogu pristupiti ovom pogledu
+    permission_classes = [IsAdminUser]  # Samo administratori mogu pristupiti ovom pogledu
 
     def post(self, request, *args, **kwargs):
         if request.user.role == 'ADMIN':
