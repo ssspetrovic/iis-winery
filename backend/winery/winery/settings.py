@@ -156,3 +156,12 @@ CORS_ALLOW_CREDENTIALS = True
 DATA_DIR_PATH = os.path.join(BASE_DIR, 'data/')
 
 CITY_CSV_PATH = os.path.join(DATA_DIR_PATH, 'cities.csv')
+
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+]
