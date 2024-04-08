@@ -63,6 +63,11 @@ class WinemakerSerializer(serializers.HyperlinkedModelSerializer):
             city_instance, _ = City.objects.get_or_create(**city_data)
             instance.city = city_instance
         
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+            hashed_password = make_password(password)
+            validated_data['password'] = hashed_password
+        
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
@@ -89,6 +94,11 @@ class ManagerSerializer(serializers.HyperlinkedModelSerializer):
         return manager
 
     def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+            hashed_password = make_password(password)
+            validated_data['password'] = hashed_password
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
@@ -116,6 +126,11 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
         return admin
 
     def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+            hashed_password = make_password(password)
+            validated_data['password'] = hashed_password
+        
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
