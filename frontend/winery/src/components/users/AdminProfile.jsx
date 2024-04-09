@@ -11,6 +11,7 @@ import {
   Input,
 } from "reactstrap";
 import axios from "axios";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const AdminProfile = () => {
   const [username, setUsername] = useState("");
@@ -144,17 +145,23 @@ const AdminProfile = () => {
       <Row className="mt-4">
         <Col>
           <Link to="/view-users">
-            <Button color="info">View Users</Button>
+            <Button color="info">
+              <i className="fas fa-users"></i> View Users
+            </Button>
           </Link>
         </Col>
         <Col>
           <Link to="/view-reports">
-            <Button color="success">View Reports</Button>
+            <Button color="success">
+              <i className="fas fa-chart-bar"></i> View Reports
+            </Button>
           </Link>
         </Col>
         <Col>
           <Link to="/view-vehicles">
-            <Button color="warning">View Vehicles</Button>
+            <Button color="warning">
+              <i className="fas fa-truck"></i> View Vehicles
+            </Button>
           </Link>
         </Col>
       </Row>

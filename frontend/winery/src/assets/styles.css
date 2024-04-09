@@ -12,3 +12,17 @@
 .login-form {
     text-align: left;
 }
+
+.registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .registration-box {
+    padding: 20px;
+    background-color: #fff; /* Boja pozadine */
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Efekat senke */
+  }
+  

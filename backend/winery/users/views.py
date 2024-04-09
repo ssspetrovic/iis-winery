@@ -63,24 +63,17 @@ class WorkersAPIView(APIView):
 
 class WinemakerRegistrationAPIView(generics.CreateAPIView):
     serializer_class = WinemakerSerializer
-    permission_classes = [IsAdminUser]  # Samo administratori mogu pristupiti ovom pogledu
 
     def post(self, request, *args, **kwargs):
-        if request.user.role == 'ADMIN':
-            return super().post(request, *args, **kwargs)
-        else:
-            return Response({'message': 'Only administrators can register new winemakers'}, status=status.HTTP_403_FORBIDDEN)
+        return super().post(request, *args, **kwargs)
 
 
 class ManagerRegistrationAPIView(generics.CreateAPIView):
     serializer_class = ManagerSerializer
-    permission_classes = [IsAdminUser]  # Samo administratori mogu pristupiti ovom pogledu
 
     def post(self, request, *args, **kwargs):
-        if request.user.role == 'ADMIN':
-            return super().post(request, *args, **kwargs)
-        else:
-            return Response({'message': 'Only administrators can register new managers'}, status=status.HTTP_403_FORBIDDEN)
+        return super().post(request, *args, **kwargs)
+
 
 
 class WinemakerUpdateAPIView(generics.UpdateAPIView):
