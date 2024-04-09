@@ -36,10 +36,11 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      const accessToken = response?.data?.accessToken;
+      const accessToken = response?.data?.access;
       setAuth({ username, password, accessToken });
       setSuccess(true);
       setErrorMessage("");
+      console.log(response);
     } catch (error) {
       if (!error?.response) {
         setErrorMessage("No server response");
@@ -107,7 +108,7 @@ const Login = () => {
                     color: "red",
                   }}
                 >
-                  Passwords do not match.
+                  {errorMessage}
                 </div>
               </Row>
               <Row>
@@ -121,6 +122,9 @@ const Login = () => {
           <h2>Successully logged in as {username}</h2>
           <h4>
             Back to <Link onClick={handleClick}>login</Link>
+          </h4>
+          <h4>
+            Back to <Link to="/">home page</Link>
           </h4>
         </div>
       )}
