@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Customer, City, Winemaker, Manager, Admin
+from .models import User, Customer, City, Winemaker, Manager, Admin, Report
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -143,3 +143,10 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ['id', 'user_id', 'description', 'is_reviewed', 'reply']
+    
+

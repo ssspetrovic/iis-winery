@@ -57,3 +57,10 @@ class Admin(User):
     class Meta:
         verbose_name = 'Admin'
         verbose_name_plural = 'Admins'
+
+
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField()
+    is_reviewed = models.BooleanField(default=False)
+    reply = models.TextField(null=True, blank=True)

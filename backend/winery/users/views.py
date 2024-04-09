@@ -1,12 +1,23 @@
 from rest_framework import viewsets
-from .models import User, Customer, Manager, Winemaker, Admin
-from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer
+from .models import User, Customer, Manager, Winemaker, Admin, Report
+from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .permissions import IsAdminUser, IsCustomerOrManager
 
-# Create your views here.
+
+class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+            return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -25,11 +36,6 @@ class WinemakerViewSet(viewsets.ModelViewSet):
 class ManagerViewSet(viewsets.ModelViewSet):
     queryset = Manager.objects.all()    
     serializer_class = ManagerSerializer
-
-
-class IsAdminUser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == User.Role.ADMIN
 
 
 class WorkersAPIView(APIView):
@@ -105,3 +111,38 @@ class AdminUpdateAPIView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+    
+
+class ReportCreateAPIView(generics.CreateAPIView):
+    serializer_class = ReportSerializer
+    permission_classes = [IsAuthenticated, IsCustomerOrManager]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ReportListAPIView(generics.ListAPIView):
+    serializer_class = ReportSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == User.Role.ADMIN:
+            return Report.objects.filter(is_reviewed=False)
+        else:
+            return Report.objects.filter(user=user)
+
+
+class ReportDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        if user.role == User.Role.ADMIN:
+            if serializer.instance.is_reviewed:
+                return Response({"error": "This report has already been reviewed."}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(is_reviewed=True)
+        else:
+            return Response({"error": "Only administrators can update reports."}, status=status.HTTP_403_FORBIDDEN)
