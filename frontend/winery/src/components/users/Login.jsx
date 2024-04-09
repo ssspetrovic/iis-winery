@@ -41,21 +41,11 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      const accessToken = response?.data?.accessToken;
-
-      // Čuvanje korisničkog imena i uloge u localStorage
-      localStorage.setItem("username", username);
-      localStorage.setItem("role", userRole);
-
-      setAuth({ username, password, accessToken, role: userRole });
+      const accessToken = response?.data?.access;
+      setAuth({ username, password, accessToken });
       setSuccess(true);
       setErrorMessage("");
-
-      console.log(profileRedirects[userRole]);
-      const redirectPath = profileRedirects[userRole]
-        ? profileRedirects[userRole](username)
-        : "/login";
-      navigate(redirectPath);
+      console.log(response);
     } catch (error) {
       if (!error?.response) {
         setErrorMessage("No server response");
@@ -123,7 +113,7 @@ const Login = () => {
                     color: "red",
                   }}
                 >
-                  Passwords do not match.
+                  {errorMessage}
                 </div>
               </Row>
               <Row>
@@ -137,6 +127,9 @@ const Login = () => {
           <h2>Successully logged in as {username}</h2>
           <h4>
             Back to <Link onClick={handleClick}>login</Link>
+          </h4>
+          <h4>
+            Back to <Link to="/">home page</Link>
           </h4>
         </div>
       )}
