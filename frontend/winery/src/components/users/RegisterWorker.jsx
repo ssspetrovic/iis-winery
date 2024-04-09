@@ -58,7 +58,7 @@ function RegisterWorker() {
           phone_number,
         };
       } else if (role === "winemaker") {
-        url = "http://127.0.0.1:8000/api/winemaker/";
+        url = "http://127.0.0.1:8000/api/winemakers/";
         data = {
           username,
           password,
