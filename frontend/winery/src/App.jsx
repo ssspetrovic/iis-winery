@@ -9,6 +9,7 @@ import {
 import Register from "./components/users/Register";
 import Home from "./components/Home";
 import Login from "./components/users/Login";
+import AdminProfile from "./components/users/AdminProfile";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admin-profile/:username" element={<AdminProfile />} />
       </Routes>
     </Router>
   );

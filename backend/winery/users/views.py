@@ -6,7 +6,9 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .permissions import IsAdminUser, IsCustomerOrManager
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password
 
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -21,22 +23,32 @@ class LogoutAPIView(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
 
 class WinemakerViewSet(viewsets.ModelViewSet):
     queryset = Winemaker.objects.all()
     serializer_class = WinemakerSerializer
-
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
 
 class ManagerViewSet(viewsets.ModelViewSet):
     queryset = Manager.objects.all()    
     serializer_class = ManagerSerializer
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
 
+class AdminViewSet(viewsets.ModelViewSet):
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
+    lookup_field = 'username'
+    lookup_url_kwarg = 'username'
 
 class WorkersAPIView(APIView):
     def get(self, request, *args, **kwargs):
@@ -88,20 +100,6 @@ class WinemakerUpdateAPIView(generics.UpdateAPIView):
 class ManagerUpdateAPIView(generics.UpdateAPIView):
     queryset = Manager.objects.all()
     serializer_class = ManagerSerializer
-    lookup_field = 'username'  
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-    
-
-class AdminUpdateAPIView(generics.UpdateAPIView):
-    queryset = Admin.objects.all()
-    serializer_class = AdminSerializer
     lookup_field = 'username'  
 
     def update(self, request, *args, **kwargs):

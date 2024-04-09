@@ -140,9 +140,7 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Admin
         fields = ['username', 'password', 'first_name', 'last_name', 'email']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
+
 
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:

@@ -13,6 +13,7 @@ import "../../assets/styles.css";
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
+import profileRedirects from "./ProfileRedirect";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,16 +31,31 @@ const Login = () => {
       password: password,
     };
 
-    console.log(user);
     try {
+      // Dobijanje informacija o korisniku na osnovu korisničkog imena
+      const userResponse = await axios.get(`/users/${username}`);
+      const userRole = userResponse.data.role;
+
+      // Sada možemo nastaviti sa autentifikacijom
       const response = await axios.post("/token/", user, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       const accessToken = response?.data?.accessToken;
-      setAuth({ username, password, accessToken });
+
+      // Čuvanje korisničkog imena i uloge u localStorage
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", userRole);
+
+      setAuth({ username, password, accessToken, role: userRole });
       setSuccess(true);
       setErrorMessage("");
+
+      console.log(profileRedirects[userRole]);
+      const redirectPath = profileRedirects[userRole]
+        ? profileRedirects[userRole](username)
+        : "/login";
+      navigate(redirectPath);
     } catch (error) {
       if (!error?.response) {
         setErrorMessage("No server response");
