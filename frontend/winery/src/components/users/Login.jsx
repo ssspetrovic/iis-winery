@@ -41,11 +41,18 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", userRole);
+
       const accessToken = response?.data?.access;
       setAuth({ username, password, accessToken });
       setSuccess(true);
       setErrorMessage("");
-      console.log(response);
+
+      // Redirekcija na odgovarajući profil
+      const redirectPath = profileRedirects[userRole](username);
+      navigate(redirectPath);
     } catch (error) {
       if (!error?.response) {
         setErrorMessage("No server response");
