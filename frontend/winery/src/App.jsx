@@ -10,6 +10,9 @@ import Register from "./components/users/Register";
 import Home from "./components/Home";
 import Login from "./components/users/Login";
 import AdminProfile from "./components/users/AdminProfile";
+import ViewUsers from "./components/users/ViewUsers";
+import RegisterWorker from "./components/users/RegisterWorker";
+import UpdateWorker from "./components/users/UpdateWorker";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin-profile/:username" element={<AdminProfile />} />
+        <Route path="/view-users" element={<ViewUsers />} />
+        <Route path="/register-worker" element={<RegisterWorker />} />
+        <Route path="/update-worker" element={<UpdateWorker />} />
       </Routes>
     </Router>
   );
