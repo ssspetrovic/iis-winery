@@ -6,9 +6,9 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Register from "./components/users/Register";
+import Register from "./components/auth/Register";
 import Home from "./components/Home";
-import Login from "./components/users/Login";
+import Login from "./components/auth/Login";
 import AdminProfile from "./components/users/AdminProfile";
 import ViewUsers from "./components/users/ViewUsers";
 import RegisterWorker from "./components/users/RegisterWorker";

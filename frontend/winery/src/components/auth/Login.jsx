@@ -13,11 +13,12 @@ import "../../assets/styles.css";
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
-import profileRedirects from "./ProfileRedirect";
+import profileRedirects from "../users/ProfileRedirect";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);

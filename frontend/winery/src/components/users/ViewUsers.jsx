@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
-import Table from "../hooks/Table";
+import Table from "../util/Table";
 import { Link } from "react-router-dom";
 
 const ViewUsers = () => {
