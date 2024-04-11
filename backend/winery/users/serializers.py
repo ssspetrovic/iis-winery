@@ -144,6 +144,6 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ['id', 'user_id', 'description', 'is_reviewed', 'reply']
+        fields = ['id', 'user', 'description', 'is_reviewed', 'reply']
     
 

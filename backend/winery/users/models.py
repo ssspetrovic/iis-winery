@@ -60,7 +60,7 @@ class Admin(User):
 
 
 class Report(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
     description = models.TextField()
     is_reviewed = models.BooleanField(default=False)
     reply = models.TextField(null=True, blank=True)

@@ -16,6 +16,7 @@ import UpdateWorker from "./components/users/UpdateWorker";
 import VehiclesList from "./components/vehicles/VehiclesList";
 import AddVehicle from "./components/vehicles/AddVehicle";
 import UpdateVehicle from "./components/vehicles/UpdateVehicle";
+import ReportList from "./components/reports/ReportList";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/view-vehicles" element={<VehiclesList />} />
         <Route path="/add-vehicle" element={<AddVehicle />} />
         <Route path="/update-vehicle" element={<UpdateVehicle />} />
+        <Route path="/view-reports" element={<ReportList />} />
       </Routes>
     </Router>
   );

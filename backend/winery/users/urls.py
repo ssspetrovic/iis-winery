@@ -6,7 +6,6 @@ from .views import (
     ManagerUpdateAPIView, 
     WorkersAPIView, 
     ReportCreateAPIView, 
-    ReportListAPIView, 
     ReportDetailAPIView, 
     LogoutAPIView, 
 )
@@ -25,7 +24,6 @@ urlpatterns = [
     path('update/manager/<str:username>/', ManagerUpdateAPIView.as_view(), name='manager-update'),  
     path('api/workers/', WorkersAPIView.as_view(), name='all-workers'),
     path('report/', ReportCreateAPIView.as_view(), name='report'),
-    path('report/list/', ReportListAPIView.as_view(), name='report_list'),
     path('report/<int:pk>/reply/', ReportDetailAPIView.as_view(), name='reply'),
     path('logout/', LogoutAPIView.as_view(), name='logout'),
 ]

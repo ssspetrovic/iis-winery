@@ -2,12 +2,9 @@ from rest_framework import viewsets
 from .models import User, Customer, Manager, Winemaker, Admin, Report, City
 from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer, CitySerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .permissions import IsAdminUser, IsCustomerOrManager
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 
 class LogoutAPIView(APIView):
@@ -104,30 +101,21 @@ class ManagerUpdateAPIView(generics.UpdateAPIView):
         return Response(serializer.data)
     
 
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+
 class ReportCreateAPIView(generics.CreateAPIView):
     serializer_class = ReportSerializer
-    permission_classes = [IsAuthenticated, IsCustomerOrManager]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
-class ReportListAPIView(generics.ListAPIView):
-    serializer_class = ReportSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.role == User.Role.ADMIN:
-            return Report.objects.filter(is_reviewed=False)
-        else:
-            return Report.objects.filter(user=user)
-
-
 class ReportDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
 
     def perform_update(self, serializer):
         user = self.request.user

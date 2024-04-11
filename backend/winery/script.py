@@ -29,18 +29,13 @@ else:
 csv_file_path = 'data/cities.csv'
 
 def load_cities_from_csv(csv_file_path):
-    # Otvorite CSV datoteku
     with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
-        # Iterirajte kroz redove CSV datoteke
         for row in reader:
-            # Uzmite podatke o gradu i poštanski kod iz CSV reda
             city_name = row['City']
             postal_code = row['Postal Code']
-            # Provjerite postoji li grad već u bazi podataka
             existing_city = City.objects.filter(name=city_name, postal_code=postal_code).first()
             if not existing_city:
-                # Ako grad ne postoji, stvorite novi zapis
                 city = City(name=city_name, postal_code=postal_code)
                 city.save()
                 print(f"Dodan grad: {city_name}, Poštanski kod: {postal_code}")
