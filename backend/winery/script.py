@@ -1,15 +1,16 @@
 import os
 import django
+import csv
 
 # Postavite okruženje Django projekta
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'winery.settings')
 django.setup()
 
 # Import modela Admin iz vaše aplikacije
-from users.models import Admin
+from users.models import Admin, City
 
-# Provjera postoji li već administratorski korisnik
-if not Admin.objects.filter(username='admin').exists():
+# Provera postoji li već administratorski korisnik
+if not Admin.objects.filter(username='pale').exists():
     # Stvaranje administratorskog korisnika
     admin = Admin.objects.create(
         username='pale',
@@ -23,3 +24,28 @@ if not Admin.objects.filter(username='admin').exists():
     print("Admin kreiran.")
 else:
     print("Admin nije kreiran.")
+
+# Putanja do CSV datoteke s gradovima
+csv_file_path = 'data/cities.csv'
+
+def load_cities_from_csv(csv_file_path):
+    # Otvorite CSV datoteku
+    with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        # Iterirajte kroz redove CSV datoteke
+        for row in reader:
+            # Uzmite podatke o gradu i poštanski kod iz CSV reda
+            city_name = row['City']
+            postal_code = row['Postal Code']
+            # Provjerite postoji li grad već u bazi podataka
+            existing_city = City.objects.filter(name=city_name, postal_code=postal_code).first()
+            if not existing_city:
+                # Ako grad ne postoji, stvorite novi zapis
+                city = City(name=city_name, postal_code=postal_code)
+                city.save()
+                print(f"Dodan grad: {city_name}, Poštanski kod: {postal_code}")
+            else:
+                print(f"Grad već postoji: {city_name}, Poštanski kod: {postal_code}")
+
+# Poziv funkcije za učitavanje gradova iz CSV datoteke
+load_cities_from_csv(csv_file_path)

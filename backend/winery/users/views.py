@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import User, Customer, Manager, Winemaker, Admin, Report
-from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer
+from .models import User, Customer, Manager, Winemaker, Admin, Report, City
+from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer, CitySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
@@ -137,3 +137,9 @@ class ReportDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer.save(is_reviewed=True)
         else:
             return Response({"error": "Only administrators can update reports."}, status=status.HTTP_403_FORBIDDEN)
+
+class CityViewSet(viewsets.ModelViewSet):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
+    lookup_field = 'name'
+    lookup_url_kwarg = 'name'

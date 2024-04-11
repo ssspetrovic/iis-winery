@@ -13,6 +13,9 @@ import AdminProfile from "./components/users/AdminProfile";
 import ViewUsers from "./components/users/ViewUsers";
 import RegisterWorker from "./components/users/RegisterWorker";
 import UpdateWorker from "./components/users/UpdateWorker";
+import VehiclesList from "./components/vehicles/VehiclesList";
+import AddVehicle from "./components/vehicles/AddVehicle";
+import UpdateVehicle from "./components/vehicles/UpdateVehicle";
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
         <Route path="/view-users" element={<ViewUsers />} />
         <Route path="/register-worker" element={<RegisterWorker />} />
         <Route path="/update-worker" element={<UpdateWorker />} />
+        <Route path="/view-vehicles" element={<VehiclesList />} />
+        <Route path="/add-vehicle" element={<AddVehicle />} />
+        <Route path="/update-vehicle" element={<UpdateVehicle />} />
       </Routes>
     </Router>
   );

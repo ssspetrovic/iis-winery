@@ -36,21 +36,32 @@ const ViewUsers = () => {
     fetchData();
   }, []);
 
+  // Dohvatanje podataka za nove kolone
+  const customersWithAddress = customers.map((customer) => ({
+    ...customer,
+    fullAddress: `${customer.address} ${customer.street_number}`, // Spajamo adresu i broj ulice
+  }));
+
+  const winemakersWithAddress = winemakers.map((winemaker) => ({
+    ...winemaker,
+    fullAddress: `${winemaker.address} ${winemaker.street_number}`, // Spajamo adresu i broj ulice
+  }));
+
   // Parametri za svaku od tabela
   const customersColumns = [
     { Header: "Name", accessor: "first_name" },
     { Header: "Username", accessor: "username" },
     { Header: "Email", accessor: "email" },
-    { Header: "Address", accessor: "address" },
-    { Header: "City", accessor: "city" },
+    { Header: "Address", accessor: "fullAddress" },
+    { Header: "City", accessor: "city.name" },
   ];
 
   const winemakersColumns = [
     { Header: "Name", accessor: "first_name" },
     { Header: "Username", accessor: "username" },
     { Header: "Email", accessor: "email" },
-    { Header: "Address", accessor: "address" },
-    { Header: "City", accessor: "city" },
+    { Header: "Address", accessor: "fullAddress" },
+    { Header: "City", accessor: "city.name" },
   ];
 
   const managersColumns = [
@@ -66,13 +77,13 @@ const ViewUsers = () => {
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Customers</h1>
           <div className="mt-4">
-            <Table columns={customersColumns} data={customers} />
+            <Table columns={customersColumns} data={customersWithAddress} />
           </div>
         </div>
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Winemakers</h1>
           <div className="mt-4">
-            <Table columns={winemakersColumns} data={winemakers} />
+            <Table columns={winemakersColumns} data={winemakersWithAddress} />
           </div>
         </div>
         <div>

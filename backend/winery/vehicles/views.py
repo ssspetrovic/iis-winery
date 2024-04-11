@@ -1,51 +1,64 @@
 from rest_framework import viewsets
 from .models import Vehicle
 from .serializers import VehicleSerializer
-from rest_framework import permissions
-from users.models import User
 from rest_framework.generics import UpdateAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import NotFound
+from users.models import City
 
-class IsAdminUser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == User.Role.ADMIN
 
 class VehicleViewSet(viewsets.ModelViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
-    permission_classes = [IsAdminUser]
 
 class VehicleCreateAPIView(CreateAPIView):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
-    permission_classes = [IsAdminUser]
 
     def post(self, request, *args, **kwargs):
+        city_name = request.data.get('city', None)
+        if city_name:
+            try:
+                city = City.objects.get(name=city_name)
+            except City.DoesNotExist:
+                return Response({"error": f"City with name {city_name} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+            request.data['city'] = city.id  # Replace city name with city ID in request data
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class VehicleUpdateAPIView(UpdateAPIView):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     lookup_field = 'pk'
-    permission_classes = [IsAdminUser]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.perform_update(serializer)
         return Response(serializer.data)
+    
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        try:
+            obj = queryset.get(pk=self.kwargs[self.lookup_field])
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Vehicle.DoesNotExist:
+            raise NotFound('Vehicle not found')
+
 
 class VehicleDeleteAPIView(DestroyAPIView):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     lookup_field = 'pk'
-    permission_classes = [IsAdminUser]
 
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()

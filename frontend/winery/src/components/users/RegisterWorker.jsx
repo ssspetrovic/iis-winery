@@ -22,10 +22,8 @@ function RegisterWorker() {
   const [last_name, setLastName] = useState("");
   const [role, setRole] = useState("manager");
   const [address, setAddress] = useState("");
-  const [streetNo, setStreetNo] = useState("");
+  const [street_number, setStreetNo] = useState("");
   const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [country, setCountry] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
   const navigate = useNavigate(); // Koristimo useNavigate hook za navigaciju
   const [errorMessage, setErrorMessage] = useState(""); // Dodajemo stanje za prikazivanje poruka o greškama
@@ -44,37 +42,42 @@ function RegisterWorker() {
       return;
     }
 
+    const encodedCity = encodeURIComponent(city);
+    const cityResponse = await axios.get(
+      `http://127.0.0.1:8000/api/cities/${encodedCity}`
+    );
+
     try {
-      let url = "";
-      let data = {};
       if (role === "manager") {
-        url = "http://127.0.0.1:8000/api/managers/";
-        data = {
-          username,
-          password,
-          email,
-          first_name,
-          last_name,
-          phone_number,
-        };
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/managers/",
+          {
+            username,
+            password,
+            email,
+            first_name,
+            last_name,
+            phone_number,
+          }
+        );
+        console.log(response.data);
       } else if (role === "winemaker") {
-        url = "http://127.0.0.1:8000/api/winemakers/";
-        data = {
-          username,
-          password,
-          email,
-          first_name,
-          last_name,
-          address,
-          streetNo,
-          city,
-          zip,
-          country,
-        };
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/winemakers/",
+          {
+            username,
+            password,
+            email,
+            first_name,
+            last_name,
+            address,
+            street_number,
+            city: cityResponse.data,
+          }
+        );
+        console.log(response.data);
       }
 
-      const response = await axios.post(url, data);
-      console.log(response.data);
       // Uspesno registrovanje, resetovanje stanja i preusmeravanje na određenu rutu
       setUsername("");
       setPassword("");
@@ -85,8 +88,6 @@ function RegisterWorker() {
       setAddress("");
       setStreetNo("");
       setCity("");
-      setZip("");
-      setCountry("");
       setPhoneNumber("");
       setErrorMessage("");
     } catch (error) {
@@ -226,11 +227,11 @@ function RegisterWorker() {
                 </Col>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="streetNo">Street Number</Label>
+                    <Label for="street_number">Street Number</Label>
                     <Input
                       type="text"
-                      id="streetNo"
-                      value={streetNo}
+                      id="street_number"
+                      value={street_number}
                       onChange={(e) => setStreetNo(e.target.value)}
                       className="form-control"
                     />
@@ -238,7 +239,7 @@ function RegisterWorker() {
                 </Col>
               </Row>
               <Row>
-                <Col md={6}>
+                <Col md={6} className="mx-auto">
                   <FormGroup>
                     <Label for="city">City</Label>
                     <Input
@@ -246,32 +247,6 @@ function RegisterWorker() {
                       id="city"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="form-control"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="zip">Zip</Label>
-                    <Input
-                      type="text"
-                      id="zip"
-                      value={zip}
-                      onChange={(e) => setZip(e.target.value)}
-                      className="form-control"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="country">Country</Label>
-                    <Input
-                      type="text"
-                      id="country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
                       className="form-control"
                     />
                   </FormGroup>

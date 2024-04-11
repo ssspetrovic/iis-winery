@@ -1,9 +1,5 @@
 from django.db import models
-
-class City(models.Model):
-    name = models.CharField(
-        max_length=60, verbose_name='City name', default='')
-    postal_code = models.IntegerField(verbose_name='Postal Code', default=0)
+from users.models import City
 
 class Vehicle(models.Model):
     class VehicleType(models.TextChoices):

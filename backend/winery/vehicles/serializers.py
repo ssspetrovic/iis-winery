@@ -15,7 +15,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         city_data = validated_data.pop('city')
-        city_instance = City.objects.create(**city_data)
+        city_instance, _ = City.objects.get_or_create(**city_data)
         vehicle = Vehicle.objects.create(city=city_instance, **validated_data)
         return vehicle
 
@@ -30,3 +30,4 @@ class VehicleSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+

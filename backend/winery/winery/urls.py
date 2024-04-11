@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet
+from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet
 from vehicles.views import VehicleViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -28,6 +28,7 @@ router.register(r'winemakers', WinemakerViewSet)
 router.register(r'managers', ManagerViewSet)
 router.register(r'vehicles', VehicleViewSet)
 router.register(r'admins', AdminViewSet)
+router.register(r'cities', CityViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
