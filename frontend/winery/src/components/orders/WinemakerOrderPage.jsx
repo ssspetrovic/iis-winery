@@ -158,7 +158,19 @@ const WinemakerOrdersPage = () => {
                     <strong>Order ID:</strong> {order.id}
                   </p>
                   <p>
-                    <strong>Customer:</strong> {order.customerData[0].username}
+                    <strong>Customer:</strong>{" "}
+                    {order.customerData[0].first_name}{" "}
+                    {order.customerData[0].last_name}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {order.customerData[0].email}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {order.customerData[0].address}{" "}
+                    {order.customerData[0].street_number}
+                    {", "}
+                    {order.customerData[0].city.name}{" "}
+                    {order.customerData[0].city.postal_code}
                   </p>
                   <p>
                     <strong>Wines:</strong>
