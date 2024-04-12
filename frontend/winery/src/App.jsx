@@ -17,6 +17,7 @@ import VehiclesList from "./components/vehicles/VehiclesList";
 import AddVehicle from "./components/vehicles/AddVehicle";
 import UpdateVehicle from "./components/vehicles/UpdateVehicle";
 import ReportList from "./components/reports/ReportList";
+import WinemakerOrdersPage from "./components/orders/WinemakerOrderPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/add-vehicle" element={<AddVehicle />} />
         <Route path="/update-vehicle" element={<UpdateVehicle />} />
         <Route path="/view-reports" element={<ReportList />} />
+        <Route path="/winemaker-order-page" element={<WinemakerOrdersPage />} />
       </Routes>
     </Router>
   );

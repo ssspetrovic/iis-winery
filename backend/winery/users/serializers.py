@@ -28,11 +28,17 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     city = CitySerializer()
 
     def create(self, validated_data):
+        city_data = validated_data.pop('city')
+        city_instance, _ = City.objects.get_or_create(**city_data)
+
+        validated_data['role'] = Customer.Role.CUSTOMER
+
         # Hash the password before saving the user
         password = validated_data.pop('password')
         hashed_password = make_password(password)
-        user = User.objects.create(password=hashed_password, **validated_data)
-        return user
+
+        customer = Customer.objects.create(password=hashed_password, **validated_data, city=city_instance)
+        return customer
 
     class Meta:
         model = Customer
@@ -76,7 +82,7 @@ class WinemakerSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Winemaker
-        fields = ['username', 'password', 'first_name', 'last_name', 'email', 'address', 'street_number', 'city']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'address', 'street_number', 'city']
         extra_kwargs = {
             'password': {'write_only': True},
         }
