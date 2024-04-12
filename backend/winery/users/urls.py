@@ -7,7 +7,8 @@ from .views import (
     WorkersAPIView, 
     ReportCreateAPIView, 
     ReportDetailAPIView, 
-    LogoutAPIView, 
+    LogoutAPIView,
+    GetUserRoleAPIView
 )
 
 from rest_framework_simplejwt.views import (
@@ -16,6 +17,8 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
+    # path('api/token/', CookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/winemaker/', WinemakerRegistrationAPIView.as_view(), name='winemaker-registration'),
@@ -26,4 +29,5 @@ urlpatterns = [
     path('report/', ReportCreateAPIView.as_view(), name='report'),
     path('report/<int:pk>/reply/', ReportDetailAPIView.as_view(), name='reply'),
     path('logout/', LogoutAPIView.as_view(), name='logout'),
+    path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role")
 ]

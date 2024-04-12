@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth.hashers import make_password
+from rest_framework.exceptions import NotFound
+
 
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -17,11 +18,29 @@ class LogoutAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+class GetUserRoleAPIView(APIView):
+    """
+    Retrieve the role of a user.
+    """
+
+    def get_object(self, username):
+        try:
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise NotFound("User not found")
+
+    def get(self, request, username, format=None):
+        user = self.get_object(username)
+        return Response({'role': user.role})
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
+
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -29,17 +48,20 @@ class CustomerViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
 
+
 class WinemakerViewSet(viewsets.ModelViewSet):
     queryset = Winemaker.objects.all()
     serializer_class = WinemakerSerializer
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
 
+
 class ManagerViewSet(viewsets.ModelViewSet):
-    queryset = Manager.objects.all()    
+    queryset = Manager.objects.all()
     serializer_class = ManagerSerializer
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
+
 
 class AdminViewSet(viewsets.ModelViewSet):
     queryset = Admin.objects.all()
@@ -47,16 +69,17 @@ class AdminViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
 
+
 class WorkersAPIView(APIView):
     def get(self, request, *args, **kwargs):
         winemakers = Winemaker.objects.all()
         managers = Manager.objects.all()
-        
+
         winemakers_serializer = WinemakerSerializer(winemakers, many=True)
         managers_serializer = ManagerSerializer(managers, many=True)
-        
+
         return Response({'winemakers': winemakers_serializer.data, 'managers': managers_serializer.data})
-    
+
 
 class WinemakerRegistrationAPIView(generics.CreateAPIView):
     serializer_class = WinemakerSerializer
@@ -72,16 +95,16 @@ class ManagerRegistrationAPIView(generics.CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
-
 class WinemakerUpdateAPIView(generics.UpdateAPIView):
     queryset = Winemaker.objects.all()
     serializer_class = WinemakerSerializer
-    lookup_field = 'username'  
+    lookup_field = 'username'
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
@@ -90,16 +113,17 @@ class WinemakerUpdateAPIView(generics.UpdateAPIView):
 class ManagerUpdateAPIView(generics.UpdateAPIView):
     queryset = Manager.objects.all()
     serializer_class = ManagerSerializer
-    lookup_field = 'username'  
+    lookup_field = 'username'
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
-    
+
 
 class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
@@ -125,6 +149,7 @@ class ReportDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer.save(is_reviewed=True)
         else:
             return Response({"error": "Only administrators can update reports."}, status=status.HTTP_403_FORBIDDEN)
+
 
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
