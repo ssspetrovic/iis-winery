@@ -6,6 +6,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 
 
 class LogoutAPIView(APIView):
@@ -17,6 +19,15 @@ class LogoutAPIView(APIView):
             return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@permission_classes([IsAuthenticated])
+class AuthenticatedHelloAPIView(APIView):
+    def get(self, request, format=None):
+        content = {
+            'message': 'Hello, authenticated user!'
+        }
+        return Response(content)
 
 
 class GetUserRoleAPIView(APIView):

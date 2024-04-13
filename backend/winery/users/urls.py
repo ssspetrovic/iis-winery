@@ -8,7 +8,8 @@ from .views import (
     ReportCreateAPIView, 
     ReportDetailAPIView, 
     LogoutAPIView,
-    GetUserRoleAPIView
+    GetUserRoleAPIView,
+    AuthenticatedHelloAPIView
 )
 
 from rest_framework_simplejwt.views import (
@@ -24,10 +25,11 @@ urlpatterns = [
     path('register/winemaker/', WinemakerRegistrationAPIView.as_view(), name='winemaker-registration'),
     path('register/manager/', ManagerRegistrationAPIView.as_view(), name='manager-registration'),
     path('update/winemaker/<str:username>/', WinemakerUpdateAPIView.as_view(), name='winemaker-update'), 
-    path('update/manager/<str:username>/', ManagerUpdateAPIView.as_view(), name='manager-update'),  
+    path('update/manager/<str:username>/', ManagerUpdateAPIView.as_view(), name='manager-update'),
     path('api/workers/', WorkersAPIView.as_view(), name='all-workers'),
     path('report/', ReportCreateAPIView.as_view(), name='report'),
     path('report/<int:pk>/reply/', ReportDetailAPIView.as_view(), name='reply'),
     path('logout/', LogoutAPIView.as_view(), name='logout'),
-    path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role")
+    path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role"),
+    path('api/hello-auth/', AuthenticatedHelloAPIView.as_view(), name="hello_auth")
 ]

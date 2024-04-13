@@ -31,13 +31,15 @@ function App() {
 
         {/* Private */}
         {/* <Route element={<RequireAuth allowedRoles={["customer", "admin"]} />}> */}
-        {/* <Route element={<RequireAuth allowedRoles="admin" />}> */}
-        <Route path="/" element={<Home />} />
-        {/* </Route> */}
+        <Route element={<RequireAuth allowedRoles="ADMIN" />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         {/* </Route> */}
         <Route element={<RequireAuth allowedRoles={["admin"]} />}>
           <Route path="/admin-profile/:username" element={<AdminProfile />} />
         </Route>
+
+        {/* <Route element=></Route> */}
         <Route path="/view-users" element={<ViewUsers />} />
         <Route path="/register-worker" element={<RegisterWorker />} />
         <Route path="/update-worker" element={<UpdateWorker />} />

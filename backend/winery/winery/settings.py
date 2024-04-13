@@ -145,8 +145,17 @@ REST_FRAMEWORK = {
     ]
 }
 
+from datetime import timedelta
+
 SIMPLE_JWT = {
-    'USER_ID_FIELD': 'username'
+    'USER_ID_FIELD': 'username',
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
 }
 
 CORS_ALLOW_ALL_ORIGINS = True  # If you want to allow all origins
