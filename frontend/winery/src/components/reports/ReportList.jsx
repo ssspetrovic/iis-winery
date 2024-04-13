@@ -27,7 +27,7 @@ const ReportList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/reports/`);
+        const response = await axios.get(`/reports/`);
         setReports(response.data);
 
         const role = localStorage.getItem("role");
@@ -52,7 +52,7 @@ const ReportList = () => {
 
   const handleReportProblem = async () => {
     try {
-      await axios.post(`http://127.0.0.1:8000/api/reports/`, {
+      await axios.post(`/reports/`, {
         user: username,
         description: newReport,
         is_reviewed: false,
@@ -74,13 +74,10 @@ const ReportList = () => {
 
   const handleReply = async () => {
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/reports/${selectedReport.id}/`,
-        {
-          reply: replyText,
-          is_reviewed: true,
-        }
-      );
+      await axios.patch(`/reports/${selectedReport.id}/`, {
+        reply: replyText,
+        is_reviewed: true,
+      });
       setReplyModal(false);
       setAdminConfirmModal(true);
     } catch (error) {

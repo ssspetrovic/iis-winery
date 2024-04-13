@@ -28,7 +28,7 @@ const WinemakerOrdersPage = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/vehicles/");
+        const response = await axios.get("/vehicles/");
         const filteredVehicles = response.data.filter(
           (vehicle) => !vehicle.is_transporting && vehicle.is_operational
         );
@@ -50,12 +50,10 @@ const WinemakerOrdersPage = () => {
     const fetchOrders = async () => {
       try {
         const winemakerResponse = await axios.get(
-          `http://127.0.0.1:8000/api/winemakers/${localStorage.getItem(
-            "username"
-          )}/`
+          `/winemakers/${localStorage.getItem("username")}/`
         );
         const winemakerId = winemakerResponse.data.id;
-        const response = await axios.get("http://127.0.0.1:8000/api/orders/");
+        const response = await axios.get("/orders/");
         const winemakerOrders = [];
 
         // Iteriraj kroz svaku narudžbinu
@@ -65,9 +63,7 @@ const WinemakerOrdersPage = () => {
           // Iteriraj kroz svako vino u narudžbini
           for (const wineId of order.wines) {
             // Izvrši Axios GET za vino kako bi se dobio winemaker
-            const wineResponse = await axios.get(
-              `http://127.0.0.1:8000/api/wines/${wineId}/`
-            );
+            const wineResponse = await axios.get(`/wines/${wineId}/`);
 
             // Uporedi ID winemakera sa ID-jem trenutno ulogovanog winemakera
             if (winemakerId === wineResponse.data.winemaker) {
@@ -80,14 +76,12 @@ const WinemakerOrdersPage = () => {
           if (!order.is_accepted && isWinemakerOrder) {
             // Izvuci podatke o korisniku (customer-u) iz narudžbine
             const customerResponse = await axios.get(
-              `http://127.0.0.1:8000/api/customers/?id=${order.customer}/`
+              `/customers/?id=${order.customer}/`
             );
             const customerData = customerResponse.data;
             const winesData = [];
             for (const wineId of order.wines) {
-              const wineResponse = await axios.get(
-                `http://127.0.0.1:8000/api/wines/${wineId}/`
-              );
+              const wineResponse = await axios.get(`/wines/${wineId}/`);
 
               winesData.push(wineResponse.data);
             }
@@ -121,19 +115,13 @@ const WinemakerOrdersPage = () => {
   const handleAcceptOrder = async () => {
     try {
       // Send request to accept order
-      await axios.patch(
-        `http://127.0.0.1:8000/api/orders/${selectedOrder.id}/`,
-        {
-          is_accepted: true,
-        }
-      );
+      await axios.patch(`/orders/${selectedOrder.id}/`, {
+        is_accepted: true,
+      });
 
-      await axios.patch(
-        `http://127.0.0.1:8000/api/vehicles/${selectedVehicle}/`,
-        {
-          is_transporting: true,
-        }
-      );
+      await axios.patch(`/vehicles/${selectedVehicle}/`, {
+        is_transporting: true,
+      });
 
       toggleModal();
       setConfirmationModalOpen(true);

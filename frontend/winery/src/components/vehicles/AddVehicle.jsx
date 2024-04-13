@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -43,16 +43,14 @@ function AddVehicle() {
 
     try {
       // Provera postoji li grad u bazi podataka
-      const cityResponse = await axios.get(
-        `http://127.0.0.1:8000/api/cities/${city}/`
-      );
+      const cityResponse = await axios.get(`/cities/${city}/`);
       if (!cityResponse.data) {
         setErrorMessage("City does not exist.");
         return;
       }
 
       // Ako grad postoji, dodaj vozilo
-      const response = await axios.post(`http://127.0.0.1:8000/api/vehicles/`, {
+      const response = await axios.post(`/vehicles/`, {
         driver_name: driverName,
         capacity: parseInt(capacity),
         address: address,

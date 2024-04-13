@@ -33,7 +33,7 @@ function UpdateWorker() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/${role}s/`);
+      const response = await axios.get(`/${role}s/`);
       setUsers(response.data);
       setPassword(response.data.password);
     } catch (error) {
@@ -95,7 +95,7 @@ function UpdateWorker() {
       let url = "";
       let data = {};
       if (role === "manager") {
-        url = `http://127.0.0.1:8000/api/managers/${username}/`;
+        url = `/managers/${username}/`;
         data = {
           username,
           password,
@@ -105,7 +105,7 @@ function UpdateWorker() {
           phone_number,
         };
       } else if (role === "winemaker") {
-        url = `http://127.0.0.1:8000/api/winemakers/${username}/`;
+        url = `/winemakers/${username}/`;
         data = {
           username,
           password,

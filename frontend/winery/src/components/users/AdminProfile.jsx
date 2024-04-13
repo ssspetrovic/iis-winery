@@ -27,9 +27,7 @@ const AdminProfile = () => {
 
     const fetchAdminInfo = async () => {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/admins/${storedUsername}`
-        );
+        const response = await axios.get(`/admins/${storedUsername}`);
         const data = response.data;
         setAdminInfo(data);
         setEmail(data.email);
@@ -49,7 +47,7 @@ const AdminProfile = () => {
     try {
       console.log("Saving changes...");
       // Enkodiranje šifre pre slanja
-      await axios.patch(`http://127.0.0.1:8000/api/admins/${username}/`, {
+      await axios.patch(`/admins/${username}/`, {
         email: email,
         first_name: firstName,
         last_name: lastName,

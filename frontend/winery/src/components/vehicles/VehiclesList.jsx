@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { Container, Row, Col, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +13,7 @@ const VehiclesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/vehicles`);
+        const response = await axios.get("/vehicles");
         setVehicles(response.data);
 
         const role = localStorage.getItem("role");
@@ -78,7 +78,7 @@ const VehiclesList = () => {
   // Funkcija za brisanje vozila
   const handleDeleteVehicle = async (vehicleId) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/vehicles/${vehicleId}`);
+      await axios.delete(`/vehicles/${vehicleId}`);
       // Nakon uspešnog brisanja, ažuriramo listu vozila tako da se ukloni obrisano vozilo
       setVehicles(vehicles.filter((vehicle) => vehicle.id !== vehicleId));
       alert("Vehicle successfully deleted.");

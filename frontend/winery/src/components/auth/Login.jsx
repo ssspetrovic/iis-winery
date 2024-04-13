@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   Form,
   Row,
@@ -10,12 +10,8 @@ import {
   Container,
 } from "reactstrap";
 import "../../assets/styles.css";
-import AuthContext from "../../context/AuthProvider";
-import axios from "../../api/axios";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import profileRedirects from "../users/ProfileRedirect";
+import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { useCookies } from "react-cookie";
 
 const Login = () => {
   const { login } = useAuth();
@@ -36,11 +32,6 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      // Dobijanje informacija o korisniku na osnovu korisničkog imena
-      // const userResponse = await axios.get(`/users/${username}`);
-      // const userRole = userResponse.data.role;
-
-      // Sada možemo nastaviti sa autentifikacijom
       const success = await login(username, password);
       console.log(success);
       if (success) {
@@ -48,21 +39,6 @@ const Login = () => {
         console.log("from", from);
         navigate(from, { replace: true });
       }
-
-      // // localStorage.setItem("username", username);
-      // // localStorage.setItem("role", userRole);
-      // const accessToken = response?.data?.access;
-      // const refreshToken = response?.data?.refresh;
-      // console.log(username);
-      // console.log(accessToken);
-      // const role = "admin";
-      // setAuth({ username, role, accessToken, refreshToken });
-
-      // setCookie("username", username, { path: "/" });
-      // setCookie("role", role, { path: "/" });
-      // setCookie("access_token", accessToken, { path: "/" });
-      // setCookie("refresh_token", refreshToken, { path: "/" });
-
       setErrorMessage("");
       // on successful login, the user is routed to the page he was trying to visit while unauthenticated
       navigate(from, { replace: true });
@@ -81,13 +57,6 @@ const Login = () => {
       }
       console.log(errorMessage);
     }
-  };
-
-  const handleClick = () => {
-    setUsername("");
-    setPassword("");
-    setSuccess(false);
-    navigate("/login");
   };
 
   return (

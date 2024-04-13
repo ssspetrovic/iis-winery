@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -28,7 +28,7 @@ function UpdateVehicle() {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/vehicles/");
+      const response = await axios.get("/vehicles/");
       setVehicles(response.data);
     } catch (error) {
       console.error(error);
@@ -76,10 +76,10 @@ function UpdateVehicle() {
 
     try {
       const cityResponse = await axios.get(
-        `http://127.0.0.1:8000/api/cities/${encodeURIComponent(cityName)}/`
+        `/cities/${encodeURIComponent(cityName)}/`
       );
 
-      const url = `http://127.0.0.1:8000/api/vehicles/${selectedVehicle}/`;
+      const url = `/vehicles/${selectedVehicle}/`;
       const data = {
         driver_name: driverName,
         capacity: capacity,

@@ -22,25 +22,27 @@ import RequireAuth from "./components/auth/RequireAuth";
 import WinemakerOrdersPage from "./components/orders/WinemakerOrderPage";
 
 function App() {
+  const ROLES = {
+    ADMIN: "ADMIN",
+    WINEMAKER: "WINEMAKER",
+    MANAGER: "MANAGER",
+    CUSTOMER: "CUSTOMER",
+  };
+
   return (
-    // <Router>
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* Unprotected */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
 
         {/* Private */}
-        {/* <Route element={<RequireAuth allowedRoles={["customer", "admin"]} />}> */}
-        <Route element={<RequireAuth allowedRoles="ADMIN" />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-        {/* </Route> */}
-        <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+        <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
           <Route path="/admin-profile/:username" element={<AdminProfile />} />
         </Route>
 
-        {/* <Route element=></Route> */}
+        {/* TODO: Update roles accordingly */}
         <Route path="/view-users" element={<ViewUsers />} />
         <Route path="/register-worker" element={<RegisterWorker />} />
         <Route path="/update-worker" element={<UpdateWorker />} />

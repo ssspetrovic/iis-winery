@@ -43,38 +43,30 @@ function RegisterWorker() {
     }
 
     const encodedCity = encodeURIComponent(city);
-    const cityResponse = await axios.get(
-      `http://127.0.0.1:8000/api/cities/${encodedCity}`
-    );
+    const cityResponse = await axios.get(`/cities/${encodedCity}`);
 
     try {
       if (role === "manager") {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/managers/",
-          {
-            username,
-            password,
-            email,
-            first_name,
-            last_name,
-            phone_number,
-          }
-        );
+        const response = await axios.post("/managers/", {
+          username,
+          password,
+          email,
+          first_name,
+          last_name,
+          phone_number,
+        });
         console.log(response.data);
       } else if (role === "winemaker") {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/winemakers/",
-          {
-            username,
-            password,
-            email,
-            first_name,
-            last_name,
-            address,
-            street_number,
-            city: cityResponse.data,
-          }
-        );
+        const response = await axios.post("/winemakers/", {
+          username,
+          password,
+          email,
+          first_name,
+          last_name,
+          address,
+          street_number,
+          city: cityResponse.data,
+        });
         console.log(response.data);
       }
 
