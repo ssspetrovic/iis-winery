@@ -18,6 +18,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+<<<<<<< HEAD
 }
 
 .registration-box {
@@ -34,3 +35,14 @@
     justify-content: flex-start;
     align-items: flex-end;
 }
+=======
+  }
+  
+.registration-box {
+    padding: 20px;
+    background-color: #fff; /* Boja pozadine */
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Efekat senke */
+  }
+  
+  
+>>>>>>> feature/frontend-auth

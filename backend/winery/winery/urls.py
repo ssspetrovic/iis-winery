@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
+from wines.views import OrderViewSet, WineViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -30,11 +31,14 @@ router.register(r'vehicles', VehicleViewSet)
 router.register(r'admins', AdminViewSet)
 router.register(r'cities', CityViewSet)
 router.register(r'reports', ReportViewSet)
+router.register(r'orders', OrderViewSet)
+router.register(r'wines', WineViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls'), name='users'),
     path('api/', include(router.urls)),
     path('api/vehicles/', include('vehicles.urls'), name='vehicles'),
+    path('api/wines/', include('wines.urls'), name='wines'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

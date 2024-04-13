@@ -19,6 +19,7 @@ import UpdateVehicle from "./components/vehicles/UpdateVehicle";
 import ReportList from "./components/reports/ReportList";
 import Layout from "./components/util/Layout";
 import RequireAuth from "./components/auth/RequireAuth";
+import WinemakerOrdersPage from "./components/orders/WinemakerOrderPage";
 
 function App() {
   return (
@@ -47,9 +48,9 @@ function App() {
         <Route path="/add-vehicle" element={<AddVehicle />} />
         <Route path="/update-vehicle" element={<UpdateVehicle />} />
         <Route path="/view-reports" element={<ReportList />} />
+        <Route path="/winemaker-order-page" element={<WinemakerOrdersPage />} />
       </Route>
     </Routes>
-    // </Router>
   );
 }
 
