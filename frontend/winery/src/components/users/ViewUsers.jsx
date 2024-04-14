@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../api/axios";
+import axiosPrivate from "../../api/axios";
 import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
@@ -14,13 +14,13 @@ const ViewUsers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const customersResponse = await axios.get("/customers/");
+        const customersResponse = await axiosPrivate.get("/customers/");
         setCustomers(customersResponse.data);
 
-        const managersResponse = await axios.get("/managers/");
+        const managersResponse = await axiosPrivate.get("/managers/");
         setManagers(managersResponse.data);
 
-        const winemakersResponse = await axios.get("/winemakers/");
+        const winemakersResponse = await axiosPrivate.get("/winemakers/");
         setWinemakers(winemakersResponse.data);
       } catch (error) {
         console.error("Error fetching users data:", error);
