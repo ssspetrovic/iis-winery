@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Form,
   Row,
@@ -14,7 +14,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { auth, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,6 +28,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+    // If the double alert pop is annoying, comment out the <React.StrictMode> in index.jsx
+    if (auth?.username) {
+      alert("You are already logged in!");
+      navigate("/");
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -39,12 +47,10 @@ const Login = () => {
         console.log("from", from);
         navigate(from, { replace: true });
       }
+
       setErrorMessage("");
-      // on successful login, the user is routed to the page he was trying to visit while unauthenticated
+      // On successful login, the user is routed to the page he was trying to visit while unauthenticated
       navigate(from, { replace: true });
-      // Redirekcija na odgovarajući profil
-      // const redirectPath = profileRedirects[userRole](username);
-      // navigate(redirectPath);
     } catch (error) {
       if (!error?.response) {
         setErrorMessage("No server response");
@@ -107,7 +113,7 @@ const Login = () => {
             </div>
           </Row>
           <Row>
-            <Button>Sign up</Button>
+            <Button>Sign in</Button>
           </Row>
         </Form>
       </Container>
