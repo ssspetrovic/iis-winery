@@ -61,10 +61,22 @@ export const AuthProvider = ({ children }) => {
       setCookie("access_token", accessToken, { path: "/" });
       setCookie("refresh_token", refreshToken, { path: "/" });
 
-      return true;
+      return "";
     } catch (error) {
+      let errorMessage = "";
+
+      if (!error?.response) {
+        errorMessage = "No server response";
+      } else if (error.response?.status === 400) {
+        errorMessage = "Missing username or password";
+      } else if (error.response?.status === 401) {
+        errorMessage = "Wrong username or password";
+      } else {
+        errorMessage = "Login failed";
+      }
+
       console.error(error);
-      return false;
+      return errorMessage;
     }
   };
 

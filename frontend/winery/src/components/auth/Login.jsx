@@ -39,30 +39,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const success = await login(username, password);
-      console.log(success);
-      if (success) {
-        console.log("in");
-        console.log("from", from);
-        navigate(from, { replace: true });
-      }
-
-      setErrorMessage("");
-      // On successful login, the user is routed to the page he was trying to visit while unauthenticated
+    setErrorMessage(await login(username, password));
+    if (errorMessage === "") {
+      console.log("success");
+      console.log("from", from);
       navigate(from, { replace: true });
-    } catch (error) {
-      if (!error?.response) {
-        setErrorMessage("No server response");
-      } else if (error.response?.status === 400) {
-        setErrorMessage("Missing username or password");
-      } else if (error.response?.status === 401) {
-        setErrorMessage("Unauthorized");
-      } else {
-        setErrorMessage("Login failed");
-      }
-      console.log(errorMessage);
+      setErrorMessage("");
     }
+    // On successful login, the user is routed to the page he was trying to visit while unauthenticated
+    navigate(from, { replace: true });
   };
 
   return (
