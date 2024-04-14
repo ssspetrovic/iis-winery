@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { Button, Row, Col } from "reactstrap";
 import useAuth from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
-// import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import axios from "../api/axios";
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate";
 
 const Home = () => {
@@ -25,10 +23,10 @@ const Home = () => {
   return (
     <div className="div-center">
       <h1>Hello from home page!</h1>
-      <h3>Current username: {username}</h3>
-      <h3>Current role: {role}</h3>
-      <h3>Current access token:</h3> <p>{accessToken}</p>
-      <h3>Current access refresh token:</h3> <p>{refreshToken}</p>
+      <h3>Username: {username}</h3>
+      <h3>Role: {role}</h3>
+      <h3>Access token:</h3> <p>{accessToken}</p>
+      <h3>Refresh token:</h3> <p>{refreshToken}</p>
       <h4>
         Register: <Link to="/register">click here</Link>
       </h4>

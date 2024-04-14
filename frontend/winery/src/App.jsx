@@ -14,29 +14,26 @@ import ReportList from "./components/reports/ReportList";
 import Layout from "./components/util/Layout";
 import RequireAuth from "./components/auth/RequireAuth";
 import WinemakerOrdersPage from "./components/orders/WinemakerOrderPage";
+import Unauthorized from "./components/auth/Unauthorized";
+import NotFound from "./components/util/NotFound";
+import { ROLES } from "./components/auth/Roles";
 
 function App() {
-  const ROLES = {
-    ADMIN: "ADMIN",
-    WINEMAKER: "WINEMAKER",
-    MANAGER: "MANAGER",
-    CUSTOMER: "CUSTOMER",
-  };
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* Unprotected */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Private */}
         <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
           <Route path="/admin-profile/:username" element={<AdminProfile />} />
         </Route>
 
-        {/* TODO: Update roles accordingly */}
+        {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}
         <Route path="/view-users" element={<ViewUsers />} />
         <Route path="/register-worker" element={<RegisterWorker />} />
         <Route path="/update-worker" element={<UpdateWorker />} />
@@ -45,6 +42,9 @@ function App() {
         <Route path="/update-vehicle" element={<UpdateVehicle />} />
         <Route path="/view-reports" element={<ReportList />} />
         <Route path="/winemaker-order-page" element={<WinemakerOrdersPage />} />
+
+        {/* If no other routes are hooked, throw 404 */}
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
