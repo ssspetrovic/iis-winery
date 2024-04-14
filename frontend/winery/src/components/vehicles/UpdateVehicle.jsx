@@ -25,6 +25,7 @@ function UpdateVehicle() {
   const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const [isOperational, setIsOperational] = useState(false);
 
   const fetchVehicles = async () => {
     try {
@@ -53,6 +54,7 @@ function UpdateVehicle() {
       setCityName("");
       setPhoneNumber("");
       setVehicleType("");
+      setIsOperational(false);
     } else {
       // Fetch vehicle details based on selected ID
       // and populate the form fields
@@ -67,6 +69,7 @@ function UpdateVehicle() {
         setCityName(selectedVehicleData.city.name || "");
         setPhoneNumber(selectedVehicleData.phone_number || "");
         setVehicleType(selectedVehicleData.vehicle_type || "");
+        setIsOperational(selectedVehicleData.is_operational || false);
       }
     }
   };
@@ -87,6 +90,7 @@ function UpdateVehicle() {
         street_number: streetNo,
         phone_number: phoneNumber,
         vehicle_type: vehicleType,
+        is_operational: isOperational,
         city: cityResponse.data,
       };
 
@@ -102,6 +106,7 @@ function UpdateVehicle() {
       setPhoneNumber("");
       setVehicleType("");
       setSelectedVehicle("");
+      setIsOperational(false);
       setErrorMessage("");
 
       // Refetch vehicles to update the list
@@ -222,7 +227,7 @@ function UpdateVehicle() {
             </Col>
           </Row>
           <Row>
-            <Col md={6} className="mx-auto">
+            <Col md={6}>
               <FormGroup>
                 <Label for="vehicleType">Vehicle Type</Label>
                 <Input
@@ -240,6 +245,35 @@ function UpdateVehicle() {
                   <option value="bicycle">Bicycle</option>
                   {/* Add more options as needed */}
                 </Input>
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup>
+                <Label for="isOperational">Is Operational</Label>
+                <div>
+                  <Label check>
+                    <Input
+                      type="radio"
+                      name="isOperational"
+                      value="true"
+                      checked={isOperational === true}
+                      onChange={() => setIsOperational(true)}
+                    />{" "}
+                    True
+                  </Label>
+                </div>
+                <div>
+                  <Label check>
+                    <Input
+                      type="radio"
+                      name="isOperational"
+                      value="false"
+                      checked={isOperational === false}
+                      onChange={() => setIsOperational(false)}
+                    />{" "}
+                    False
+                  </Label>
+                </div>
               </FormGroup>
             </Col>
           </Row>

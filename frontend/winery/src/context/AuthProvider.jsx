@@ -68,11 +68,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = (newUsername = "") => {
     removeCookie("username");
-    removeCookie("role");
-    removeCookie("access_token");
-    removeCookie("refresh_token");
+
+    if (newUsername) {
+      setCookie("username", newUsername, { path: "/" });
+    } else {
+      removeCookie("role");
+      removeCookie("access_token");
+      removeCookie("refresh_token");
+    }
 
     setAuth({});
   };

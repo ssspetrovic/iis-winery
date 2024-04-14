@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Modal, ModalBody, ModalFooter, Button } from "reactstrap";
 import profileRedirects from "../users/ProfileRedirect";
+import useAuth from "../../hooks/useAuth";
 
 const ConfirmationModal = ({ isOpen, toggle }) => {
   const [modalMessage, setModalMessage] = useState("");
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   // Handler za zatvaranje modala i resetovanje poruke
   const handleCloseModal = () => {
@@ -13,9 +16,7 @@ const ConfirmationModal = ({ isOpen, toggle }) => {
 
   // Handler za redirekciju na odgovarajući profil
   const handleHomePageRedirect = () => {
-    const username = localStorage.getItem("username");
-    const redirectPath =
-      profileRedirects[localStorage.getItem("role")](username);
+    const redirectPath = profileRedirects[role](username);
     window.location.href = redirectPath;
   };
 

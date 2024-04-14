@@ -14,13 +14,20 @@ const ViewUsers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const customersResponse = await axiosPrivate.get("/customers/");
+        const customersResponse = await axiosPrivate.get("/customers/", {
+          headers: { "Content-Type": "application/json" },
+        });
         setCustomers(customersResponse.data);
 
-        const managersResponse = await axiosPrivate.get("/managers/");
+        const managersResponse = await axiosPrivate.get("/managers/", {
+          headers: { "Content-Type": "application/json" },
+        });
         setManagers(managersResponse.data);
 
-        const winemakersResponse = await axiosPrivate.get("/winemakers/");
+        const winemakersResponse = await axiosPrivate.get("/winemakers/", {
+          headers: { "Content-Type": "application/json" },
+        });
+
         setWinemakers(winemakersResponse.data);
       } catch (error) {
         console.error("Error fetching users data:", error);

@@ -5,19 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const VehiclesList = () => {
   const [vehicles, setVehicles] = useState([]);
-  const [userRole, setUserRole] = useState("");
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/vehicles");
         setVehicles(response.data);
-
-        const role = localStorage.getItem("role");
-        setUserRole(role);
       } catch (error) {
         console.error("Error fetching vehicles data:", error);
       }
@@ -60,10 +59,10 @@ const VehiclesList = () => {
     },
     { Header: "City", accessor: "cityWithPostalCode" },
     {
-      Header: userRole === "WINEMAKER" ? "Operational Status" : "",
+      Header: role === "WINEMAKER" ? "Operational Status" : "",
       accessor: "id",
       Cell: ({ value, row }) =>
-        userRole === "ADMIN" ? (
+        role === "ADMIN" ? (
           <Button color="danger" onClick={() => handleDeleteVehicle(value)}>
             Delete
           </Button>
@@ -92,7 +91,7 @@ const VehiclesList = () => {
     <Container>
       <Row>
         <Col>
-          {userRole === "ADMIN" ? (
+          {role === "ADMIN" ? (
             <>
               <div className="mb-8">
                 <h1 className="text-xl font-semibold">Vehicles List</h1>
@@ -115,7 +114,7 @@ const VehiclesList = () => {
                 </Link>
               </div>
             </>
-          ) : userRole === "WINEMAKER" ? (
+          ) : role === "WINEMAKER" ? (
             <>
               <div className="mb-8">
                 <h1 className="text-xl font-semibold">Vehicles List</h1>

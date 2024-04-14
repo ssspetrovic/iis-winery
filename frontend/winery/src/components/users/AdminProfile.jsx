@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -10,31 +10,35 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.css";
+import useAuth from "../../hooks/useAuth";
+import axios from "../../api/axios";
+import AuthProvider from "../../context/AuthProvider";
 
 const AdminProfile = () => {
-  const [username, setUsername] = useState("");
   const [adminInfo, setAdminInfo] = useState(null);
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
+  const { logout } = useContext(AuthProvider);
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    setUsername(storedUsername);
-
     const fetchAdminInfo = async () => {
       try {
-        const response = await axios.get(`/admins/${storedUsername}`);
+        const response = await axios.get(`/admins/${username}/`, {
+          headers: { "Content-Type": "application/json" },
+        });
         const data = response.data;
+        setNewUsername(username);
         setAdminInfo(data);
         setEmail(data.email);
         setFirstName(data.first_name);
         setLastName(data.last_name);
         setPassword(data.password);
-        // Ne postavljamo šifru ovde, jer ćemo je enkodirati pri čuvanju promena
       } catch (error) {
         console.error("Error fetching admin info:", error);
       }
@@ -48,16 +52,18 @@ const AdminProfile = () => {
       console.log("Saving changes...");
       // Enkodiranje šifre pre slanja
       await axios.patch(`/admins/${username}/`, {
+        headers: { "Content-Type": "application/json" },
         email: email,
         first_name: firstName,
         last_name: lastName,
-        username: username,
+        username: newUsername,
         password: password,
       });
-      if (localStorage.getItem("username") !== username) {
+
+      if (newUsername !== username) {
         // Ako jeste, izvrši navigaciju na odgovarajuću adresu
-        localStorage.setItem("username", username);
-        window.location.href = `/admin-profile/${username}`;
+        logout(newUsername); // Logout with the new username
+        window.location.href = `/admin-profile/${newUsername}`;
       }
       console.log("Changes saved successfully!");
     } catch (error) {
@@ -111,8 +117,8 @@ const AdminProfile = () => {
                       type="username"
                       name="username"
                       id="editUsername"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
                     />
                   </FormGroup>
                 </Col>

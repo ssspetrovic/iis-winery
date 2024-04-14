@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -11,11 +11,10 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
+import useAuth from "../../hooks/useAuth";
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
-  const [userRole, setUserRole] = useState("");
-  const [username, setUsername] = useState("");
   const [reportModal, setReportModal] = useState(false);
   const [replyModal, setReplyModal] = useState(false);
   const [newReport, setNewReport] = useState("");
@@ -23,17 +22,14 @@ const ReportList = () => {
   const [replyText, setReplyText] = useState("");
   const [confirmModal, setConfirmModal] = useState(false);
   const [adminConfirmModal, setAdminConfirmModal] = useState(false);
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`/reports/`);
         setReports(response.data);
-
-        const role = localStorage.getItem("role");
-        const username = localStorage.getItem("username");
-        setUserRole(role);
-        setUsername(username);
       } catch (error) {
         console.error("Error fetching reports data:", error);
       }
@@ -43,7 +39,7 @@ const ReportList = () => {
   }, []);
 
   const filteredReports = reports.filter((report) => {
-    if (userRole === "ADMIN") {
+    if (role === "ADMIN") {
       return report.is_reviewed === false;
     } else {
       return report.user === username && report.is_reviewed === true;
@@ -113,17 +109,17 @@ const ReportList = () => {
                 <thead>
                   <tr>
                     <th>Description</th>
-                    {userRole === "ADMIN" && <th>Reply</th>}
+                    {role === "ADMIN" && <th>Reply</th>}
                   </tr>
                 </thead>
                 <tbody>
                   {filteredReports.map((report) => (
                     <tr key={report.id}>
                       <td>{report.description}</td>
-                      {userRole !== "ADMIN" && (
+                      {role !== "ADMIN" && (
                         <td>{report.reply ? report.reply : "No reply yet"}</td>
                       )}
-                      {userRole === "ADMIN" && (
+                      {role === "ADMIN" && (
                         <td>
                           <Button
                             color="primary"
@@ -137,7 +133,7 @@ const ReportList = () => {
                   ))}
                 </tbody>
               </table>
-              {userRole !== "ADMIN" && (
+              {role !== "ADMIN" && (
                 <Button color="danger" onClick={toggleReportModal}>
                   Report a Problem
                 </Button>
@@ -171,10 +167,10 @@ const ReportList = () => {
                   <h4>Thank you for your patience!</h4>
                 </ModalBody>
                 <ModalFooter>
-                  {userRole === "CUSTOMER" && (
+                  {role === "CUSTOMER" && (
                     <Link to={`/customer-profile/${username}`}>Go Back</Link>
                   )}
-                  {userRole === "MANAGER" && (
+                  {role === "MANAGER" && (
                     <Link to={`/manager-profile/${username}`}>Go Back</Link>
                   )}
                 </ModalFooter>

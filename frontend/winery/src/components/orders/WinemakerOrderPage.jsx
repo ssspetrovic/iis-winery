@@ -10,8 +10,8 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "./ConformationModal";
+import useAuth from "../../hooks/useAuth";
 
 const WinemakerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -21,9 +21,8 @@ const WinemakerOrdersPage = () => {
   const [vehicles, setVehicles] = useState([]);
   const [isVehicleSelected, setIsVehicleSelected] = useState(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-
-  const userRole = localStorage.getItem("role");
-  const navigate = useNavigate();
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -42,16 +41,14 @@ const WinemakerOrdersPage = () => {
   }, []);
 
   useEffect(() => {
-    if (userRole !== "WINEMAKER") {
+    if (role !== "WINEMAKER") {
       window.location.href = "/";
     }
 
     // Fetch winemaker's orders
     const fetchOrders = async () => {
       try {
-        const winemakerResponse = await axios.get(
-          `/winemakers/${localStorage.getItem("username")}/`
-        );
+        const winemakerResponse = await axios.get(`/winemakers/${username}/`);
         const winemakerId = winemakerResponse.data.id;
         const response = await axios.get("/orders/");
         const winemakerOrders = [];
@@ -101,7 +98,7 @@ const WinemakerOrdersPage = () => {
     };
 
     fetchOrders();
-  }, [userRole]);
+  }, [role]);
 
   const toggleModal = () => {
     setModal(!modal);
