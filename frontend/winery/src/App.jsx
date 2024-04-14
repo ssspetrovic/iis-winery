@@ -17,6 +17,7 @@ import WinemakerOrdersPage from "./components/orders/WinemakerOrderPage";
 import Unauthorized from "./components/auth/Unauthorized";
 import NotFound from "./components/util/NotFound";
 import { ROLES } from "./components/auth/Roles";
+import ManagerProfile from "./components/users/ManagerProfile";
 
 function App() {
   return (
@@ -31,6 +32,11 @@ function App() {
         {/* Private */}
         <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
           <Route path="/admin-profile/:username" element={<AdminProfile />} />
+        </Route>
+
+        {/* Private */}
+        <Route element={<RequireAuth allowedRoles={ROLES.MANAGER} />}>
+          <Route path="/manager-profile/:username" element={<ManagerProfile />} />
         </Route>
 
         {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}
