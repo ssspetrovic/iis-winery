@@ -1,11 +1,5 @@
 import React from "react";
 import { useTable, usePagination, useSortBy } from "react-table";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/solid";
 
 function Table({ columns, data }) {
   const {
@@ -46,102 +40,85 @@ function Table({ columns, data }) {
         )} of ${totalEntries} entries`;
 
   return (
-    <>
-      <div className="mt-2 flex flex-col">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table
-                {...getTableProps()}
-                className="w-full table-auto divide-y divide-gray-200"
-              >
-                <thead className="bg-gray-50">
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
-                        >
-                          {column.render("Header")}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? " ▼"
-                                : " ▲"
-                              : ""}
-                          </span>
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody
-                  {...getTableBodyProps()}
-                  className="bg-white divide-y divide-gray-200"
+    <div className="overflow-x-auto">
+      <table className="table">
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  {page.map((row, i) => {
-                    prepareRow(row);
-                    return (
-                      <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              className="px-6 py-4 whitespace-nowrap border border-gray-200"
-                            >
-                              <div className="ml-2">{cell.render("Cell")}</div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " ↓"
+                        : " ↑"
+                      : ""}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map(row => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      className="px-6 py-4 whitespace-nowrap"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       <div className="mt-4 flex justify-between items-center">
         <div className="flex text-sm text-gray-700">
           {showingEntries}
+        </div>
+        <div className="flex space-x-2">
           <button
             onClick={() => gotoPage(0)}
             disabled={pageIndex === 0}
-            className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md ml-2"
+            className="btn-pagination"
           >
-            <ArrowLeftIcon className="h-5 w-5" />
-            <ArrowLeftIcon className="h-5 w-5" />
+            {"<<"}
           </button>
           <button
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
-            className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md ml-2"
+            className="btn-pagination"
           >
-            <ChevronLeftIcon className="h-5 w-5" />
+            {"<"}
           </button>
           <button
             onClick={() => nextPage()}
             disabled={!canNextPage}
-            className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md ml-2"
+            className="btn-pagination"
           >
-            <ChevronRightIcon className="h-5 w-5" />
+            {">"}
           </button>
           <button
             onClick={() => gotoPage(pageCount - 1)}
             disabled={pageIndex === pageCount - 1}
-            className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md ml-2"
+            className="btn-pagination"
           >
-            <ArrowRightIcon className="h-5 w-5" />
-            <ArrowRightIcon className="h-5 w-5" />
+            {">>"}
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

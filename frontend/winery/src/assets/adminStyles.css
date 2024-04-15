@@ -1,0 +1,50 @@
+.admin-button {
+    background-color: white;
+    border: 2px solid black;
+    width: 25%;
+    height: 150%;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 20px;
+  }
+  
+  .admin-button:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .btn-pagination {
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  
+  .btn-pagination:hover {
+    background-color: black;
+    color: white;
+    border-color: transparent;
+  }
+  
+  .admin-search {
+    border: 1px solid #ccc; /* Dodaje tanku ivicu oko polja */
+    border-radius: 5px; /* Zaobljava ivice polja */
+    padding: 8px 12px; /* Dodaje unutrašnji prostor */
+    font-size: 16px; /* Postavlja veličinu fonta */
+    outline: none; /* Uklanja naglašavanje prilikom klika */
+    transition: border-color 0.2s; /* Dodaje glatku tranziciju boje ivice */
+    width: 300px;
+  }
+  
+  .admin-search:focus {
+    border-color: #000000; /* Menja boju ivice prilikom fokusa */
+  }
+  
+  .search-icon {
+    margin-right: 8px; /* Dodaje marginu između ikone i input polja */
+    color: #555; /* Postavlja boju ikone */
+  }
+  

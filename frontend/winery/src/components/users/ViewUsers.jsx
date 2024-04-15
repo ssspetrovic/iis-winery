@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosPrivate from "../../api/axios";
 import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSync, faSearch } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,9 @@ const ViewUsers = () => {
   const [customers, setCustomers] = useState([]);
   const [managers, setManagers] = useState([]);
   const [winemakers, setWinemakers] = useState([]);
+  const [customerSearchText, setCustomerSearchText] = useState("");
+  const [winemakerSearchText, setWinemakerSearchText] = useState("");
+  const [managerSearchText, setManagerSearchText] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +30,6 @@ const ViewUsers = () => {
         const winemakersResponse = await axiosPrivate.get("/winemakers/", {
           headers: { "Content-Type": "application/json" },
         });
-
         setWinemakers(winemakersResponse.data);
       } catch (error) {
         console.error("Error fetching users data:", error);
@@ -37,20 +39,52 @@ const ViewUsers = () => {
     fetchData();
   }, []);
 
-  // Dohvatanje podataka za nove kolone
-  const customersWithAddress = customers.map((customer) => ({
+  const filterCustomers = (customer, searchText) => {
+    return (
+      customer.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      customer.last_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      customer.username.toLowerCase().includes(searchText.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchText.toLowerCase())
+    );
+  };
+
+  const filterWinemakers = (winemaker, searchText) => {
+    return (
+      winemaker.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      winemaker.last_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      winemaker.username.toLowerCase().includes(searchText.toLowerCase()) ||
+      winemaker.email.toLowerCase().includes(searchText.toLowerCase())
+    );
+  };
+
+  const filterManagers = (manager, searchText) => {
+    return (
+      manager.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      manager.last_name.toLowerCase().includes(searchText.toLowerCase()) ||
+      manager.username.toLowerCase().includes(searchText.toLowerCase()) ||
+      manager.email.toLowerCase().includes(searchText.toLowerCase())
+    );
+  };
+
+  const customersTable = customers.map((customer) => ({
     ...customer,
-    fullAddress: `${customer.address} ${customer.street_number}`, // Spajamo adresu i broj ulice
+    fullName: `${customer.first_name} ${customer.last_name}`,
+    fullAddress: `${customer.address} ${customer.street_number}`,
   }));
 
-  const winemakersWithAddress = winemakers.map((winemaker) => ({
+  const winemakersTable = winemakers.map((winemaker) => ({
     ...winemaker,
-    fullAddress: `${winemaker.address} ${winemaker.street_number}`, // Spajamo adresu i broj ulice
+    fullName: `${winemaker.first_name} ${winemaker.last_name}`,
+    fullAddress: `${winemaker.address} ${winemaker.street_number}`,
   }));
 
-  // Parametri za svaku od tabela
+  const managersTable = managers.map((manager) => ({
+    ...manager,
+    fullName: `${manager.first_name} ${manager.last_name}`,
+  }));
+
   const customersColumns = [
-    { Header: "Name", accessor: "first_name" },
+    { Header: "Name", accessor: "fullName" },
     { Header: "Username", accessor: "username" },
     { Header: "Email", accessor: "email" },
     { Header: "Address", accessor: "fullAddress" },
@@ -58,7 +92,7 @@ const ViewUsers = () => {
   ];
 
   const winemakersColumns = [
-    { Header: "Name", accessor: "first_name" },
+    { Header: "Name", accessor: "fullName" },
     { Header: "Username", accessor: "username" },
     { Header: "Email", accessor: "email" },
     { Header: "Address", accessor: "fullAddress" },
@@ -66,7 +100,7 @@ const ViewUsers = () => {
   ];
 
   const managersColumns = [
-    { Header: "Name", accessor: "first_name" },
+    { Header: "Name", accessor: "fullName" },
     { Header: "Username", accessor: "username" },
     { Header: "Email", accessor: "email" },
     { Header: "Phone", accessor: "phone_number" },
@@ -78,33 +112,72 @@ const ViewUsers = () => {
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Customers</h1>
           <div className="mt-4">
-            <Table columns={customersColumns} data={customersWithAddress} />
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              className="admin-search"
+              placeholder="Search..."
+              value={customerSearchText}
+              onChange={(e) => setCustomerSearchText(e.target.value)}
+            />
+            <Table
+              columns={customersColumns}
+              data={customersTable.filter((customer) =>
+                filterCustomers(customer, customerSearchText)
+              )}
+            />
           </div>
         </div>
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Winemakers</h1>
           <div className="mt-4">
-            <Table columns={winemakersColumns} data={winemakersWithAddress} />
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              className="admin-search"
+              placeholder="Search..."
+              value={winemakerSearchText}
+              onChange={(e) => setWinemakerSearchText(e.target.value)}
+            />
+            <Table
+              columns={winemakersColumns}
+              data={winemakersTable.filter((winemaker) =>
+                filterWinemakers(winemaker, winemakerSearchText)
+              )}
+            />
           </div>
         </div>
         <div>
           <h1 className="text-xl font-semibold">Managers</h1>
           <div className="mt-4">
-            <Table columns={managersColumns} data={managers} />
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              className="admin-search"
+              placeholder="Search..."
+              value={managerSearchText}
+              onChange={(e) => setManagerSearchText(e.target.value)}
+            />
+            <Table
+              columns={managersColumns}
+              data={managersTable.filter((manager) =>
+                filterManagers(manager, managerSearchText)
+              )}
+            />
           </div>
         </div>
         <div className="mt-4 d-flex justify-content-between">
-          <Link to="/register-worker">
-            <Button color="primary">
+          <Link to="/register-worker" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+            <i>
               <FontAwesomeIcon icon={faPen} className="mr-2" />
-              Register New Worker{" "}
-            </Button>
+              {" "}Register New Worker{" "}
+            </i>
           </Link>
-          <Link to="/update-worker">
-            <Button color="secondary">
+          <Link to="/update-worker" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+            <i>
               <FontAwesomeIcon icon={faSync} className="mr-2" />
-              Update Worker{" "}
-            </Button>
+              {" "}Update Worker{" "}
+            </i>
           </Link>
         </div>
       </div>

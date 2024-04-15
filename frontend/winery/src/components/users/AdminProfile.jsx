@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import useAuth from "../../hooks/useAuth";
 import axios from "../../api/axios";
 import AuthProvider from "../../context/AuthProvider";
+import "../../assets/adminStyles.css";
 
 const AdminProfile = () => {
   const [adminInfo, setAdminInfo] = useState(null);
@@ -74,12 +75,12 @@ const AdminProfile = () => {
   return (
     <Container>
       <Row>
-        <Col>
+        <Col className="text-center">
           <h1>Hi, {username}!</h1>
           <h2>What would you like to do today?</h2>
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-4">
         <Col>
           {adminInfo && (
             <Form>
@@ -139,33 +140,40 @@ const AdminProfile = () => {
           )}
         </Col>
       </Row>
-      <Row className="mt-4">
-        <Col>
-          <Button color="primary" onClick={handleEdit}>
+      <Row className="mt-5" style={{ marginBottom: "100px" }}>
+        <Col className="text-center">
+          <button
+            color="primary"
+            size="lg"
+            className="admin-button"
+            onClick={handleEdit}
+          >
             Edit
-          </Button>
+          </button>
         </Col>
       </Row>
-      <Row className="mt-4">
-        <Col>
-          <Link to="/view-users">
-            <Button color="info">
-              <i className="fas fa-users"></i> View Users
-            </Button>
+      <Row className="mt-5">
+        <Col className="d-flex flex-column align-items-center">
+          <span style={{ color: "black", fontWeight: "bold" }}>View Users</span>
+          <Link to="/view-users" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+            <i className="fas fa-users fa-6x mb-2"></i>
           </Link>
         </Col>
-        <Col>
-          <Link to="/view-reports">
-            <Button color="success">
-              <i className="fas fa-chart-bar"></i> View Reports
-            </Button>
+
+        <Col className="d-flex flex-column align-items-center">
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            View Reports
+          </span>
+          <Link to="/view-reports" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+            <i className="fas fa-chart-bar fa-6x mb-2"></i>
           </Link>
         </Col>
-        <Col>
-          <Link to="/view-vehicles">
-            <Button color="warning">
-              <i className="fas fa-truck"></i> View Vehicles
-            </Button>
+        <Col className="d-flex flex-column align-items-center">
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            View Vehicles
+          </span>
+          <Link to="/view-vehicles" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+            <i className="fas fa-truck fa-6x mb-2"></i>
           </Link>
         </Col>
       </Row>
