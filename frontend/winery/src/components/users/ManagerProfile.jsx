@@ -10,13 +10,19 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import "@fortawesome/fontawesome-free/css/all.css";
 import useAuth from "../../hooks/useAuth";
 import axios from "../../api/axios";
 import AuthProvider from "../../context/AuthProvider";
+import "../../assets/adminStyles.css";
 
 const ManagerProfile = () => {
   const [managerInfo, setManagerInfo] = useState(null);
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [passwordError, setPasswordError] = useState(false); // State to track password error
   const { auth } = useAuth();
   const { username, role } = auth || {};
   const { logout } = useContext(AuthProvider);
@@ -28,98 +34,161 @@ const ManagerProfile = () => {
   const fetchManagerInfo = async () => {
     try {
       const response = await axios.get(`/managers/${username}`);
-      setManagerInfo(response.data);
+      const data = response.data;
+      setManagerInfo(data);
+      setEmail(data.email);
+      setFirstName(data.first_name);
+      setLastName(data.last_name);
+      setPhoneNumber(data.phone_number);
     } catch (error) {
       console.error("Error fetching manager info:", error);
     }
   };
 
+  const handleEdit = async () => {
+    try {
+      if (!password) {
+        setPasswordError(true);
+        return; // Exit early if password is empty
+      }
+
+      console.log("Saving changes...");
+      console.log(password);
+      await axios.patch(`/managers/${username}/`, {
+        username: username,
+        password: password,
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+      });
+      console.log("Changes saved successfully!");
+    } catch (error) {
+      console.error("Error saving changes:", error);
+    }
+  };
+
   return (
-    <div className="border border-black">
-      <div className="bg-secondary nav">
-        <h2 className="m-2">Winery</h2>
-      </div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-4" style={{ height: "600px" }}>
-            <div className="rounded border mt-5">
-              <Container className="mt-5">
+    <Container>
+      <Row>
+        <Col md={6}>
+          <div className="rounded border p-4 my-5">
+            <div className="text-center mb-4">
+              <i className="fa-solid fa-circle-user fa-3x"></i>
+            </div>
+            <h4 className="text-center">{username}</h4>
+            <div className="mt-3">
+              <Form>
                 <Row>
-                  <i className="fa-solid fa-circle-user fa-2xl mb-3"></i>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="editFirstName">First Name</Label>
+                      <Input
+                        type="text"
+                        name="firstName"
+                        id="editFirstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="editLastName">Last Name</Label>
+                      <Input
+                        type="text"
+                        name="lastName"
+                        id="editLastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
                 </Row>
                 <Row>
-                  <Col xs={12} className="text-center fs-4 fw-bold">
-                    <p className="text-center">{username}</p>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="editPassword">Password</Label>
+                      <Input
+                        type="password"
+                        name="password"
+                        id="editPassword"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="editEmail">Email</Label>
+                      <Input
+                        type="email"
+                        name="email"
+                        id="editEmail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </FormGroup>
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={6}>
-                    <h4>First Name:</h4>
-                    <p>{managerInfo?.first_name}</p>
-                  </Col>
-                  <Col xs={6}>
-                    <h4>Last Name:</h4>
-                    <p>{managerInfo?.last_name}</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={6}>
-                    <h4>Username:</h4>
-                    <p>{managerInfo?.username}</p>
-                  </Col>
-                  <Col xs={6}>
-                    <h4>Password:</h4>
-                    <p>********</p>
+                  <Col>
+                    <FormGroup>
+                      <Label for="editPhoneNumber">Phone Number</Label>
+                      <Input
+                        type="text"
+                        name="phoneNumber"
+                        id="editPhoneNumber"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                      />
+                    </FormGroup>
                   </Col>
                 </Row>
-                <Row>
-                  <Col xs={12} className="text-center">
-                    <h4>Phone Number:</h4>
-                    <p>{managerInfo?.phone_number}</p>
-                  </Col>
-                </Row>
-              </Container>
+              </Form>
+              {/* Conditional rendering for password error message */}
+              {passwordError && (
+                <p className="text-danger">Please enter a password.</p>
+              )}
+              <div className="text-center">
+                <button
+                  className="admin-button"
+                  onClick={handleEdit}
+                  style={{ height: "50px" }}
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </div>
-          <div className="col-md-6 d-flex justify-content-center align-items-center">
-            <div className="row d-flex justify-content-center align-items-center">
-              <div className=" pt-4">
-                <div className="rounded border p-4 text-center">
-                  <i className="fa-solid fa-champagne-glasses fa-3x"></i>
-                </div>
-              </div>
-              <div className="pt-4">
-                <div className="rounded border p-4 text-center">
-                  <i className="fa-solid fa-handshake fa-3x p-4"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer className="bg-secondary text-white py-2">
-        <Container fluid>
+        </Col>
+        <Col md={4}>
           <Row>
-            <Col xs={6}>
-              <p className="nav m-0 fw-bold">Winery</p>
-            </Col>
-            <Col xs={6} className="text-right">
-              <p className="m-0">
-                <a href="#" className="text-white m-1">
-                  About
-                </a>{" "}
-                <a href="#" className="text-white m-2">
-                  Contact
-                </a>{" "}
-                <a href="#" className="text-white m-1">
-                  Privacy Policy
-                </a>
-              </p>
+            <Col>
+              <div className="rounded p-4 text-center mb-4">
+                <Link to="/events" className="btn btn-outline-dark btn-lg mb-2">
+                  <i className="fa-solid fa-champagne-glasses fa-3x"></i>
+                  <h5 className="mt-2">Events</h5>
+                </Link>
+              </div>
             </Col>
           </Row>
-        </Container>
-      </footer>
-    </div>
+          <Row>
+            <Col>
+              <div className="rounded p-4 text-center">
+                <Link
+                  to="/partnerships"
+                  className="btn btn-outline-dark btn-lg"
+                >
+                  <i className="fa-solid fa-handshake fa-3x"></i>
+                  <h5 className="mt-2">Partnerships</h5>
+                </Link>
+              </div>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

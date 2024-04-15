@@ -6,8 +6,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
 
 
 class LogoutAPIView(APIView):
@@ -79,61 +78,6 @@ class AdminViewSet(viewsets.ModelViewSet):
     serializer_class = AdminSerializer
     lookup_field = 'username'
     lookup_url_kwarg = 'username'
-
-
-class WorkersAPIView(APIView):
-    def get(self, request, *args, **kwargs):
-        winemakers = Winemaker.objects.all()
-        managers = Manager.objects.all()
-
-        winemakers_serializer = WinemakerSerializer(winemakers, many=True)
-        managers_serializer = ManagerSerializer(managers, many=True)
-
-        return Response({'winemakers': winemakers_serializer.data, 'managers': managers_serializer.data})
-
-
-class WinemakerRegistrationAPIView(generics.CreateAPIView):
-    serializer_class = WinemakerSerializer
-
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
-
-class ManagerRegistrationAPIView(generics.CreateAPIView):
-    serializer_class = ManagerSerializer
-
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
-
-class WinemakerUpdateAPIView(generics.UpdateAPIView):
-    queryset = Winemaker.objects.all()
-    serializer_class = WinemakerSerializer
-    lookup_field = 'username'
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
-
-class ManagerUpdateAPIView(generics.UpdateAPIView):
-    queryset = Manager.objects.all()
-    serializer_class = ManagerSerializer
-    lookup_field = 'username'
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
 
 
 class ReportViewSet(viewsets.ModelViewSet):

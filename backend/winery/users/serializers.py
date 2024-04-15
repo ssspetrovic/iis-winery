@@ -53,6 +53,7 @@ class WinemakerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         city_data = validated_data.pop('city')
         city_instance, _ = City.objects.get_or_create(**city_data)
+        
         validated_data['role'] = Winemaker.Role.WINEMAKER
 
         password = validated_data.pop('password')
@@ -82,9 +83,6 @@ class WinemakerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Winemaker
         fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'address', 'street_number', 'city']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
 
 class ManagerSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
@@ -112,9 +110,6 @@ class ManagerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Manager
         fields = ['username', 'password', 'first_name', 'last_name', 'email', 'phone_number']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
 
 
 class AdminSerializer(serializers.HyperlinkedModelSerializer):
