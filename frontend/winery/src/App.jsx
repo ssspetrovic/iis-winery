@@ -17,6 +17,7 @@ import Unauthorized from "./components/auth/Unauthorized";
 import NotFound from "./components/util/NotFound";
 import MainNavbar from "./components/util/MainNavbar";
 import ManagerProfile from "./components/users/ManagerProfile";
+import CustomerProfile from "./components/users/CustomerProfile";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -34,6 +35,12 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Private */}
+          <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
+            <Route
+              path="/customer-profile/:username"
+              element={<CustomerProfile />}
+            />
+          </Route>
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
           </Route>
