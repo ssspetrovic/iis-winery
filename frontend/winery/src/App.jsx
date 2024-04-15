@@ -17,6 +17,7 @@ import Unauthorized from "./components/auth/Unauthorized";
 import NotFound from "./components/util/NotFound";
 import MainNavbar from "./components/util/MainNavbar";
 import ManagerProfile from "./components/users/ManagerProfile";
+import WinemakerProfile from "./components/users/WinemakerProfile";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -42,6 +43,12 @@ function App() {
             path="/manager-profile/:username"
             element={<ManagerProfile />}
           />
+
+          <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
+            <Route path="/winemaker-profile/:username"
+            element={<WinemakerProfile />}/>
+          </Route>
+
 
           {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}
           <Route path="/view-users" element={<ViewUsers />} />

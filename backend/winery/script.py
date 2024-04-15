@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'winery.settings')
 django.setup()
 
 # Import modela Admin iz vaše aplikacije
-from users.models import Admin, City
+from users.models import Admin, City, Winemaker
 
 # Provera postoji li već administratorski korisnik
 if not Admin.objects.filter(username='pale').exists():
