@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../../api/axios";
-import { useNavigate } from "react-router-dom"; // Importovanje useNavigate iz React Router-a
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Form,
@@ -10,8 +10,14 @@ import {
   Col,
   Row,
   Container,
+  Modal,
+  ModalHeader,
+  ModalFooter,
 } from "reactstrap";
 import "../../assets/styles.css";
+import Unauthorized from "../auth/Unauthorized";
+import useAuth from "../../hooks/useAuth";
+import "../../assets/adminStyles.css";
 
 function RegisterWorker() {
   const [username, setUsername] = useState("");
@@ -20,13 +26,17 @@ function RegisterWorker() {
   const [email, setEmail] = useState("");
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
-  const [role, setRole] = useState("manager");
+  const [userRole, setUserRole] = useState("manager");
   const [address, setAddress] = useState("");
   const [street_number, setStreetNo] = useState("");
   const [city, setCity] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
-  const navigate = useNavigate(); // Koristimo useNavigate hook za navigaciju
-  const [errorMessage, setErrorMessage] = useState(""); // Dodajemo stanje za prikazivanje poruka o greškama
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const { auth } = useAuth();
+  const { role } = auth || {};
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +56,7 @@ function RegisterWorker() {
     const cityResponse = await axios.get(`/cities/${encodedCity}`);
 
     try {
-      if (role === "manager") {
+      if (userRole === "manager") {
         const response = await axios.post("/managers/", {
           username,
           password,
@@ -56,7 +66,7 @@ function RegisterWorker() {
           phone_number,
         });
         console.log(response.data);
-      } else if (role === "winemaker") {
+      } else if (userRole === "winemaker") {
         const response = await axios.post("/winemakers/", {
           username,
           password,
@@ -70,7 +80,7 @@ function RegisterWorker() {
         console.log(response.data);
       }
 
-      // Uspesno registrovanje, resetovanje stanja i preusmeravanje na određenu rutu
+      // Uspesno registrovanje, resetovanje stanja i prikazivanje modala
       setUsername("");
       setPassword("");
       setConfirmPassword("");
@@ -82,6 +92,8 @@ function RegisterWorker() {
       setCity("");
       setPhoneNumber("");
       setErrorMessage("");
+      setIsModalOpen(true);
+      setIsRegistrationSuccess(true);
     } catch (error) {
       console.error(error);
       // Neuspesno registrovanje, prikazivanje poruke o grešci
@@ -93,10 +105,49 @@ function RegisterWorker() {
     navigate("/view-users");
   };
 
+  if (role !== "ADMIN") {
+    return <Unauthorized />;
+  }
+
   return (
     <Container className="registration-container">
       <div className="registration-box">
+        <h1 className="text-center mb-4" style={{ color: "#007bff" }}>
+          Register New Workers
+        </h1>
         <Form onSubmit={handleSubmit}>
+          <Label>Role</Label>
+          <Row>
+            <Col md={6}>
+              <FormGroup check inline>
+                <Label check>
+                  <Input
+                    type="radio"
+                    name="userRole"
+                    value="manager"
+                    checked={userRole === "manager"}
+                    onChange={() => setUserRole("manager")}
+                  />
+                  Manager
+                </Label>
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup check inline>
+                <Label check>
+                  <Input
+                    type="radio"
+                    name="userRole"
+                    value="winemaker"
+                    checked={userRole === "winemaker"}
+                    onChange={() => setUserRole("winemaker")}
+                  />
+                  Winemaker
+                </Label>
+              </FormGroup>
+            </Col>
+          </Row>
+
           <Row>
             <Col md={6}>
               <FormGroup>
@@ -112,12 +163,38 @@ function RegisterWorker() {
             </Col>
             <Col md={6}>
               <FormGroup>
+                <Label for="first_name">First Name</Label>
+                <Input
+                  type="text"
+                  id="first_name"
+                  value={first_name}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="form-control"
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <FormGroup>
                 <Label for="password">Password</Label>
                 <Input
                   type="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                />
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup>
+                <Label for="last_name">Last Name</Label>
+                <Input
+                  type="text"
+                  id="last_name"
+                  value={last_name}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="form-control"
                 />
               </FormGroup>
@@ -149,60 +226,7 @@ function RegisterWorker() {
               </FormGroup>
             </Col>
           </Row>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="first_name">First Name</Label>
-                <Input
-                  type="text"
-                  id="first_name"
-                  value={first_name}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="last_name">Last Name</Label>
-                <Input
-                  type="text"
-                  id="last_name"
-                  value={last_name}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <FormGroup>
-            <Label>Role</Label>
-            <FormGroup check>
-              <Label check>
-                <Input
-                  type="radio"
-                  name="role"
-                  value="manager"
-                  checked={role === "manager"}
-                  onChange={() => setRole("manager")}
-                />
-                Manager
-              </Label>
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input
-                  type="radio"
-                  name="role"
-                  value="winemaker"
-                  checked={role === "winemaker"}
-                  onChange={() => setRole("winemaker")}
-                />
-                Winemaker
-              </Label>
-            </FormGroup>
-          </FormGroup>
-          {role === "winemaker" && (
+          {userRole === "winemaker" && (
             <div>
               <Row>
                 <Col md={6}>
@@ -231,7 +255,7 @@ function RegisterWorker() {
                 </Col>
               </Row>
               <Row>
-                <Col md={6} className="mx-auto">
+                <Col className="mx-auto">
                   <FormGroup>
                     <Label for="city">City</Label>
                     <Input
@@ -246,7 +270,7 @@ function RegisterWorker() {
               </Row>
             </div>
           )}
-          {role === "manager" && (
+          {userRole === "manager" && (
             <FormGroup>
               <Label for="phone_number">Phone Number</Label>
               <Input
@@ -259,14 +283,30 @@ function RegisterWorker() {
             </FormGroup>
           )}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <Button type="submit" color="primary" className="mr-2">
-            Register
-          </Button>
-          <Button color="secondary" onClick={handleCancel}>
-            Cancel Registration
-          </Button>
+          <div className="d-flex justify-content-between">
+            <Button type="submit" color="primary">
+              Register
+            </Button>
+            <Button color="secondary" onClick={handleCancel}>
+              Cancel Registration
+            </Button>
+          </div>
         </Form>
       </div>
+      {/* Modal */}
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
+          <ModalHeader>New Worker Successfully Added!</ModalHeader>
+          <ModalFooter>
+            <Button color="secondary" onClick={() => setIsModalOpen(false)}>
+              Add Another User
+            </Button>
+            <Button color="primary" onClick={() => navigate("/view-users")}>
+              View Users
+            </Button>
+          </ModalFooter>
+        </Modal>
+      )}
     </Container>
   );
 }

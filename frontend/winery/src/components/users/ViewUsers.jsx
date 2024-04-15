@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync, faSearch } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
+import Unauthorized from "../auth/Unauthorized";
+import useAuth from "../../hooks/useAuth";
 
 const ViewUsers = () => {
   const [customers, setCustomers] = useState([]);
@@ -13,6 +15,8 @@ const ViewUsers = () => {
   const [customerSearchText, setCustomerSearchText] = useState("");
   const [winemakerSearchText, setWinemakerSearchText] = useState("");
   const [managerSearchText, setManagerSearchText] = useState("");
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,20 +110,51 @@ const ViewUsers = () => {
     { Header: "Phone", accessor: "phone_number" },
   ];
 
+  if (role !== "ADMIN") {
+    return <Unauthorized />;
+  }
+
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 admin-container">
+      <h1 className="mb-5 text-center" style={{ color: "#4a5568" }}>
+        View Users
+      </h1>
+      <div className="mt-4 mb-4 d-flex justify-content-between">
+        <Link
+          to="/register-worker"
+          className="btn view-user-btn btn-lg"
+          style={{ borderWidth: "3px", borderRadius: "20px" }}
+        >
+          <i>
+            <FontAwesomeIcon icon={faPen} className="mr-2" /> Register New
+            Worker{" "}
+          </i>
+        </Link>
+
+        <Link
+          to="/update-worker"
+          className="btn view-user-btn btn-lg"
+          style={{ borderWidth: "3px", borderRadius: "20px" }}
+        >
+          <i>
+            <FontAwesomeIcon icon={faSync} className="mr-2" /> Update Worker{" "}
+          </i>
+        </Link>
+      </div>
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Customers</h1>
-          <div className="mt-4">
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
-            <input
-              type="text"
-              className="admin-search"
-              placeholder="Search..."
-              value={customerSearchText}
-              onChange={(e) => setCustomerSearchText(e.target.value)}
-            />
+          <div className="mt-4 mb-4">
+            <div className="search-container">
+              <FontAwesomeIcon icon={faSearch} className="search-icon" />
+              <input
+                type="text"
+                className="admin-search"
+                placeholder="Search..."
+                value={customerSearchText}
+                onChange={(e) => setCustomerSearchText(e.target.value)}
+              />
+            </div>
             <Table
               columns={customersColumns}
               data={customersTable.filter((customer) =>
@@ -130,15 +165,17 @@ const ViewUsers = () => {
         </div>
         <div className="mb-8">
           <h1 className="text-xl font-semibold">Winemakers</h1>
-          <div className="mt-4">
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
-            <input
-              type="text"
-              className="admin-search"
-              placeholder="Search..."
-              value={winemakerSearchText}
-              onChange={(e) => setWinemakerSearchText(e.target.value)}
-            />
+          <div className="mt-4 mb-4">
+            <div className="search-container">
+              <FontAwesomeIcon icon={faSearch} className="search-icon" />
+              <input
+                type="text"
+                className="admin-search"
+                placeholder="Search..."
+                value={winemakerSearchText}
+                onChange={(e) => setWinemakerSearchText(e.target.value)}
+              />
+            </div>
             <Table
               columns={winemakersColumns}
               data={winemakersTable.filter((winemaker) =>
@@ -149,15 +186,17 @@ const ViewUsers = () => {
         </div>
         <div>
           <h1 className="text-xl font-semibold">Managers</h1>
-          <div className="mt-4">
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
-            <input
-              type="text"
-              className="admin-search"
-              placeholder="Search..."
-              value={managerSearchText}
-              onChange={(e) => setManagerSearchText(e.target.value)}
-            />
+          <div className="mt-4 mb-4">
+            <div className="search-container">
+              <FontAwesomeIcon icon={faSearch} className="search-icon" />
+              <input
+                type="text"
+                className="admin-search"
+                placeholder="Search..."
+                value={managerSearchText}
+                onChange={(e) => setManagerSearchText(e.target.value)}
+              />
+            </div>
             <Table
               columns={managersColumns}
               data={managersTable.filter((manager) =>
@@ -166,21 +205,8 @@ const ViewUsers = () => {
             />
           </div>
         </div>
-        <div className="mt-4 d-flex justify-content-between">
-          <Link to="/register-worker" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
-            <i>
-              <FontAwesomeIcon icon={faPen} className="mr-2" />
-              {" "}Register New Worker{" "}
-            </i>
-          </Link>
-          <Link to="/update-worker" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
-            <i>
-              <FontAwesomeIcon icon={faSync} className="mr-2" />
-              {" "}Update Worker{" "}
-            </i>
-          </Link>
-        </div>
       </div>
+      <div className="whitespace">.</div>
     </div>
   );
 };

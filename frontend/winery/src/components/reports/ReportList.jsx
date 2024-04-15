@@ -12,6 +12,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import useAuth from "../../hooks/useAuth";
+import Unauthorized from "../auth/Unauthorized";
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
@@ -97,6 +98,10 @@ const ReportList = () => {
   const toggleAdminConfirmModal = () => {
     setAdminConfirmModal(!adminConfirmModal);
   };
+
+  if (role === "WINEMAKER") {
+    return <Unauthorized />;
+  }
 
   return (
     <Container>

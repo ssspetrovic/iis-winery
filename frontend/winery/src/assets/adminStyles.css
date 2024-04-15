@@ -1,50 +1,147 @@
+/* body {
+  background-color: #722F37; 
+} */
+
+.admin-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border-radius: 20px;
+}
+
 .admin-button {
-    background-color: white;
-    border: 2px solid black;
-    width: 25%;
-    height: 150%;
-    transition: background-color 0.3s, color 0.3s;
-    border-radius: 20px;
-  }
-  
-  .admin-button:hover {
-    background-color: black;
-    color: white;
-  }
-  
-  .btn-pagination {
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 8px 16px;
-    background-color: transparent;
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  }
-  
-  .btn-pagination:hover {
-    background-color: black;
-    color: white;
-    border-color: transparent;
-  }
-  
-  .admin-search {
-    border: 1px solid #ccc; /* Dodaje tanku ivicu oko polja */
-    border-radius: 5px; /* Zaobljava ivice polja */
-    padding: 8px 12px; /* Dodaje unutrašnji prostor */
-    font-size: 16px; /* Postavlja veličinu fonta */
-    outline: none; /* Uklanja naglašavanje prilikom klika */
-    transition: border-color 0.2s; /* Dodaje glatku tranziciju boje ivice */
-    width: 300px;
-  }
-  
-  .admin-search:focus {
-    border-color: #000000; /* Menja boju ivice prilikom fokusa */
-  }
-  
-  .search-icon {
-    margin-right: 8px; /* Dodaje marginu između ikone i input polja */
-    color: #555; /* Postavlja boju ikone */
-  }
-  
+  background-color: white;
+  border: 2px solid black;
+  width: 25%;
+  height: 150%;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 20px;
+}
+
+.admin-button:hover {
+  background-color: black;
+  color: white;
+}
+
+.btn-pagination {
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-pagination:hover {
+  background-color: black;
+  color: white;
+  border-color: transparent;
+}
+
+.admin-search {
+  border: 1px solid #ccc;
+  /* Dodaje tanku ivicu oko polja */
+  border-radius: 5px;
+  /* Zaobljava ivice polja */
+  padding: 8px 12px;
+  /* Dodaje unutrašnji prostor */
+  font-size: 16px;
+  /* Postavlja veličinu fonta */
+  outline: none;
+  /* Uklanja naglašavanje prilikom klika */
+  transition: border-color 0.2s;
+  /* Dodaje glatku tranziciju boje ivice */
+  width: 300px;
+}
+
+.admin-search:focus {
+  border-color: #000000;
+  /* Menja boju ivice prilikom fokusa */
+}
+
+.search-icon {
+  margin-right: 8px;
+  /* Dodaje marginu između ikone i input polja */
+  color: #555;
+  /* Postavlja boju ikone */
+}
+
+.search-container {
+  margin-bottom: 1rem; /* Dodajte razmak ispod pretrage */
+}
+
+/* Dodavanje uspravnih linija između kolona */
+.admin-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Stilovi za glavni deo tabele */
+.admin-table thead th {
+  background-color: #4a5568;
+  /* Promenite boju pozadine */
+  color: #ffffff;
+  /* Promenite boju teksta */
+  border-bottom: 2px solid #cbd5e0;
+  /* Dodajte donju liniju */
+  padding: 8px;
+  /* Prilagodite padding prema potrebi */
+}
+
+.admin-table th,
+.admin-table td {
+  border-right: 1px solid #e2e8f0;
+  /* Uspravna linija između kolona */
+  padding: 8px;
+  /* Prilagodite padding prema potrebi */
+}
+
+/* Dodavanje linija na skroz levoj i skroz desnoj strani */
+.table thead th:first-child,
+.table tbody td:first-child {
+  border-left: 1px solid #e2e8f0;
+  /* Linija na skroz levoj strani */
+}
+
+.table thead th:last-child,
+.table tbody td:last-child {
+  border-right: 1px solid #e2e8f0;
+  /* Linija na skroz desnoj strani */
+}
+
+.admin-pagination-container {
+  display: flex;
+  justify-content: center;
+  /* Centriranje sadržaja po horizontali */
+  align-items: center;
+  /* Centriranje sadržaja po vertikali */
+  margin-top: 4rem;
+  /* Prilagodite margine prema potrebi */
+}
+
+.admin-pagination-buttons {
+  display: flex;
+  gap: 0.5rem;
+  /* Razmak između dugmadi */
+}
+
+.showing-entries {
+  margin-right: 1rem;
+  /* Dodajte desni razmak */
+}
+
+.view-user-btn:hover {
+  background-color: #4a5568;
+  color: #ffffff; /* Bela boja teksta prilikom hovera */
+}
+
+.view-user-btn {
+  border-color: #4a5568;
+  color: #4a5568;
+}
+
+.whitespace {
+  color: #ffffff;
+}

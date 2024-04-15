@@ -36,7 +36,7 @@ class Customer(User):
 
 class Winemaker(User):
     city = models.OneToOneField(
-        City, on_delete=models.CASCADE, verbose_name="City")
+        City, on_delete=models.CASCADE, verbose_name="City", unique=False)
     address = models.CharField(max_length=255, verbose_name="Address")
     street_number = models.IntegerField(verbose_name="Street Number", default=0)
 

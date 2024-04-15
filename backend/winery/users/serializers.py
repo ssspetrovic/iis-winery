@@ -53,7 +53,6 @@ class WinemakerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         city_data = validated_data.pop('city')
         city_instance, _ = City.objects.get_or_create(**city_data)
-        
         validated_data['role'] = Winemaker.Role.WINEMAKER
 
         password = validated_data.pop('password')

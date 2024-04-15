@@ -6,6 +6,7 @@ import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import Unauthorized from "../auth/Unauthorized";
 
 const VehiclesList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -124,7 +125,7 @@ const VehiclesList = () => {
               </div>
             </>
           ) : (
-            <p>You don't have permission to access this page.</p>
+            <Unauthorized />
           )}
         </Col>
       </Row>

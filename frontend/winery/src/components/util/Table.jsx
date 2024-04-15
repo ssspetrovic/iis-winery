@@ -41,22 +41,18 @@ function Table({ columns, data }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table">
+      <table className="table admin-table">
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
+              {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   className="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   {column.render("Header")}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " ↓"
-                        : " ↑"
-                      : ""}
+                    {column.isSorted ? (column.isSortedDesc ? " ↓" : " ↑") : ""}
                   </span>
                 </th>
               ))}
@@ -64,11 +60,11 @@ function Table({ columns, data }) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map(row => {
+          {page.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
+                {row.cells.map((cell) => {
                   return (
                     <td
                       {...cell.getCellProps()}
@@ -83,8 +79,8 @@ function Table({ columns, data }) {
           })}
         </tbody>
       </table>
-      <div className="mt-4 flex justify-between items-center">
-        <div className="flex text-sm text-gray-700">
+      <div className="admin-pagination-container">
+        <div className="showing-entries flex text-sm text-gray-700">
           {showingEntries}
         </div>
         <div className="flex space-x-2">

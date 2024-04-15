@@ -73,7 +73,8 @@ const AdminProfile = () => {
   };
 
   return (
-    <Container>
+    <Container className="admin-container">
+      <div className="whitespace">.</div>
       <Row>
         <Col className="text-center">
           <h1>Hi, {username}!</h1>
@@ -155,7 +156,11 @@ const AdminProfile = () => {
       <Row className="mt-5">
         <Col className="d-flex flex-column align-items-center">
           <span style={{ color: "black", fontWeight: "bold" }}>View Users</span>
-          <Link to="/view-users" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+          <Link
+            to="/view-users"
+            className="btn btn-outline-dark"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
             <i className="fas fa-users fa-6x mb-2"></i>
           </Link>
         </Col>
@@ -164,7 +169,11 @@ const AdminProfile = () => {
           <span style={{ color: "black", fontWeight: "bold" }}>
             View Reports
           </span>
-          <Link to="/view-reports" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+          <Link
+            to="/view-reports"
+            className="btn btn-outline-dark"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
             <i className="fas fa-chart-bar fa-6x mb-2"></i>
           </Link>
         </Col>
@@ -172,11 +181,16 @@ const AdminProfile = () => {
           <span style={{ color: "black", fontWeight: "bold" }}>
             View Vehicles
           </span>
-          <Link to="/view-vehicles" className="btn btn-outline-dark" style={{ borderWidth: "3px", borderRadius: "20px" }}>
+          <Link
+            to="/view-vehicles"
+            className="btn btn-outline-dark"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
             <i className="fas fa-truck fa-6x mb-2"></i>
           </Link>
         </Col>
       </Row>
+      <div className="whitespace">.</div>
     </Container>
   );
 };
