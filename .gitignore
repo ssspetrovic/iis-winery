@@ -297,4 +297,7 @@ sketch
 .history
 .ionide
 
+# Virtual Enviorment
+backend/winery/myvenv/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,python,react
