@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from datetime import date
 
 class City(models.Model):
     name = models.CharField(
@@ -28,7 +28,8 @@ class Customer(User):
         City, on_delete=models.CASCADE, verbose_name="City")
     address = models.CharField(max_length=255, verbose_name="Address")
     street_number = models.IntegerField(verbose_name="Street Number", default=0)
-
+    date_of_birth = models.DateField(verbose_name="Date of Birth", default=date.today)
+    
     class Meta:
         verbose_name = 'Customer'
         verbose_name_plural = 'Customers'

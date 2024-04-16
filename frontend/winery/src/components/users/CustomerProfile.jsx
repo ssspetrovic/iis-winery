@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Button,
   Row,
@@ -14,8 +14,13 @@ import {
   CardTitle,
   CardText,
   CardImg,
+  UncontrolledTooltip,
 } from "reactstrap";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import PasswordChangeModal from "../util/PasswordChangeModal";
+import wineImage1 from "../../assets/images/wine_01.jpg";
+import wineImage2 from "../../assets/images/wine_02.jpg";
+import wineImage3 from "../../assets/images/wine_03.jpg";
 
 const CustomerProfile = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -24,13 +29,16 @@ const CustomerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [address, setAddress] = useState("");
   const [streetNumber, setStreetNumber] = useState(0);
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState(0);
 
-  const currentDate = new Date(Date.now());
-  const dateOfBirth = currentDate.toISOString().split("T")[0]; // Format to "yyyy-MM-dd"
+  const getDateString = (date) => {
+    const splitted = date.split("-");
+    return `${splitted[2]}.${splitted[1]}.${splitted[0]}.`;
+  };
 
   const fetchData = async () => {
     try {
@@ -38,10 +46,12 @@ const CustomerProfile = () => {
       console.log("success: ", response.data.username);
       setFirstName(response.data.first_name);
       setLastName(response.data.last_name);
+      setDateOfBirth(getDateString(response.data.date_of_birth));
       setAddress(response.data.address);
       setStreetNumber(response.data.street_number);
       setCity(response.data.city.name);
       setPostalCode(response.data.city.postal_code);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -81,6 +91,27 @@ const CustomerProfile = () => {
   const discard = async () => {
     setIsEditing(false);
     fetchData();
+  };
+
+  const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
+    useState(false);
+
+  const togglePasswordChangeModal = () => {
+    setIsPasswordChangeModalOpen(!isPasswordChangeModalOpen);
+  };
+
+  const changePassword = async (newPassword) => {
+    try {
+      const response = await axiosPrivate.patch(`/customers/${username}/`, {
+        password: newPassword,
+      });
+      console.log(response);
+      alert("Password successfully changed!");
+      setIsPasswordChangeModalOpen(false);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to change the password :(\nPlease try again.");
+    }
   };
 
   return (
@@ -138,9 +169,20 @@ const CustomerProfile = () => {
               <FormGroup>
                 <Row>
                   <Col md="6">
-                    <Label className="form-label" for="customer-country">
-                      Country
+                    <Label
+                      id="customer-country-label"
+                      className="form-label"
+                      for="customer-country"
+                    >
+                      Country <span className="text-danger">*</span>
                     </Label>
+                    <UncontrolledTooltip
+                      className="mx-3"
+                      placement="right"
+                      target="customer-country-label"
+                    >
+                      We only ship to Serbia.
+                    </UncontrolledTooltip>
                     <Input
                       id="customer-country"
                       className="form-control"
@@ -151,15 +193,26 @@ const CustomerProfile = () => {
                     />
                   </Col>
                   <Col md="6">
-                    <Label className="form-label" for="customer-dob">
-                      Date of Birth
+                    <Label
+                      id="customer-dob-label"
+                      className="form-label"
+                      for="customer-dob"
+                    >
+                      Date of Birth <span className="text-danger">*</span>
                     </Label>
+                    <UncontrolledTooltip
+                      className="mx-3"
+                      placement="right"
+                      target="customer-dob-label"
+                    >
+                      Birth date cannot be changed.
+                    </UncontrolledTooltip>
                     <Input
                       id="customer-dob"
                       className="form-control"
                       name="dob"
                       value={dateOfBirth}
-                      type="date"
+                      type="text"
                       disabled
                     />
                   </Col>
@@ -230,7 +283,7 @@ const CustomerProfile = () => {
                 </Row>
               </FormGroup>
             </Form>
-            <Row className="mt-5">
+            <Row className="mt-4">
               <Col md="12" className="text-center">
                 <Button
                   className="w-50"
@@ -262,54 +315,90 @@ const CustomerProfile = () => {
                 </Button>
               </Col>
             </Row>
+            <Row>
+              <Col md="12" className="text-center mt-2">
+                <p>
+                  Looking to change the password?
+                  <Link className="mx-1" onClick={togglePasswordChangeModal}>
+                    Click here
+                  </Link>
+                  <PasswordChangeModal
+                    isOpen={isPasswordChangeModalOpen}
+                    toggle={togglePasswordChangeModal}
+                    confirm={changePassword}
+                  />
+                </p>
+              </Col>
+            </Row>
           </div>
         </Col>
       </Row>
-      <hr className="my-5" />
+      <hr className="my-4" />
+      <Row>
+        <h3 className="mb-3">You might be interested in</h3>
+      </Row>
       <Row>
         <CardGroup>
           <Col md="4">
             <Card className="mx-2">
-              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardImg
+                src={wineImage1}
+                className="card-img-top"
+                alt="wine image"
+              />
               <CardBody>
-                <CardTitle>Card title</CardTitle>
+                <CardTitle>First Wine Sample</CardTitle>
                 <CardText>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Sapiente corporis iusto impedit delectus laboriosam. Sunt
                   aperiam eius suscipit est explicabo. Sed beatae nihil est vel
                   vitae quibusdam debitis earum fugit?
                 </CardText>
-                <Button color="primary">Go somewhere</Button>
+                <div className="text-center">
+                  <Button color="primary">Learn more</Button>
+                </div>
               </CardBody>
             </Card>
           </Col>
           <Col md="4">
             <Card className="mx-2">
-              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardImg
+                src={wineImage2}
+                className="card-img-top"
+                alt="wine image"
+              />
               <CardBody>
-                <CardTitle>Card title</CardTitle>
+                <CardTitle>Second Wine Sample</CardTitle>
                 <CardText>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Sapiente corporis iusto impedit delectus laboriosam. Sunt
                   aperiam eius suscipit est explicabo. Sed beatae nihil est vel
                   vitae quibusdam debitis earum fugit?
                 </CardText>
-                <Button color="primary">Go somewhere</Button>
+                <div className="text-center">
+                  <Button color="primary">Learn more</Button>
+                </div>
               </CardBody>
             </Card>
           </Col>
           <Col md="4">
             <Card className="mx-2">
-              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardImg
+                src={wineImage3}
+                className="card-img-top"
+                alt="wine image"
+              />
               <CardBody>
-                <CardTitle>Card title</CardTitle>
+                <CardTitle>Third Wine Sample</CardTitle>
                 <CardText>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Sapiente corporis iusto impedit delectus laboriosam. Sunt
                   aperiam eius suscipit est explicabo. Sed beatae nihil est vel
                   vitae quibusdam debitis earum fugit?
                 </CardText>
-                <Button color="primary">Go somewhere</Button>
+                <div className="text-center">
+                  <Button color="primary">Learn more</Button>
+                </div>
               </CardBody>
             </Card>
           </Col>
