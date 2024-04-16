@@ -10,8 +10,13 @@ import {
   Col,
   Row,
   Container,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 import "../../assets/styles.css";
+import "../../assets/adminStyles.css";
 
 function UpdateVehicle() {
   const [driverName, setDriverName] = useState("");
@@ -26,6 +31,7 @@ function UpdateVehicle() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isOperational, setIsOperational] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
   const fetchVehicles = async () => {
     try {
@@ -111,6 +117,9 @@ function UpdateVehicle() {
 
       // Refetch vehicles to update the list
       fetchVehicles();
+
+      // Show success modal
+      setSuccessModal(true);
     } catch (error) {
       console.error(error);
       setErrorMessage("Update failed. Please try again later.");
@@ -121,9 +130,24 @@ function UpdateVehicle() {
     navigate("/view-vehicles");
   };
 
+  const successModalContent = (
+    <Modal isOpen={successModal} toggle={() => setSuccessModal(false)}>
+      <ModalHeader toggle={() => setSuccessModal(false)}>Success</ModalHeader>
+      <ModalBody>
+        Vehicle Successfully Updated
+      </ModalBody>
+      <ModalFooter>
+        <Button style={{ backgroundColor: "#4a5568" }} onClick={() => setSuccessModal(false)}>Close</Button>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <Container className="registration-container">
       <div className="registration-box">
+        <h1 className="text-center mb-4" style={{ color: "#007bff" }}>
+          Update Existing Vehicle
+        </h1>
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col md={6} className="mx-auto">
@@ -250,42 +274,53 @@ function UpdateVehicle() {
             <Col md={6}>
               <FormGroup>
                 <Label for="isOperational">Is Operational</Label>
-                <div>
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="isOperational"
-                      value="true"
-                      checked={isOperational === true}
-                      onChange={() => setIsOperational(true)}
-                    />{" "}
-                    True
-                  </Label>
-                </div>
-                <div>
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="isOperational"
-                      value="false"
-                      checked={isOperational === false}
-                      onChange={() => setIsOperational(false)}
-                    />{" "}
-                    False
-                  </Label>
-                </div>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup check inline>
+                      <Label check>
+                        <Input
+                          type="radio"
+                          className="radio-check"
+                          name="isOperational"
+                          value="true"
+                          checked={isOperational === true}
+                          onChange={() => setIsOperational(true)}
+                        />{" "}
+                        True
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup check inline>
+                      <Label check>
+                        <Input
+                          type="radio"
+                          className="radio-check"
+                          name="isOperational"
+                          value="false"
+                          checked={isOperational === false}
+                          onChange={() => setIsOperational(false)}
+                        />{" "}
+                        False
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                </Row>
               </FormGroup>
             </Col>
           </Row>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <Button type="submit" color="primary" className="mr-2">
-            Update
-          </Button>
-          <Button color="secondary" onClick={handleCancel}>
-            Cancel Update
-          </Button>
+          <div className="d-flex justify-content-between">
+            <Button type="submit" color="primary" className="mr-2">
+              Update
+            </Button>
+            <Button color="secondary" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </div>
         </Form>
       </div>
+      {successModalContent}
     </Container>
   );
 }
