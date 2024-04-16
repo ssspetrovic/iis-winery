@@ -82,7 +82,7 @@ class WinemakerSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Winemaker
-        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'address', 'street_number', 'city']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'phone_number', 'address', 'street_number', 'city']
 
 class ManagerSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
