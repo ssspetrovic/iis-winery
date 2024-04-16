@@ -18,35 +18,55 @@ const CustomerProfile = () => {
   const currentDate = new Date(Date.now());
   const dateOfBirth = currentDate.toISOString().split("T")[0]; // Format to "yyyy-MM-dd"
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosPrivate.get(`/customers/${username}/`);
-        console.log("success: ", response.data.username);
-        setFirstName(response.data.first_name);
-        setLastName(response.data.last_name);
-        setAddress(response.data.address);
-        setStreetNumber(response.data.street_number);
-        setCity(response.data.city.name);
-        setPostalCode(response.data.city.postal_code);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axiosPrivate.get(`/customers/${username}/`);
+      console.log("success: ", response.data.username);
+      setFirstName(response.data.first_name);
+      setLastName(response.data.last_name);
+      setAddress(response.data.address);
+      setStreetNumber(response.data.street_number);
+      setCity(response.data.city.name);
+      setPostalCode(response.data.city.postal_code);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
-  const edit = async () => {
+  const edit = () => {
     setIsEditing(true);
   };
 
-  const confirm = () => {
+  const confirm = async () => {
     setIsEditing(false);
+
+    try {
+      const response = await axiosPrivate.patch(`/customers/${username}/`, {
+        first_name: firstName,
+        last_name: lastName,
+        address: address,
+        street_number: streetNumber,
+        city: {
+          name: city,
+          postal_code: postalCode,
+        },
+      });
+
+      console.log(response);
+      alert("Information successfully updated!");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update the information :(\nPlease try again.");
+    }
   };
 
-  const discard = () => {
+  const discard = async () => {
     setIsEditing(false);
+    fetchData();
   };
 
   return (
@@ -79,10 +99,10 @@ const CustomerProfile = () => {
                       id="customer-first-name"
                       className="form-control"
                       name="name"
-                      placeholder="xx"
-                      type="text"
                       value={firstName}
+                      type="text"
                       disabled={!isEditing}
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                   </Col>
                   <Col md="6">
@@ -93,10 +113,10 @@ const CustomerProfile = () => {
                       id="customer-last-name"
                       className="form-control"
                       name="last-name"
-                      placeholder="xx"
-                      type="text"
                       value={lastName}
+                      type="text"
                       disabled={!isEditing}
+                      onChange={(e) => setLastName(e.target.value)}
                     />
                   </Col>
                 </Row>
@@ -111,9 +131,8 @@ const CustomerProfile = () => {
                       id="customer-country"
                       className="form-control"
                       name="country"
-                      placeholder="xx"
-                      type="text"
                       value="Serbia"
+                      type="text"
                       disabled
                     />
                   </Col>
@@ -125,10 +144,9 @@ const CustomerProfile = () => {
                       id="customer-dob"
                       className="form-control"
                       name="dob"
-                      placeholder="xx"
-                      type="date"
                       value={dateOfBirth}
-                      disabled={!isEditing}
+                      type="date"
+                      disabled
                     />
                   </Col>
                 </Row>
@@ -143,10 +161,10 @@ const CustomerProfile = () => {
                       id="customer-address"
                       className="form-control"
                       name="address"
-                      placeholder="xx"
-                      type="text"
                       value={address}
+                      type="text"
                       disabled={!isEditing}
+                      onChange={(e) => setAddress(e.target.value)}
                     />
                   </Col>
                   <Col md="3">
@@ -157,10 +175,10 @@ const CustomerProfile = () => {
                       id="customer-streetno"
                       className="form-control"
                       name="streetno"
-                      placeholder="xx"
-                      type="number"
                       value={streetNumber}
+                      type="number"
                       disabled={!isEditing}
+                      onChange={(e) => setStreetNumber(e.target.value)}
                     />
                   </Col>
                 </Row>
@@ -175,10 +193,10 @@ const CustomerProfile = () => {
                       id="customer-city"
                       className="form-control"
                       name="city"
-                      placeholder="xx"
-                      type="text"
                       value={city}
+                      type="text"
                       disabled={!isEditing}
+                      onChange={(e) => setCity(e.target.value)}
                     />
                   </Col>
                   <Col md="3">
@@ -189,10 +207,10 @@ const CustomerProfile = () => {
                       id="customer-postal-code"
                       className="form-control"
                       name="postal-code"
-                      placeholder="xx"
-                      type="number"
                       value={postalCode}
+                      type="number"
                       disabled={!isEditing}
+                      onChange={(e) => setPostalCode(e.target.value)}
                     />
                   </Col>
                 </Row>
