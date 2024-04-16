@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Nav,
@@ -17,8 +17,9 @@ import useAuth from "../../hooks/useAuth";
 
 const MainNavbar = () => {
   const { auth, logout } = useAuth();
-  const { username } = auth || {};
+  const { username, role } = auth || {};
   const [isOpen, setIsOpen] = useState(false);
+  const [redirectPath, setRedirectPath] = useState("");
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -47,7 +48,9 @@ const MainNavbar = () => {
                 </div>
                 <DropdownMenu>
                   <DropdownItem>
-                    <NavLink href={`/admin-profile/${username}`}>
+                    <NavLink
+                      href={`/${role.toLowerCase()}-profile/${username}`}
+                    >
                       Profile
                     </NavLink>
                   </DropdownItem>
