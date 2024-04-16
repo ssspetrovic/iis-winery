@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/axios";
-import { Container, Row, Col, Button } from "reactstrap";
+import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
@@ -10,8 +10,11 @@ import Unauthorized from "../auth/Unauthorized";
 
 const VehiclesList = () => {
   const [vehicles, setVehicles] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [deleteSuccessModal, setDeleteSuccessModal] = useState(false);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const { auth } = useAuth();
-  const { username, role } = auth || {};
+  const { role } = auth || {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +35,54 @@ const VehiclesList = () => {
     addressWithStreetNumber: `${vehicle.address} ${vehicle.street_number}`, // Spajamo adresu i broj ulice
     cityWithPostalCode: `${vehicle.city.name} ${vehicle.city.postal_code}`, // Spajamo grad i poštanski broj
   }));
+
+  // Funkcija za otvaranje modala za brisanje
+  const toggleModal = (vehicleId) => {
+    setSelectedVehicleId(vehicleId);
+    setModal(!modal);
+  };
+
+  // Funkcija za brisanje vozila
+  const handleDeleteVehicle = async () => {
+    try {
+      await axios.delete(`/vehicles/${selectedVehicleId}`);
+      // Nakon uspešnog brisanja, ažuriramo listu vozila tako da se ukloni obrisano vozilo
+      setVehicles(vehicles.filter((vehicle) => vehicle.id !== selectedVehicleId));
+      toggleModal(null);
+      setDeleteSuccessModal(true);
+    } catch (error) {
+      console.error("Error deleting vehicle:", error);
+      alert("Error deleting vehicle. Please try again later.");
+    }
+  };
+  
+
+  const toggle = () => setModal(!modal);
+
+  const confirmDeleteModal = (
+    <Modal isOpen={modal} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Delete Vehicle</ModalHeader>
+      <ModalBody>
+        Are you sure you want to delete this vehicle?
+      </ModalBody>
+      <ModalFooter>
+        <Button color="danger" onClick={handleDeleteVehicle}>Delete</Button>{' '}
+        <Button style={{ backgroundColor: "#4a5568" }} onClick={toggle}>Cancel</Button>
+      </ModalFooter>
+    </Modal>
+  );
+
+  const deleteSuccessModalContent = (
+    <Modal isOpen={deleteSuccessModal} toggle={() => setDeleteSuccessModal(false)}>
+      <ModalHeader toggle={() => setDeleteSuccessModal(false)}>Success</ModalHeader>
+      <ModalBody>
+        Vehicle Successfully Deleted
+      </ModalBody>
+      <ModalFooter>
+        <Button style={{ backgroundColor: "#4a5568" }} onClick={() => setDeleteSuccessModal(false)}>Close</Button>
+      </ModalFooter>
+    </Modal>
+  );  
 
   // Parametri za tabelu vozila
   const vehicleColumns = [
@@ -60,13 +111,15 @@ const VehiclesList = () => {
     },
     { Header: "City", accessor: "cityWithPostalCode" },
     {
-      Header: role === "WINEMAKER" ? "Operational Status" : "",
+      Header: role === "WINEMAKER" ? "Operational Status" : "Remove Driver",
       accessor: "id",
       Cell: ({ value, row }) =>
         role === "ADMIN" ? (
-          <Button color="danger" onClick={() => handleDeleteVehicle(value)}>
-            Delete
-          </Button>
+          <div className="text-center">
+            <Button color="danger" size="sm" onClick={() => toggleModal(value)}>
+              Delete
+            </Button>
+          </div>
         ) : row.original.is_operational ? (
           "Operational"
         ) : (
@@ -74,19 +127,6 @@ const VehiclesList = () => {
         ),
     },
   ];
-
-  // Funkcija za brisanje vozila
-  const handleDeleteVehicle = async (vehicleId) => {
-    try {
-      await axios.delete(`/vehicles/${vehicleId}`);
-      // Nakon uspešnog brisanja, ažuriramo listu vozila tako da se ukloni obrisano vozilo
-      setVehicles(vehicles.filter((vehicle) => vehicle.id !== vehicleId));
-      alert("Vehicle successfully deleted.");
-    } catch (error) {
-      console.error("Error deleting vehicle:", error);
-      alert("Error deleting vehicle. Please try again later.");
-    }
-  };
 
   return (
     <Container>
@@ -100,18 +140,27 @@ const VehiclesList = () => {
                   <Table columns={vehicleColumns} data={vehiclesWithAddress} />
                 </div>
               </div>
-              <div className="mt-4 d-flex justify-content-between">
-                <Link to="/add-vehicle">
-                  <Button color="primary">
-                    <FontAwesomeIcon icon={faPen} className="mr-2" />
-                    Add New Vehicle
-                  </Button>
+              <div className="mt-4 mb-4 d-flex justify-content-between">
+                <Link
+                  to="/add-vehicle"
+                  className="btn view-user-btn btn-lg"
+                  style={{ borderWidth: "3px", borderRadius: "20px" }}
+                >
+                  <i>
+                    <FontAwesomeIcon icon={faPen} className="mr-2" /> Register
+                    New Worker{" "}
+                  </i>
                 </Link>
-                <Link to="/update-vehicle">
-                  <Button color="secondary">
-                    <FontAwesomeIcon icon={faSync} className="mr-2" />
-                    Update Existing Vehicle
-                  </Button>
+
+                <Link
+                  to="/update-vehicle"
+                  className="btn view-user-btn btn-lg"
+                  style={{ borderWidth: "3px", borderRadius: "20px" }}
+                >
+                  <i>
+                    <FontAwesomeIcon icon={faSync} className="mr-2" /> Update
+                    Worker{" "}
+                  </i>
                 </Link>
               </div>
             </>
@@ -129,6 +178,8 @@ const VehiclesList = () => {
           )}
         </Col>
       </Row>
+      {confirmDeleteModal}
+      {deleteSuccessModalContent}
     </Container>
   );
 };

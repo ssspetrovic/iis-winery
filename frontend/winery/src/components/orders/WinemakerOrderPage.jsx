@@ -9,14 +9,21 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
 } from "reactstrap";
 import ConfirmationModal from "./ConformationModal";
 import useAuth from "../../hooks/useAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
 
 const WinemakerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [selectedVehicleData, setSelectedVehicleData] = useState("");
   const [modal, setModal] = useState(false);
   const [vehicles, setVehicles] = useState([]);
   const [isVehicleSelected, setIsVehicleSelected] = useState(false);
@@ -104,10 +111,27 @@ const WinemakerOrdersPage = () => {
     setModal(!modal);
   };
 
-  const handleVehicleChange = (e) => {
-    setSelectedVehicle(e.target.value);
-    setIsVehicleSelected(!!e.target.value);
+  const handleVehicleChange = async (e) => {
+    const selectedVehicleId = e.target.value;
+    setSelectedVehicle(selectedVehicleId);
+    
+    // Provera da li je selektovan ID vozila
+    if (selectedVehicleId) {
+      try {
+        const response = await axios.get(`/vehicles/${selectedVehicleId}`);
+        setSelectedVehicleData(response.data);
+      } catch (error) {
+        console.error("Error fetching vehicle data:", error);
+        setSelectedVehicleData(null);
+      }
+      setIsVehicleSelected(true);
+    } else {
+      // Ako nije selektovan ID vozila, resetujte podatke o vozilu i postavite da vozilo nije selektovano
+      setSelectedVehicleData(null);
+      setIsVehicleSelected(false);
+    }
   };
+  
 
   const handleAcceptOrder = async () => {
     try {
@@ -134,11 +158,30 @@ const WinemakerOrdersPage = () => {
     <Container>
       <Row>
         <Col>
-          <h1>Winemaker Orders</h1>
+          <h1 className="text-center">Winemaker Orders</h1>
           {orders.length > 0 ? (
             <ul className="list-unstyled row row-cols-3 column column-gap-9">
               {orders.map((order) => (
-                <li key={order.id} className="my-3 border p-3 col-sm-5 mx-auto">
+                <li
+                  key={order.id}
+                  className="my-3 border p-3 col-sm-5 mx-auto order-card"
+                  style={{ position: "relative", color: "#5e1717" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faWineBottle}
+                    style={{
+                      position:
+                        "absolute" /* Postavljamo ikonu na fiksnu poziciju */,
+                      top: "130px" /* Pomeramo ikonu na dno ekrana */,
+                      right: "0" /* Pomeramo ikonu na desni kraj ekrana */,
+                      fontSize: "400px",
+                      color: "#8B0000",
+                      opacity: "0.5",
+                      zIndex:
+                        "-1" /* Postavljamo z-index na negativnu vrednost kako bi ikona bila ispod ostalih elemenata */,
+                    }}
+                  />
+
                   <p>
                     <strong>Order ID:</strong> {order.id}
                   </p>
@@ -157,33 +200,45 @@ const WinemakerOrdersPage = () => {
                     {order.customerData[0].city.name}{" "}
                     {order.customerData[0].city.postal_code}
                   </p>
-                  <p>
+                  <h3 className="mt-4">
                     <strong>Wines:</strong>
-                  </p>
+                  </h3>
                   <ul className="list-unstyled row row-cols-3 column column-gap-9">
                     {order.winesData.map((wine) => (
                       <li
                         key={wine.id}
-                        className="my-3 border p-2 col-md-6 mx-7 mb-3"
+                        className="my-3  p-2 col-md-6 mx-7 mb-3"
                       >
-                        <p>
-                          <strong>{wine.name}</strong>
-                        </p>
-                        <p>
-                          Sweetness: {wine.sweetness}, Acidity: {wine.acidity}
-                        </p>
-                        <p>
-                          Alcohol: {wine.alcohol}%, pH: {wine.pH}
-                        </p>
+                        <Card
+                          className="h-100"
+                          style={{
+                            backgroundColor: "#fafafa",
+                            color: "#5e1717",
+                          }}
+                        >
+                          <CardBody>
+                            <CardTitle tag="h5">{wine.name}</CardTitle>
+                            <CardText>
+                              <b>Sweetness:</b> {wine.sweetness}
+                              <br />
+                              <b>Acidity:</b> {wine.acidity}
+                              <br />
+                              <b>Alcohol:</b> {wine.alcohol}%
+                              <br />
+                              <b>pH:</b> {wine.pH}
+                            </CardText>
+                          </CardBody>
+                        </Card>
                       </li>
                     ))}
                   </ul>
                   <Button
-                    color="primary"
+                    style={{ backgroundColor: "#8B0000" }}
                     onClick={() => {
                       setSelectedOrder(order);
                       toggleModal();
                     }}
+                    className="accept-order-button"
                   >
                     Accept Order
                   </Button>
@@ -195,13 +250,20 @@ const WinemakerOrdersPage = () => {
           )}
         </Col>
       </Row>
-      <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Accept Order</ModalHeader>
+      {/* Modal section */}
+      <Modal
+        isOpen={modal}
+        toggle={toggleModal}
+        className="order-modal-content"
+      >
+        <ModalHeader toggle={toggleModal} className="order-modal-header">
+          Accept Order
+        </ModalHeader>
         <ModalBody>
           <select
             value={selectedVehicle}
             onChange={handleVehicleChange}
-            className="form-control"
+            className="form-control order-form-control"
           >
             <option value="">Select Vehicle</option>
             {vehicles.map((vehicle) => (
@@ -210,11 +272,40 @@ const WinemakerOrdersPage = () => {
               </option>
             ))}
           </select>
+          {selectedVehicleData && (
+            <div>
+              <h4 className="mt-4 mb-4">Selected Vehicle Data</h4>
+              <p>
+                <strong>Driver Name:</strong> {selectedVehicleData.driver_name}
+              </p>
+              <p>
+                <strong>Capacity:</strong>{" "}
+                {selectedVehicleData.capacity === 1
+                  ? `${selectedVehicleData.capacity} ton`
+                  : `${selectedVehicleData.capacity} tons`}
+              </p>
+              <p>
+                <strong>Phone Number:</strong>{" "}
+                {selectedVehicleData.phone_number}
+              </p>
+              <p>
+                <strong>Vehicle Type:</strong>{" "}
+                {selectedVehicleData.vehicle_type.charAt(0).toUpperCase() +
+                  selectedVehicleData.vehicle_type.slice(1)}
+              </p>
+              <p>
+                <strong>Address:</strong> {selectedVehicleData.address}{" "}
+                {selectedVehicleData.street_number}
+              </p>
+              <p>
+                <strong>City:</strong> {selectedVehicleData.city.name}
+              </p>
+            </div>
+          )}
         </ModalBody>
-
-        <ModalFooter>
+        <ModalFooter className="order-modal-footer">
           <Button
-            color="primary"
+            style={{ backgroundColor: "#8B0000" }}
             onClick={handleAcceptOrder}
             disabled={!isVehicleSelected}
           >
@@ -225,7 +316,7 @@ const WinemakerOrdersPage = () => {
           </Button>
         </ModalFooter>
       </Modal>
-
+      {/* Confirmation modal */}
       <ConfirmationModal
         isOpen={confirmationModalOpen}
         toggle={() => setConfirmationModalOpen(false)}

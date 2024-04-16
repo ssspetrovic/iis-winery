@@ -10,6 +10,10 @@ import {
   Col,
   Row,
   Container,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 import "../../assets/styles.css";
 
@@ -23,6 +27,7 @@ function AddVehicle() {
   const [city, setCity] = useState("");
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +66,7 @@ function AddVehicle() {
       });
       console.log(response.data);
 
-      // Resetovanje stanja i preusmeravanje na određenu rutu
+      // Resetovanje stanja i prikazivanje modala o uspehu
       setDriverName("");
       setCapacity("");
       setAddress("");
@@ -70,7 +75,7 @@ function AddVehicle() {
       setVehicleType("");
       setCity("");
       setErrorMessage("");
-      navigate("/view-vehicles");
+      setSuccessModal(true);
     } catch (error) {
       console.error(error);
       // Prikazivanje poruke o grešci
@@ -82,9 +87,24 @@ function AddVehicle() {
     navigate("/view-vehicles");
   };
 
+  const successModalContent = (
+    <Modal isOpen={successModal} toggle={() => setSuccessModal(false)}>
+      <ModalHeader toggle={() => setSuccessModal(false)}>Success</ModalHeader>
+      <ModalBody>
+        Vehicle Successfully Added
+      </ModalBody>
+      <ModalFooter>
+        <Button style={{ backgroundColor: "#4a5568" }} onClick={() => setSuccessModal(false)}>Close</Button>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <Container className="registration-container">
       <div className="registration-box">
+        <h1 className="text-center mb-4" style={{ color: "#007bff" }}>
+          Add New Vehicle
+        </h1>
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col md={6}>
@@ -172,7 +192,7 @@ function AddVehicle() {
             </Col>
           </Row>
           <Row>
-            <Col md={6} className="mx-auto">
+            <Col className="mx-auto">
               <FormGroup>
                 <Label for="city">City</Label>
                 <Input
@@ -186,14 +206,17 @@ function AddVehicle() {
             </Col>
           </Row>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <Button type="submit" color="primary" className="mr-2">
-            Add Vehicle
-          </Button>
-          <Button color="secondary" onClick={handleCancel}>
-            Cancel
-          </Button>
+          <div className="d-flex justify-content-between">
+            <Button type="submit" color="primary" className="mr-2">
+              Add Vehicle
+            </Button>
+            <Button color="secondary" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </div>
         </Form>
       </div>
+      {successModalContent}
     </Container>
   );
 }

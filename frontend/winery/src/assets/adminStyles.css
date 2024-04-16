@@ -145,3 +145,83 @@
 .whitespace {
   color: #ffffff;
 }
+
+.radio-check {
+  transform: scale(1.2); /* Promenite ovaj broj da biste povećali ili smanjili veličinu */
+  margin-right: 10px; /* Dodajte razmak između radio checka i teksta */
+}
+
+/* Stilizovanje kartica */
+.order-card {
+  border: 2px solid #ced4da; /* Deblji border */
+  border-radius: 0.5rem; /* Veći border radijus */
+  padding: 1.5rem; /* Povećanje unutrašnjeg prostora */
+  margin-bottom: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Dodavanje senke */
+}
+
+.order-card h3 {
+  margin-bottom: 1rem; /* Veći razmak ispod naslova */
+}
+
+.order-card p {
+  margin-bottom: 1rem; /* Veći razmak između paragrafa */
+}
+
+.order-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Stilizovanje unutrašnjih elemenata */
+.order-card ul li {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Senka za svaku stavku unutar liste */
+  border-radius: 0.25rem; /* Malo zaobljeni ivični radijus */
+  padding: 1rem; /* Povećanje unutrašnjeg prostora */
+  margin-bottom: 0.5rem; /* Manji razmak između stavki */
+}
+
+/* Dodavanje razmaka između stavki */
+.order-card ul li + li {
+  margin-top: 0.5rem; /* Minijaturni razmak između stavki */
+}
+
+/* Stilizovanje dugmeta "Accept Order" */
+.accept-order-button {
+  margin-top: 1rem;
+}
+
+/* Stilizovanje modalnog prozora */
+.order-modal-content {
+  border-radius: 10px;
+}
+
+.order-modal-header {
+  background-color: #5e1717;
+  color: #fff;
+}
+
+.order-modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #ced4da;
+}
+
+/* Stilizovanje select polja u modalnom prozoru */
+.order-modal-body select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #dacece;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Stilizovanje opcija select polja */
+.order-modal-body option {
+  font-size: 1rem;
+}
+
+.order-form-control:focus {
+  border-color: #8B0000;
+  box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+}
