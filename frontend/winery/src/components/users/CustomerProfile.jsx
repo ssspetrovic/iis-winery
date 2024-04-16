@@ -82,7 +82,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="text"
                       value={firstName}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                   <Col md="6">
@@ -96,7 +96,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="text"
                       value={lastName}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                 </Row>
@@ -128,7 +128,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="date"
                       value={dateOfBirth}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                 </Row>
@@ -146,7 +146,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="text"
                       value={address}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                   <Col md="3">
@@ -160,7 +160,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="number"
                       value={streetNumber}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                 </Row>
@@ -178,7 +178,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="text"
                       value={city}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                   <Col md="3">
@@ -192,7 +192,7 @@ const CustomerProfile = () => {
                       placeholder="xx"
                       type="number"
                       value={postalCode}
-                      disabled
+                      disabled={!isEditing}
                     />
                   </Col>
                 </Row>
@@ -201,7 +201,8 @@ const CustomerProfile = () => {
             <Row className="mt-5">
               <Col md="12" className="text-center">
                 <Button
-                  className="w-50 btn btn-secondary"
+                  className="w-50"
+                  color="primary"
                   hidden={isEditing}
                   onClick={edit}
                 >
@@ -210,7 +211,8 @@ const CustomerProfile = () => {
               </Col>
               <Col md="6" className=" text-center">
                 <Button
-                  className="w-100 btn btn-success"
+                  className="w-100"
+                  color="success"
                   hidden={!isEditing}
                   onClick={confirm}
                 >
@@ -219,7 +221,8 @@ const CustomerProfile = () => {
               </Col>
               <Col md="6" className=" text-center">
                 <Button
-                  className="w-100 btn btn-danger"
+                  className="w-100"
+                  color="danger"
                   hidden={!isEditing}
                   onClick={discard}
                 >
