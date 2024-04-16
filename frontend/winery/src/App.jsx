@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/auth/Register";
-import Home from "./components/Home";
+import Test from "./components/Test";
 import Login from "./components/auth/Login";
 import AdminProfile from "./components/users/AdminProfile";
 import ViewUsers from "./components/users/ViewUsers";
@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Test />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
