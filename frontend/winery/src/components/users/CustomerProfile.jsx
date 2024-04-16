@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Row, Col, FormGroup, Form, Input, Label } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  FormGroup,
+  Form,
+  Input,
+  Label,
+  Card,
+  CardGroup,
+  CardBody,
+  CardTitle,
+  CardText,
+  CardImg,
+} from "reactstrap";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const CustomerProfile = () => {
@@ -251,6 +265,57 @@ const CustomerProfile = () => {
           </div>
         </Col>
       </Row>
+      <hr className="my-5" />
+      <Row>
+        <CardGroup>
+          <Col md="4">
+            <Card className="mx-2">
+              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Sapiente corporis iusto impedit delectus laboriosam. Sunt
+                  aperiam eius suscipit est explicabo. Sed beatae nihil est vel
+                  vitae quibusdam debitis earum fugit?
+                </CardText>
+                <Button color="primary">Go somewhere</Button>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card className="mx-2">
+              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Sapiente corporis iusto impedit delectus laboriosam. Sunt
+                  aperiam eius suscipit est explicabo. Sed beatae nihil est vel
+                  vitae quibusdam debitis earum fugit?
+                </CardText>
+                <Button color="primary">Go somewhere</Button>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card className="mx-2">
+              <CardImg src="..." className="card-img-top" alt="..." />
+              <CardBody>
+                <CardTitle>Card title</CardTitle>
+                <CardText>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Sapiente corporis iusto impedit delectus laboriosam. Sunt
+                  aperiam eius suscipit est explicabo. Sed beatae nihil est vel
+                  vitae quibusdam debitis earum fugit?
+                </CardText>
+                <Button color="primary">Go somewhere</Button>
+              </CardBody>
+            </Card>
+          </Col>
+        </CardGroup>
+      </Row>
+      <hr />
     </div>
   );
 };
