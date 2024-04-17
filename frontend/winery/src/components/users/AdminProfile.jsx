@@ -25,7 +25,7 @@ const AdminProfile = () => {
   const [newUsername, setNewUsername] = useState("");
   const { auth } = useAuth();
   const { username, role } = auth || {};
-  const { logout } = useContext(AuthProvider);
+  const { logoutUsername } = useContext(AuthProvider);
 
   useEffect(() => {
     const fetchAdminInfo = async () => {
@@ -63,7 +63,7 @@ const AdminProfile = () => {
 
       if (newUsername !== username) {
         // Ako jeste, izvrši navigaciju na odgovarajuću adresu
-        logout(newUsername); // Logout with the new username
+        logoutUsername(newUsername); // Logout with the new username
         window.location.href = `/admin-profile/${newUsername}`;
       }
       console.log("Changes saved successfully!");

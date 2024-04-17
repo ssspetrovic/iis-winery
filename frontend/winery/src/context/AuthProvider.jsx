@@ -80,22 +80,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = (newUsername = "") => {
-    removeCookie("username");
-
+  const logoutUsername = (newUsername = "") => {
     if (newUsername) {
+      removeCookie("username");
       setCookie("username", newUsername, { path: "/" });
-    } else {
-      removeCookie("role");
-      removeCookie("access_token");
-      removeCookie("refresh_token");
     }
+    setAuth({});
+  };
 
+  const logout = () => {
+    removeCookie("username");
+    removeCookie("role");
+    removeCookie("access_token");
+    removeCookie("refresh_token");
     setAuth({});
   };
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, login, logout }}>
+    <AuthContext.Provider
+      value={{ auth, setAuth, login, logout, logoutUsername }}
+    >
       {children}
     </AuthContext.Provider>
   );
