@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User, Customer, City, Winemaker, Manager, Admin, Report
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,9 +30,27 @@ class CitySerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     city = CitySerializer()
 
+    def validate_email(self, value):
+        if Customer.objects.filter(email=value).exists():
+            raise ValidationError(_('Email already exists'))
+        return value
+
+    def validate_username(self, value):
+        if Customer.objects.filter(username=value).exists():
+            raise ValidationError(_('Username already exists'))
+        return value
+
     def create(self, validated_data):
         city_data = validated_data.pop('city')
         city_instance, _ = City.objects.get_or_create(**city_data)
+
+        # Validate unique email and username
+        email = validated_data.get('email')
+        username = validated_data.get('username')
+        if Customer.objects.filter(email=email).exists():
+            raise ValidationError(_('Email already exists'))
+        if Customer.objects.filter(username=username).exists():
+            raise ValidationError(_('Username already exists'))
 
         # Hash the password before saving the user
         password = validated_data.pop('password')
