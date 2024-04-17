@@ -55,9 +55,7 @@ const MainNavbar = () => {
                     </NavLink>
                   </DropdownItem>
                   <DropdownItem>
-                    <NavLink href="/" onClick={() => logout()}>
-                      Log out
-                    </NavLink>
+                    <NavLink onClick={() => logout()}>Log out</NavLink>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
