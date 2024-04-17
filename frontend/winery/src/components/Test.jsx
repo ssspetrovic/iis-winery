@@ -3,7 +3,7 @@ import { Button } from "reactstrap";
 import useAuth from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate";
-import profileRedirects from "../components/users/ProfileRedirect";
+import profileRedirects from "./users/ProfileRedirect";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -34,13 +34,13 @@ const Home = () => {
 
   return (
     <div className="div-center m-4">
-      <div className="text-center my-4">
+      <div className="text-center my-4 mx-auto">
         <h1>Hello from home page!</h1>
       </div>
-      <div className="mx-5">
+      <div className="mx-auto mx-5">
         <h4>Username: {username ? username : "/"}</h4>
         <h4>Role: {role ? role : "/"}</h4>
-        <h4>Access token:</h4>
+        <h4 className="mt-3">Access token:</h4>
         <div>
           <textarea
             className="form-control w-100"
@@ -49,7 +49,7 @@ const Home = () => {
             readOnly
           />
         </div>
-        <h4>Refresh token:</h4>
+        <h4 className="mt-3">Refresh token:</h4>
         <div>
           <textarea
             className="form-control w-100"
@@ -59,9 +59,9 @@ const Home = () => {
           />
         </div>
       </div>
-      <div className="container m-4 ">
+      <div className="container mx-auto">
         <Button
-          className="w-100"
+          className="w-100 mt-3"
           style={{ margin: "5px" }}
           onClick={() => profilePage()}
         >

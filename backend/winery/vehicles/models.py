@@ -10,7 +10,7 @@ class Vehicle(models.Model):
         BICYCLE = 'bicycle', 'Bicycle'
 
     city = models.OneToOneField(
-        City, on_delete=models.CASCADE, verbose_name="City")
+        City, on_delete=models.CASCADE, verbose_name="City", unique=False)
     
     id = models.AutoField(primary_key=True)
     driver_name = models.CharField(max_length=255, verbose_name="Driver Name")
