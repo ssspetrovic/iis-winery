@@ -17,7 +17,7 @@ import AuthProvider from "../../context/AuthProvider";
 import "../../assets/adminStyles.css";
 
 const WinemakerProfile = () => {
-  const [winemkerInfo, setWinemakerInfo] = useState(null);
+  const [winemakerInfo, setWinemakerInfo] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -29,6 +29,7 @@ const WinemakerProfile = () => {
   const [cityName, setCityName] = useState('');
   const [cityPostalCode, setCityPostalCode] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     fetchWinemakerInfo();
@@ -44,7 +45,7 @@ const WinemakerProfile = () => {
       setPassword(data.password)
       setFirstName(data.first_name);
       setLastName(data.last_name);
-      setPhoneNumber(data.phone_number);
+      setPhoneNumber('+38166542213');
       setAddress(data.address)
       setStreetNumber(data.street_number)
       setCityName(data.city.name)
@@ -74,18 +75,19 @@ const WinemakerProfile = () => {
         street_number: streetNumber,
         city: {
           name: cityName,
-          postal_code: postalCode
+          postal_code: cityPostalCode
         }
 
       });
       console.log("Changes saved successfully!");
+      setEditMode(false);
     } catch (error) {
       console.error("Error saving changes:", error);
     }
   };
 
   return (
-    <Container className="justify-content-center">
+    <Container className="admin-container">
       <Row>
         <Col md={6}>
           <div className="rounded border p-4 my-5">
@@ -95,7 +97,7 @@ const WinemakerProfile = () => {
             <h4 className="text-center">{username}</h4>
             <div className="mt-3">
               <Form>
-                <Row>
+                <Row className="mt-4">
                   <Col md={6}>
                     <FormGroup>
                       <Label for="editFirstName">First Name</Label>
@@ -199,19 +201,64 @@ const WinemakerProfile = () => {
                     </FormGroup>
                   </Col>
                 </Row>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Label for="editCity">City</Label>
+                      <Input
+                        type="text"
+                        name="city"
+                        id="editCity"
+                        value={cityName}
+                        onChange={(e) => setCityName(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label for="editPostalCode">Postal Code</Label>
+                      <Input
+                        type="number"
+                        name="ppstalCode"
+                        id="editPostalCode"
+                        value={cityPostalCode}
+                        onChange={(e) => setCityPostalCode(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
               </Form>
               {/* Conditional rendering for password error message */}
               {passwordError && (
                 <p className="text-danger">Please enter a password.</p>
               )}
               <div className="text-center">
-                <button
-                  className="admin-button"
-                  onClick={handleEdit}
-                  style={{ height: "50px" }}
-                >
-                  Save Changes
-                </button>
+                {editMode ? ( // Render buttons based on edit mode
+                  <>
+                    <button
+                      className="admin-button"
+                      onClick={handleEdit}
+                      style={{ height: "50px" }}
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                      className="admin-button"
+                      onClick={() => setEditMode(false)}
+                      style={{ height: "50px", marginLeft: "10px", color: "red" }}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="admin-button"
+                    onClick={() => setEditMode(true)}
+                    style={{ height: "50px" }}
+                  >
+                    Edit Profile
+                  </button>
+                )}
               </div>
             </div>
           </div>

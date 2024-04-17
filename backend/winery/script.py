@@ -44,3 +44,22 @@ def load_cities_from_csv(csv_file_path):
 
 # Poziv funkcije za učitavanje gradova iz CSV datoteke
 load_cities_from_csv(csv_file_path)
+
+# if not Winemaker.objects.filter(username='mata').exists():
+#     # Stvaranje administratorskog korisnika
+#     city = City.objects.get(name='Negotin')
+#     winemaker = Winemaker.objects.create(
+#         username='mata',
+#         role=Admin.Role.WINEMAKER,
+#         first_name='Matej',
+#         last_name='Miha',
+#         email='mata@example.com',
+#         city=city,
+#         address='Bulevar Mike Mikica',
+#         street_number=23
+#     )
+#     winemaker.set_password('123')
+#     winemaker.save()
+#     print("Vinar kreiran.")
+# else:
+#     print("Vinar nije kreiran.")
