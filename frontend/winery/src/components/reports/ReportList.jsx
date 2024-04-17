@@ -3,8 +3,6 @@ import axios from "../../api/axios";
 import { Link } from "react-router-dom";
 import {
   Container,
-  Row,
-  Col,
   Button,
   Modal,
   ModalHeader,
@@ -13,6 +11,7 @@ import {
 } from "reactstrap";
 import useAuth from "../../hooks/useAuth";
 import Unauthorized from "../auth/Unauthorized";
+import Table from "../util/Table";
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
@@ -56,7 +55,7 @@ const ReportList = () => {
         reply: null,
       });
       setReportModal(false);
-      setConfirmModal(true); // Otvara se modal za potvrdu
+      setConfirmModal(true);
     } catch (error) {
       console.error("Error reporting problem:", error);
       alert("Error reporting problem. Please try again later.");
@@ -65,11 +64,16 @@ const ReportList = () => {
 
   const handleOpenReplyModal = (report) => {
     setSelectedReport(report);
-    setReplyText(""); // Resetujemo reply tekst
-    setReplyModal(true); // Otvara se modal
+    setReplyText("");
+    setReplyModal(true);
   };
 
   const handleReply = async () => {
+    if (!selectedReport || !selectedReport.id) {
+      console.error("Invalid report selected for reply.");
+      return;
+    }
+    
     try {
       await axios.patch(`/reports/${selectedReport.id}/`, {
         reply: replyText,
@@ -82,6 +86,7 @@ const ReportList = () => {
       alert("Error replying to report. Please try again later.");
     }
   };
+  
 
   const toggleReportModal = () => {
     setReportModal(!reportModal);
@@ -103,101 +108,77 @@ const ReportList = () => {
     return <Unauthorized />;
   }
 
+  const reportColumns = [{ Header: "Description", accessor: "description" }];
+
+  if (role === "MANAGER" || role === "CUSTOMER") {
+    reportColumns.push({
+      Header: "Reply",
+      accessor: "reply",
+      Cell: ({ value }) => value || "No reply yet",
+    });
+  }
+
+  if (role === "ADMIN") {
+    reportColumns.push({
+      Header: "Actions",
+      accessor: "id",
+      Cell: ({ row }) => (
+        <Button
+          color="primary"
+          onClick={() => handleOpenReplyModal(row.original)} // Ovde prosleđujemo ceo red (izveštaj)
+        >
+          Reply
+        </Button>
+      ),
+    });
+  }
+
   return (
     <Container>
-      <Row>
-        <Col>
-          <div className="mb-8">
-            <h1 className="text-xl font-semibold">Report List</h1>
-            <div className="mt-4">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Description</th>
-                    {role === "ADMIN" && <th>Reply</th>}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredReports.map((report) => (
-                    <tr key={report.id}>
-                      <td>{report.description}</td>
-                      {role !== "ADMIN" && (
-                        <td>{report.reply ? report.reply : "No reply yet"}</td>
-                      )}
-                      {role === "ADMIN" && (
-                        <td>
-                          <Button
-                            color="primary"
-                            onClick={() => handleOpenReplyModal(report)}
-                          >
-                            Reply
-                          </Button>
-                        </td>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {role !== "ADMIN" && (
-                <Button color="danger" onClick={toggleReportModal}>
-                  Report a Problem
-                </Button>
-              )}
-              <Modal isOpen={reportModal} toggle={toggleReportModal}>
-                <ModalHeader toggle={toggleReportModal}>
-                  Report a Problem
-                </ModalHeader>
-                <ModalBody>
-                  <textarea
-                    className="form-control"
-                    value={newReport}
-                    onChange={(e) => setNewReport(e.target.value)}
-                    rows="4"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onClick={handleReportProblem}>
-                    Submit
-                  </Button>{" "}
-                  <Button color="secondary" onClick={toggleReportModal}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </Modal>
-              <Modal isOpen={confirmModal} toggle={toggleConfirmModal}>
-                <ModalHeader toggle={toggleConfirmModal}>
-                  Report Successful
-                </ModalHeader>
-                <ModalBody>
-                  <h4>Thank you for your patience!</h4>
-                </ModalBody>
-                <ModalFooter>
-                  {role === "CUSTOMER" && (
-                    <Link to={`/customer-profile/${username}`}>Go Back</Link>
-                  )}
-                  {role === "MANAGER" && (
-                    <Link to={`/manager-profile/${username}`}>Go Back</Link>
-                  )}
-                </ModalFooter>
-              </Modal>
-              <Modal
-                isOpen={adminConfirmModal}
-                toggle={toggleAdminConfirmModal}
-              >
-                <ModalHeader toggle={toggleAdminConfirmModal}>
-                  Success
-                </ModalHeader>
-                <ModalBody>
-                  <h4>Reply has been sent to the reporter</h4>
-                </ModalBody>
-                <ModalFooter>
-                  <Link to={`/admin-profile/${username}`}>Go Back</Link>
-                </ModalFooter>
-              </Modal>
-            </div>
-          </div>
-        </Col>
-      </Row>
+      <div className="mb-8">
+        <h1 className="text-xl font-semibold">Report List</h1>
+        <div className="mt-4">
+          <Table columns={reportColumns} data={filteredReports} />
+          {role !== "ADMIN" && (
+            <Button
+              color="danger"
+              onClick={toggleReportModal}
+              className="btn-lg mx-auto d-block mt-4"
+            >
+              Report a Problem
+            </Button>
+          )}
+        </div>
+      </div>
+      {/* Modal components */}
+      {/* Confirm Modal */}
+      <Modal isOpen={confirmModal} toggle={toggleConfirmModal}>
+        <ModalHeader toggle={toggleConfirmModal}>Report Successful</ModalHeader>
+        <ModalBody>
+          <h4>Thank you for your patience!</h4>
+        </ModalBody>
+        <ModalFooter>
+          {role === "CUSTOMER" && (
+            <Link to={`/customer-profile/${username}`} className="view-user-btn">Go Back</Link>
+          )}
+          {role === "MANAGER" && (
+            <Link to={`/manager-profile/${username}`} className="view-user-btn">Go Back</Link>
+          )}
+        </ModalFooter>
+      </Modal>
+      {/* Admin Confirm Modal */}
+      <Modal isOpen={adminConfirmModal} toggle={toggleAdminConfirmModal}>
+        <ModalHeader toggle={toggleAdminConfirmModal}>Success</ModalHeader>
+        <ModalBody>
+          <h4>Reply has been sent to the reporter</h4>
+        </ModalBody>
+        <ModalFooter>
+          <ModalFooter>
+            <Link to={`/admin-profile/${username}`} className="view-user-btn">Go Back</Link>
+          </ModalFooter>{" "}
+        </ModalFooter>
+      </Modal>
+      {/* Reply Modal */}
       <Modal isOpen={replyModal} toggle={toggleReplyModal}>
         <ModalHeader toggle={toggleReplyModal}>Reply to Report</ModalHeader>
         <ModalBody>
@@ -213,6 +194,26 @@ const ReportList = () => {
             Reply
           </Button>{" "}
           <Button color="secondary" onClick={toggleReplyModal}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+      {/* Report Modal */}
+      <Modal isOpen={reportModal} toggle={toggleReportModal}>
+        <ModalHeader toggle={toggleReportModal}>Report a Problem</ModalHeader>
+        <ModalBody>
+          <textarea
+            className="form-control"
+            value={newReport}
+            onChange={(e) => setNewReport(e.target.value)}
+            rows="4"
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleReportProblem}>
+            Submit
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleReportModal}>
             Cancel
           </Button>
         </ModalFooter>

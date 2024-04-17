@@ -39,15 +39,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setErrorMessage(await login(username, password));
-    if (errorMessage === "") {
+    const result = await login(username, password);
+    console.log(`message: ${errorMessage}`);
+
+    if (!result.success) {
+      setErrorMessage(result.message);
+    } else {
       console.log("success");
       console.log("from", from);
       navigate(from, { replace: true });
-      setErrorMessage("");
+      setErrorMessage(result.message);
     }
-    // On successful login, the user is routed to the page he was trying to visit while unauthenticated
-    navigate(from, { replace: true });
   };
 
   return (

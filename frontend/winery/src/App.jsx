@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/auth/Register";
-import Home from "./components/Home";
+import Test from "./components/Test";
 import Login from "./components/auth/Login";
 import AdminProfile from "./components/users/AdminProfile";
 import ViewUsers from "./components/users/ViewUsers";
@@ -17,6 +17,7 @@ import Unauthorized from "./components/auth/Unauthorized";
 import NotFound from "./components/util/NotFound";
 import MainNavbar from "./components/util/MainNavbar";
 import ManagerProfile from "./components/users/ManagerProfile";
+import CustomerProfile from "./components/users/CustomerProfile";
 import WinemakerProfile from "./components/users/WinemakerProfile";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -29,12 +30,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Test />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Private */}
+          <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
+            <Route
+              path="/customer-profile/:username"
+              element={<CustomerProfile />}
+            />
+          </Route>
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
           </Route>

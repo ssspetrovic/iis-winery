@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       setCookie("access_token", accessToken, { path: "/" });
       setCookie("refresh_token", refreshToken, { path: "/" });
 
-      return "";
+      return { success: true, message: "" };
     } catch (error) {
       let errorMessage = "";
 
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       console.error(error);
-      return errorMessage;
+      return { success: false, message: errorMessage };
     }
   };
 
