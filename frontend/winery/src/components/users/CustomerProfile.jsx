@@ -21,6 +21,7 @@ import PasswordChangeModal from "../util/PasswordChangeModal";
 import wineImage1 from "../../assets/images/wine_01.jpg";
 import wineImage2 from "../../assets/images/wine_02.jpg";
 import wineImage3 from "../../assets/images/wine_03.jpg";
+import ConfirmModal from "../util/ConfirmModal";
 
 const CustomerProfile = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -34,6 +35,21 @@ const CustomerProfile = () => {
   const [streetNumber, setStreetNumber] = useState(0);
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState(0);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  const togglePasswordChangeModal = () => {
+    setIsPasswordChangeModalOpen(!isPasswordChangeModalOpen);
+  };
+
+  const toggleConfirmModalOpen = () => {
+    setIsConfirmModalOpen(!isConfirmModalOpen);
+  };
+
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    func: () => {},
+  });
 
   const getDateString = (date) => {
     const splitted = date.split("-");
@@ -81,10 +97,20 @@ const CustomerProfile = () => {
       });
 
       console.log(response);
-      alert("Information successfully updated!");
+      // alert("Information successfully updated!");
+      setModalData({
+        header: "Success!",
+        body: "Information successfully updated!",
+      });
+      toggleConfirmModalOpen();
     } catch (error) {
       console.log(error);
-      alert("Failed to update the information :(\nPlease try again.");
+      // alert("Failed to update the information :(\nPlease try again.");
+      setModalData({
+        header: "Editing info failed!",
+        body: "Failed to update the profile info!",
+      });
+      toggleConfirmModalOpen();
     }
   };
 
@@ -96,17 +122,18 @@ const CustomerProfile = () => {
   const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
     useState(false);
 
-  const togglePasswordChangeModal = () => {
-    setIsPasswordChangeModalOpen(!isPasswordChangeModalOpen);
-  };
-
   const changePassword = async (newPassword) => {
     try {
       const response = await axiosPrivate.patch(`/customers/${username}/`, {
         password: newPassword,
       });
       console.log(response);
-      alert("Password successfully changed!");
+      // alert("Password successfully changed!");
+      setModalData({
+        header: "Success!",
+        body: "Password successfully changed!",
+      });
+      toggleConfirmModalOpen();
       setIsPasswordChangeModalOpen(false);
     } catch (error) {
       console.log(error);
@@ -304,7 +331,7 @@ const CustomerProfile = () => {
                   Save
                 </Button>
               </Col>
-              <Col md="6" className=" text-center">
+              <Col md="6" className="text-center">
                 <Button
                   className="w-100"
                   color="danger"
@@ -332,6 +359,11 @@ const CustomerProfile = () => {
             </Row>
           </div>
         </Col>
+        <ConfirmModal
+          isOpen={isConfirmModalOpen}
+          toggle={toggleConfirmModalOpen}
+          data={modalData}
+        />
       </Row>
       <hr className="my-4" />
       <Row>
@@ -408,4 +440,5 @@ const CustomerProfile = () => {
     </div>
   );
 };
+
 export default CustomerProfile;

@@ -55,7 +55,7 @@ const Login = () => {
   return (
     <div className="div-center">
       <Container className="border rounded shadow p-5 mt-5 mx-auto col-lg-6 col-md-6 col-sm-10 col-xs-12 w-100">
-        <h1 className="display-6 my-2 text-center">Login</h1>
+        <h1 className="display-6 mb-4 text-center">Login</h1>
         <Form className="login-form" onSubmit={handleSubmit}>
           <Row>
             <Col md={12}>
