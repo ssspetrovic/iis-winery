@@ -10,7 +10,7 @@ import {
   Container,
 } from "reactstrap";
 import "../../assets/styles.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
@@ -55,9 +55,10 @@ const Login = () => {
   return (
     <div className="div-center">
       <Container className="border rounded shadow p-5 mt-5 mx-auto col-lg-6 col-md-6 col-sm-10 col-xs-12 w-100">
+        <h1 className="display-6 my-2 text-center">Login</h1>
         <Form className="login-form" onSubmit={handleSubmit}>
           <Row>
-            <Col md={6}>
+            <Col md={12}>
               <FormGroup>
                 <Label for="login-username">Username</Label>
                 <Input
@@ -72,7 +73,7 @@ const Login = () => {
                 />
               </FormGroup>
             </Col>
-            <Col md={6}>
+            <Col md={12}>
               <FormGroup>
                 <Label for="login-password">Password</Label>
                 <Input
@@ -100,7 +101,17 @@ const Login = () => {
             </div>
           </Row>
           <Row>
-            <Button>Sign in</Button>
+            <div className="text-center ">
+              <Button color="primary" className="w-100 p-2">
+                Sign in
+              </Button>
+            </div>
+            <div className="text-center">
+              <p className="my-2">
+                Don't have an account?{" "}
+                <Link to="/register">Click here to register</Link>
+              </p>
+            </div>
           </Row>
         </Form>
       </Container>
