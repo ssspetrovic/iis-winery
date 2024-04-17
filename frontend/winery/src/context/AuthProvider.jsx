@@ -1,10 +1,13 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "../api/axios";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   const [cookies, setCookie, removeCookie] = useCookies([
     "username",
     "role",
@@ -94,11 +97,42 @@ export const AuthProvider = ({ children }) => {
     removeCookie("access_token");
     removeCookie("refresh_token");
     setAuth({});
+    navigate("/");
+  };
+
+  const register = async (user) => {
+    try {
+      const response = await axios.post("/customers/", user, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      console.log(response);
+      return { success: true, message: "" };
+    } catch (error) {
+      let errorMessage = "";
+
+      if (!error?.response) {
+        errorMessage = "No server response";
+      } else if (error.response?.status === 400) {
+        if (error.response.data.username) {
+          errorMessage = "Username already exists";
+        } else if (error.response.data.email) {
+          errorMessage = "Email already exists";
+        } else {
+          errorMessage = "Registration failed";
+        }
+      } else {
+        errorMessage = "Registration failed";
+      }
+
+      console.log(error);
+      return { success: false, message: errorMessage };
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, login, logout, logoutUsername }}
+      value={{ auth, setAuth, login, logout, register, logoutUsername }}
     >
       {children}
     </AuthContext.Provider>
