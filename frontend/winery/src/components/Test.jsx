@@ -35,7 +35,7 @@ const Home = () => {
   return (
     <div className="div-center m-4">
       <div className="text-center my-4 mx-auto">
-        <h1>Hello from home page!</h1>
+        <h1 className="display-5">Test page</h1>
       </div>
       <div className="mx-auto mx-5">
         <h4>Username: {username ? username : "/"}</h4>
@@ -63,6 +63,7 @@ const Home = () => {
         <Button
           className="w-100 mt-3"
           style={{ margin: "5px" }}
+          color="primary"
           onClick={() => profilePage()}
         >
           Redirect to Profile Page
@@ -70,6 +71,7 @@ const Home = () => {
         <Button
           className="w-100"
           style={{ margin: "5px" }}
+          color="primary"
           onClick={() => navigate("/login")}
         >
           Log in
@@ -77,6 +79,7 @@ const Home = () => {
         <Button
           className="w-100"
           style={{ margin: "5px" }}
+          color="primary"
           onClick={() => logout()}
         >
           Log out
@@ -84,6 +87,7 @@ const Home = () => {
         <Button
           className="w-100"
           style={{ margin: "5px" }}
+          color="primary"
           onClick={() => navigate("/register")}
         >
           Register
@@ -91,6 +95,7 @@ const Home = () => {
         <Button
           className="w-100"
           style={{ margin: "5px" }}
+          color="primary"
           onClick={() => refresh()}
         >
           Refresh token
@@ -99,6 +104,7 @@ const Home = () => {
           className="w-100"
           style={{ margin: "5px" }}
           onClick={() => checkAuth()}
+          color={authStatus ? "success" : "danger"}
         >
           Check Authentication {authStatus ? "[SUCCESSFUL]" : "[FAILED]"}
         </Button>
