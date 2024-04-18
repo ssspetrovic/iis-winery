@@ -87,6 +87,12 @@ const Login = () => {
                   required
                 />
               </FormGroup>
+              <div className="text-center">
+                <small>
+                  Forgot your password?{" "}
+                  <Link to="/reset-password  ">Click here to reset it</Link>
+                </small>
+              </div>
             </Col>
           </Row>
           <Row>
@@ -102,12 +108,12 @@ const Login = () => {
           </Row>
           <Row>
             <div className="text-center ">
-              <Button color="primary" className="w-100 p-2">
+              <Button color="primary" className="w-100 p-2 mt-3">
                 Sign in
               </Button>
             </div>
             <div className="text-center">
-              <p className="my-2">
+              <p className="mt-2 mb-0">
                 Don't have an account?{" "}
                 <Link to="/register">Click here to register</Link>
               </p>

@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+
 from .views import (
     ReportCreateAPIView, 
     ReportDetailAPIView, 
     LogoutAPIView,
     GetUserRoleAPIView,
-    AuthenticatedHelloAPIView
+    AuthenticatedHelloAPIView,
+    password_reset_token_created
 )
 
 from rest_framework_simplejwt.views import (
@@ -21,5 +23,7 @@ urlpatterns = [
     path('report/<int:pk>/reply/', ReportDetailAPIView.as_view(), name='reply'),
     path('logout/', LogoutAPIView.as_view(), name='logout'),
     path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role"),
-    path('api/hello-auth/', AuthenticatedHelloAPIView.as_view(), name="hello_auth")
+    path('api/hello-auth/', AuthenticatedHelloAPIView.as_view(), name="hello_auth"),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
+

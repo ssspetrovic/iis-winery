@@ -19,6 +19,8 @@ import MainNavbar from "./components/util/MainNavbar";
 import ManagerProfile from "./components/users/ManagerProfile";
 import CustomerProfile from "./components/users/CustomerProfile";
 import WinemakerProfile from "./components/users/WinemakerProfile";
+import PasswordResetForm from "./components/auth/PasswordResetForm";
+import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -35,6 +37,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
+          <Route path="/reset-password" element={<PasswordResetForm />} />
+          <Route
+            path="/reset-password-confirm/:token"
+            element={<PasswordResetConfirmForm />}
+          />
+
           {/* Private */}
           <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
             <Route
@@ -47,7 +55,10 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
-            <Route path="/winemaker-profile/:username" element={<WinemakerProfile />} />
+            <Route
+              path="/winemaker-profile/:username"
+              element={<WinemakerProfile />}
+            />
           </Route>
 
           <Route
