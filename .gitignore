@@ -300,4 +300,7 @@ sketch
 # Virtual Enviorment
 backend/winery/myvenv/
 
+# Secrets file
+secrets.py
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,python,react
