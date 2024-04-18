@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import secret
+from datetime import timedelta
 import os
 from pathlib import Path
 
@@ -146,7 +148,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'username',
@@ -175,3 +176,11 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5173',
     'http://localhost:5174',
 ]
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = secret.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
