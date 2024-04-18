@@ -135,6 +135,8 @@ function UpdateWorker() {
       setPhoneNumber("");
       setSelectedUser("");
       setErrorMessage("");
+      fetchUsers();
+
       setIsModalOpen(true);
     } catch (error) {
       console.error(error);

@@ -25,12 +25,12 @@ const ViewUsers = () => {
           headers: { "Content-Type": "application/json" },
         });
         setCustomers(customersResponse.data);
-
+  
         const managersResponse = await axiosPrivate.get("/managers/", {
           headers: { "Content-Type": "application/json" },
         });
         setManagers(managersResponse.data);
-
+  
         const winemakersResponse = await axiosPrivate.get("/winemakers/", {
           headers: { "Content-Type": "application/json" },
         });
@@ -39,10 +39,13 @@ const ViewUsers = () => {
         console.error("Error fetching users data:", error);
       }
     };
-
+  
     fetchData();
+  
+    const interval = setInterval(fetchData, 300000);
+    return () => clearInterval(interval);
   }, []);
-
+  
   const filterCustomers = (customer, searchText) => {
     return (
       customer.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
