@@ -20,6 +20,7 @@ import "../../assets/adminStyles.css";
 const WinemakerProfile = () => {
   const axiosPrivate = useAxiosPrivate();
   const [username, setUsername] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -28,7 +29,6 @@ const WinemakerProfile = () => {
   const [streetNumber, setStreetNumber] = useState('');
   const [cityName, setCityName] = useState('');
   const [cityPostalCode, setCityPostalCode] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
@@ -41,6 +41,9 @@ const WinemakerProfile = () => {
       const data = response.data[0];
       setEmail(data.email);
       setUsername(data.username)
+      if(newUsername == ''){
+        setNewUsername(data.username)
+      }
       setFirstName(data.first_name);
       setLastName(data.last_name);
       setPhoneNumber('+38166542213');
@@ -59,6 +62,7 @@ const WinemakerProfile = () => {
       const response = await axiosPrivate.patch(`/winemakers/${username}/`, {
         first_name: firstName,
         last_name: lastName,
+        username: newUsername,
         phone_number: phoneNumber,
         address: address,
         street_number: streetNumber,
@@ -70,7 +74,7 @@ const WinemakerProfile = () => {
       });
       console.log(response);
       alert("Information successfully updated!");
-      editMode(false);
+      setEditMode(false);
     } catch (error) {
       console.log(error);
       alert("Failed to update the information :(\nPlease try again.");
@@ -124,8 +128,8 @@ const WinemakerProfile = () => {
                         type="text"
                         name="username"
                         id="editUsername"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={newUsername} // Use newUsername state here
+                        onChange={(e) => setNewUsername(e.target.value)}
                         disabled={!editMode}
                       />
                     </FormGroup>
@@ -201,10 +205,6 @@ const WinemakerProfile = () => {
                   </Col>
                 </Row>
               </Form>
-              {/* Conditional rendering for password error message */}
-              {passwordError && (
-                <p className="text-danger">Please enter a password.</p>
-              )}
               <div className="text-center">
                 {editMode ? ( // Render buttons based on edit mode
                   <>

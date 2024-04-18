@@ -102,7 +102,6 @@ class WinemakerSerializer(serializers.ModelSerializer):
             'first_name', instance.first_name)
         instance.last_name = validated_data.get(
             'last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
         instance.address = validated_data.get('address', instance.address)
         instance.street_number = validated_data.get(
             'street_number', instance.street_number)
