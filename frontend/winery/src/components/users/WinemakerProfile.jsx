@@ -224,13 +224,19 @@ const WinemakerProfile = () => {
                     </button>
                   </>
                 ) : (
-                  <button
-                    className="admin-button"
-                    onClick={() => setEditMode(true)}
-                    style={{ height: "50px" }}
-                  >
-                    Edit Profile
-                  </button>
+                  <>
+                    <button
+                      className="admin-button"
+                      onClick={() => setEditMode(true)}
+                      style={{ height: "50px", marginRight: "10px" }}
+                    >
+                      Edit Profile
+                    </button>
+                    <Link to="/wine-rooms" className="btn admin-button" 
+                    style={{ height: "50px" }}>
+                      Wine Cellar
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
