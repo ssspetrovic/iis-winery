@@ -9,6 +9,8 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
 import Unauthorized from "../auth/Unauthorized";
 import Table from "../util/Table";
@@ -73,7 +75,7 @@ const ReportList = () => {
       console.error("Invalid report selected for reply.");
       return;
     }
-    
+
     try {
       await axios.patch(`/reports/${selectedReport.id}/`, {
         reply: replyText,
@@ -86,7 +88,6 @@ const ReportList = () => {
       alert("Error replying to report. Please try again later.");
     }
   };
-  
 
   const toggleReportModal = () => {
     setReportModal(!reportModal);
@@ -133,10 +134,34 @@ const ReportList = () => {
     });
   }
 
+  const getProfileLink = () => {
+    switch (role) {
+      case "ADMIN":
+        return `/admin-profile/${username}`;
+      case "CUSTOMER":
+        return `/customer-profile/${username}`;
+      case "MANAGER":
+        return `/manager-profile/${username}`;
+      default:
+        return "/";
+    }
+  };
+
   return (
     <Container>
       <div className="mb-8">
         <h1 className="text-xl font-semibold">Report List</h1>
+        <div className="mt-4 mb-4 d-flex justify-content-between">
+          <Link
+            to={getProfileLink()}
+            className="btn view-user-btn btn-lg"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
+            <i>
+              <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
+            </i>
+          </Link>
+        </div>
         <div className="mt-4">
           <Table columns={reportColumns} data={filteredReports} />
           {role !== "ADMIN" && (
@@ -159,10 +184,17 @@ const ReportList = () => {
         </ModalBody>
         <ModalFooter>
           {role === "CUSTOMER" && (
-            <Link to={`/customer-profile/${username}`} className="view-user-btn">Go Back</Link>
+            <Link
+              to={`/customer-profile/${username}`}
+              className="view-user-btn"
+            >
+              Go Back
+            </Link>
           )}
           {role === "MANAGER" && (
-            <Link to={`/manager-profile/${username}`} className="view-user-btn">Go Back</Link>
+            <Link to={`/manager-profile/${username}`} className="view-user-btn">
+              Go Back
+            </Link>
           )}
         </ModalFooter>
       </Modal>
@@ -174,7 +206,9 @@ const ReportList = () => {
         </ModalBody>
         <ModalFooter>
           <ModalFooter>
-            <Link to={`/admin-profile/${username}`} className="view-user-btn">Go Back</Link>
+            <Link to={`/admin-profile/${username}`} className="view-user-btn">
+              Go Back
+            </Link>
           </ModalFooter>{" "}
         </ModalFooter>
       </Modal>

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/axios";
-import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faSync } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSync, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
@@ -14,7 +23,7 @@ const VehiclesList = () => {
   const [deleteSuccessModal, setDeleteSuccessModal] = useState(false);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const { auth } = useAuth();
-  const { role } = auth || {};
+  const { username, role } = auth || {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +56,9 @@ const VehiclesList = () => {
     try {
       await axios.delete(`/vehicles/${selectedVehicleId}`);
       // Nakon uspešnog brisanja, ažuriramo listu vozila tako da se ukloni obrisano vozilo
-      setVehicles(vehicles.filter((vehicle) => vehicle.id !== selectedVehicleId));
+      setVehicles(
+        vehicles.filter((vehicle) => vehicle.id !== selectedVehicleId)
+      );
       toggleModal(null);
       setDeleteSuccessModal(true);
     } catch (error) {
@@ -55,34 +66,43 @@ const VehiclesList = () => {
       alert("Error deleting vehicle. Please try again later.");
     }
   };
-  
 
   const toggle = () => setModal(!modal);
 
   const confirmDeleteModal = (
     <Modal isOpen={modal} toggle={toggle}>
       <ModalHeader toggle={toggle}>Delete Vehicle</ModalHeader>
-      <ModalBody>
-        Are you sure you want to delete this vehicle?
-      </ModalBody>
+      <ModalBody>Are you sure you want to delete this vehicle?</ModalBody>
       <ModalFooter>
-        <Button color="danger" onClick={handleDeleteVehicle}>Delete</Button>{' '}
-        <Button style={{ backgroundColor: "#4a5568" }} onClick={toggle}>Cancel</Button>
+        <Button color="danger" onClick={handleDeleteVehicle}>
+          Delete
+        </Button>{" "}
+        <Button style={{ backgroundColor: "#4a5568" }} onClick={toggle}>
+          Cancel
+        </Button>
       </ModalFooter>
     </Modal>
   );
 
   const deleteSuccessModalContent = (
-    <Modal isOpen={deleteSuccessModal} toggle={() => setDeleteSuccessModal(false)}>
-      <ModalHeader toggle={() => setDeleteSuccessModal(false)}>Success</ModalHeader>
-      <ModalBody>
-        Vehicle Successfully Deleted
-      </ModalBody>
+    <Modal
+      isOpen={deleteSuccessModal}
+      toggle={() => setDeleteSuccessModal(false)}
+    >
+      <ModalHeader toggle={() => setDeleteSuccessModal(false)}>
+        Success
+      </ModalHeader>
+      <ModalBody>Vehicle Successfully Deleted</ModalBody>
       <ModalFooter>
-        <Button style={{ backgroundColor: "#4a5568" }} onClick={() => setDeleteSuccessModal(false)}>Close</Button>
+        <Button
+          style={{ backgroundColor: "#4a5568" }}
+          onClick={() => setDeleteSuccessModal(false)}
+        >
+          Close
+        </Button>
       </ModalFooter>
     </Modal>
-  );  
+  );
 
   // Parametri za tabelu vozila
   const vehicleColumns = [
@@ -128,6 +148,17 @@ const VehiclesList = () => {
     },
   ];
 
+  const getProfileLink = () => {
+    switch (role) {
+      case "ADMIN":
+        return `/admin-profile/${username}`;
+      case "WINEMAKER":
+        return `/winemaker-profile/${username}`;
+      default:
+        return "/";
+    }
+  };
+
   return (
     <Container>
       <Row>
@@ -149,6 +180,17 @@ const VehiclesList = () => {
                   <i>
                     <FontAwesomeIcon icon={faPen} className="mr-2" /> Register
                     New Worker{" "}
+                  </i>
+                </Link>
+
+                <Link
+                  to={getProfileLink()}
+                  className="btn view-user-btn btn-lg"
+                  style={{ borderWidth: "3px", borderRadius: "20px" }}
+                >
+                  <i>
+                    <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go
+                    Back
                   </i>
                 </Link>
 

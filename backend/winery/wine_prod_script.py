@@ -10,14 +10,14 @@ from wines.models import Wine
 from users.models import Winemaker
 
 # Create WineCellar instances
-# wine_cellar_data = [
-#     {"name": "Cellar 1", "area": 100.0},
-#     {"name": "Cellar 2", "area": 150.0},
-#     {"name": "Cellar 3", "area": 200.0},
-# ]
+wine_cellar_data = [
+    {"name": "Cellar 1", "area": 100.0},
+    {"name": "Cellar 2", "area": 150.0},
+    {"name": "Cellar 3", "area": 200.0},
+]
 
-# for data in wine_cellar_data:
-#     WineCellar.objects.create(**data)
+for data in wine_cellar_data:
+    WineCellar.objects.create(**data)
 
 if not Wine.objects.exists():
     # Create Wine instances

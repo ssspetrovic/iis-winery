@@ -36,7 +36,7 @@ const WineRoom = ({ wineRoom }) => {
       </Row>
       <Row>
         {wineTanks.map((wineTank) => (
-          <Col key={wineTank.id} md={4} className="mb-3">
+          <Col key={wineTank.tank_id} md={4} className="mb-3">
             <WineTank wineTank={wineTank} />
           </Col>
         ))}

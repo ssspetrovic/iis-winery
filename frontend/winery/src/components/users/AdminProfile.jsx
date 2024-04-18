@@ -27,6 +27,7 @@ const AdminProfile = () => {
   const [password, setPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { auth } = useAuth();
   const { username, role } = auth || {};
   const { logoutUsername } = useContext(AuthProvider);
@@ -79,6 +80,11 @@ const AdminProfile = () => {
     window.location.href = `/admin-profile/${newUsername}`;
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    setModalOpen(false);
+  };
+
   return (
     <Container className="admin-container">
       <div className="whitespace">.</div>
@@ -102,6 +108,8 @@ const AdminProfile = () => {
                       id="editFirstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      readOnly={!isEditing} 
+                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
                     />
                   </FormGroup>
                 </Col>
@@ -114,6 +122,8 @@ const AdminProfile = () => {
                       id="editLastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      readOnly={!isEditing} 
+                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
                     />
                   </FormGroup>
                 </Col>
@@ -128,6 +138,8 @@ const AdminProfile = () => {
                       id="editUsername"
                       value={newUsername}
                       onChange={(e) => setNewUsername(e.target.value)}
+                      readOnly={!isEditing} 
+                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
                     />
                   </FormGroup>
                 </Col>
@@ -140,6 +152,8 @@ const AdminProfile = () => {
                       id="editEmail"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      readOnly={!isEditing} 
+                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
                     />
                   </FormGroup>
                 </Col>
@@ -150,16 +164,28 @@ const AdminProfile = () => {
       </Row>
       <Row className="mt-5" style={{ marginBottom: "100px" }}>
         <Col className="text-center">
-          <button
-            color="primary"
-            size="lg"
-            className="admin-button"
-            onClick={handleEdit}
-          >
-            Edit
-          </button>
+          {isEditing ? (
+            <button
+              color="primary"
+              size="lg"
+              className="admin-button"
+              onClick={handleEdit}
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              color="primary"
+              size="lg"
+              className="admin-button"
+              onClick={toggleEdit}
+            >
+              Edit
+            </button>
+          )}
         </Col>
       </Row>
+
       <Row className="mt-5">
         <Col className="d-flex flex-column align-items-center">
           <span style={{ color: "black", fontWeight: "bold" }}>View Users</span>

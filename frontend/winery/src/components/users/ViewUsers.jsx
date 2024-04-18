@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import axiosPrivate from "../../api/axios";
 import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faSync, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faSync,
+  faSearch,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
 import { Link } from "react-router-dom";
 import Unauthorized from "../auth/Unauthorized";
@@ -25,12 +30,12 @@ const ViewUsers = () => {
           headers: { "Content-Type": "application/json" },
         });
         setCustomers(customersResponse.data);
-  
+
         const managersResponse = await axiosPrivate.get("/managers/", {
           headers: { "Content-Type": "application/json" },
         });
         setManagers(managersResponse.data);
-  
+
         const winemakersResponse = await axiosPrivate.get("/winemakers/", {
           headers: { "Content-Type": "application/json" },
         });
@@ -39,13 +44,13 @@ const ViewUsers = () => {
         console.error("Error fetching users data:", error);
       }
     };
-  
+
     fetchData();
-  
+
     const interval = setInterval(fetchData, 300000);
     return () => clearInterval(interval);
   }, []);
-  
+
   const filterCustomers = (customer, searchText) => {
     return (
       customer.first_name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -131,6 +136,16 @@ const ViewUsers = () => {
           <i>
             <FontAwesomeIcon icon={faPen} className="mr-2" /> Register New
             Worker{" "}
+          </i>
+        </Link>
+
+        <Link
+          to="/admin-profile/:username"
+          className="btn view-user-btn btn-lg"
+          style={{ borderWidth: "3px", borderRadius: "20px" }}
+        >
+          <i>
+            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
           </i>
         </Link>
 
