@@ -20,6 +20,7 @@ from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
 from wines.views import OrderViewSet, WineViewSet
+from wine_production.views import WineCellarViewSet, WineTankViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -33,6 +34,8 @@ router.register(r'cities', CityViewSet)
 router.register(r'reports', ReportViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'wines', WineViewSet)
+router.register(r'wine-rooms', WineCellarViewSet)
+router.register(r'wine-tanks', WineTankViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'vehicles',
-    'wines'
+    'wines',
+    'wine_production'
 ]
 
 MIDDLEWARE = [
