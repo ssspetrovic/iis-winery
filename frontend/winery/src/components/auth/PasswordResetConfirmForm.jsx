@@ -10,19 +10,29 @@ import {
   Row,
 } from "reactstrap";
 import axios from "../../api/axios";
+import ConfirmModal from "../util/ConfirmModal";
+import { useNavigate } from "react-router-dom";
 
 const PasswordResetConfirmForm = () => {
+  const navigate = useNavigate();
+
   const { token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    func: () => {},
+  });
 
   useEffect(() => {
     const validateToken = async () => {
       try {
-        const response = await axios.get(
-          `/password_reset/validate_token/${token}/`
-        );
+        const response = await axios.post(`/password_reset/validate_token/`, {
+          token: token,
+        });
         if (response.data.status !== "OK") {
           throw new Error("Invalid token");
         }
@@ -34,6 +44,10 @@ const PasswordResetConfirmForm = () => {
     validateToken();
   }, [token]);
 
+  const toggleConfirmModalOpen = () => {
+    setIsConfirmModalOpen(!isConfirmModalOpen);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -42,11 +56,16 @@ const PasswordResetConfirmForm = () => {
     }
 
     try {
-      const response = await axios.post("/password_reset/confirm/", {
+      await axios.post("/password_reset/confirm/", {
         token: token,
         password: password,
       });
-      setErrorMessage(response.data.detail);
+      setModalData({
+        header: "Success",
+        body: "Password changed succesfully. You can now login using your new passord.",
+        func: () => navigate("/login"),
+      });
+      toggleConfirmModalOpen();
     } catch (error) {
       setErrorMessage("Failed to reset password.");
     }
@@ -104,6 +123,11 @@ const PasswordResetConfirmForm = () => {
           </div>
         </Row>
       </Container>
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        toggle={toggleConfirmModalOpen}
+        data={modalData}
+      />
     </div>
   );
 };
