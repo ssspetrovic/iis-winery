@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from . import secret
+from datetime import timedelta
 import os
 from pathlib import Path
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_rest_passwordreset',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -147,7 +150,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'username',
@@ -168,7 +170,6 @@ DATA_DIR_PATH = os.path.join(BASE_DIR, 'data/')
 
 CITY_CSV_PATH = os.path.join(DATA_DIR_PATH, 'cities.csv')
 
-
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
@@ -176,3 +177,11 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5173',
     'http://localhost:5174',
 ]
+
+# SMTP settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = secret.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD

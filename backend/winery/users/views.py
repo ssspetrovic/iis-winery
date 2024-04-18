@@ -1,12 +1,19 @@
 from rest_framework import viewsets
-from .models import User, Customer, Manager, Winemaker, Admin, Report, City
-from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer, CitySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import permission_classes
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.core.mail import send_mail
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.dispatch import receiver
+
+from .models import User, Customer, Manager, Winemaker, Admin, Report, City
+from .serializers import UserSerializer, CustomerSerializer, WinemakerSerializer, ManagerSerializer, AdminSerializer, ReportSerializer, CitySerializer
 
 
 class LogoutAPIView(APIView):
@@ -111,3 +118,28 @@ class CityViewSet(viewsets.ModelViewSet):
     serializer_class = CitySerializer
     lookup_field = 'name'
     lookup_url_kwarg = 'name'
+
+
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    # the below like concatinates your websites reset password url and the reset email token which will be required at a later stage
+    email_plaintext_message = "Open the link to reset your password" + " " + \
+        "{}{}".format(instance.request.build_absolute_uri(
+            "http://localhost:5173/reset-password-confirm/"), reset_password_token.key)
+
+    """
+        this below line is the django default sending email function, 
+        takes up some parameter (title(email title), message(email body), from(email sender), to(recipient(s))
+    """
+    send_mail(
+        # title:
+        "Password Reset for {title}".format(title="Winery portal account"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "info@winery.com",
+        # to:
+        [reset_password_token.user.email],
+        fail_silently=False,
+    )
