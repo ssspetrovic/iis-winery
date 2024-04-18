@@ -51,7 +51,6 @@ const AdminProfile = () => {
   const handleEdit = async () => {
     try {
       console.log("Saving changes...");
-      // Enkodiranje šifre pre slanja
       await axios.patch(`/admins/${username}/`, {
         headers: { "Content-Type": "application/json" },
         email: email,

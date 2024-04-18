@@ -18,6 +18,7 @@ import NotFound from "./components/util/NotFound";
 import MainNavbar from "./components/util/MainNavbar";
 import ManagerProfile from "./components/users/ManagerProfile";
 import CustomerProfile from "./components/users/CustomerProfile";
+import WinemakerProfile from "./components/users/WinemakerProfile";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -43,6 +44,10 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
+            <Route path="/winemaker-profile/:username" element={<WinemakerProfile />} />
           </Route>
 
           <Route

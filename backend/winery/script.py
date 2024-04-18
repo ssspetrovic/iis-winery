@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'winery.settings')
 django.setup()
 
 # Import modela Admin iz vaše aplikacije
-from users.models import Admin, City
+from users.models import Admin, City, Winemaker
 
 # Provera postoji li već administratorski korisnik
 if not Admin.objects.filter(username='pale').exists():
@@ -24,6 +24,26 @@ if not Admin.objects.filter(username='pale').exists():
     print("Admin kreiran.")
 else:
     print("Admin nije kreiran.")
+
+
+if not Winemaker.objects.filter(username='mata').exists():
+    # Stvaranje administratorskog korisnika
+    city = City.objects.get(name='Negotin')
+    winemaker = Winemaker.objects.create(
+        username='mata',
+        role=Admin.Role.WINEMAKER,
+        first_name='Matej',
+        last_name='Miha',
+        email='mata@example.com',
+        city=city,
+        address='Bulevar Mike Mikica',
+        street_number=23
+    )
+    winemaker.set_password('123')
+    winemaker.save()
+    print("Vinar kreiran.")
+else:
+    print("Vinar nije kreiran.")
 
 # Putanja do CSV datoteke s gradovima
 csv_file_path = 'data/cities.csv'
