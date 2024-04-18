@@ -117,30 +117,21 @@ class WinemakerSerializer(serializers.ModelSerializer):
             city_instance, _ = City.objects.get_or_create(**city_data)
             instance.city = city_instance
 
-        instance.username = validated_data.get('username', instance.username)
-        instance.first_name = validated_data.get(
-            'first_name', instance.first_name)
-        instance.last_name = validated_data.get(
-            'last_name', instance.last_name)
-        instance.address = validated_data.get('address', instance.address)
-        instance.street_number = validated_data.get(
-            'street_number', instance.street_number)
-
         if 'password' in validated_data:
             password = validated_data.pop('password')
-            instance.set_password(password)
+            hashed_password = make_password(password)
+            validated_data['password'] = hashed_password
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
 
         instance.save()
-        
         return instance
 
     class Meta:
         model = Winemaker
-        fields = ['id', 'username', 'first_name',
+        fields = ['id', 'username', 'password', 'first_name',
                   'last_name', 'email', 'address', 'street_number', 'city']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
 
 
 class ManagerSerializer(serializers.HyperlinkedModelSerializer):
