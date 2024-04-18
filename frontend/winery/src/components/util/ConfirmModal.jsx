@@ -4,8 +4,8 @@ const ConfirmModal = ({ isOpen, toggle, data }) => {
   const { header, body, func } = data;
 
   return (
-    <Modal isOpen={isOpen} toggle={toggle} onExit={func} centered>
-      <ModalHeader toggle={toggle}>
+    <Modal isOpen={isOpen} toggle={toggle} centered>
+      <ModalHeader>
         <div>{header}</div>
       </ModalHeader>
       <ModalBody>
