@@ -9,6 +9,9 @@ import {
   FormGroup,
   Label,
   Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import useAuth from "../../hooks/useAuth";
 import axios from "../../api/axios";
@@ -17,15 +20,17 @@ import "../../assets/adminStyles.css";
 
 const ManagerProfile = () => {
   const [managerInfo, setManagerInfo] = useState(null);
+  const [newUsername, setNewUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [passwordError, setPasswordError] = useState(false); // State to track password error
+  const [passwordError, setPasswordError] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
   const { auth } = useAuth();
   const { username, role } = auth || {};
-  const { logout } = useContext(AuthProvider);
+  const { logoutUsername } = useContext(AuthProvider);
 
   useEffect(() => {
     fetchManagerInfo();
@@ -36,6 +41,7 @@ const ManagerProfile = () => {
       const response = await axios.get(`/managers/${username}`);
       const data = response.data;
       setManagerInfo(data);
+      setNewUsername(username);
       setEmail(data.email);
       setFirstName(data.first_name);
       setLastName(data.last_name);
@@ -49,23 +55,38 @@ const ManagerProfile = () => {
     try {
       if (!password) {
         setPasswordError(true);
-        return; // Exit early if password is empty
+        return;
       }
 
       console.log("Saving changes...");
       console.log(password);
       await axios.patch(`/managers/${username}/`, {
-        username: username,
+        username: newUsername,
         password: password,
         email: email,
         first_name: firstName,
         last_name: lastName,
         phone_number: phoneNumber,
       });
+
+      // Toggle modal visibility on successful edit
+      setModalOpen(true);
       console.log("Changes saved successfully!");
     } catch (error) {
       console.error("Error saving changes:", error);
     }
+  };
+
+  const handleNavigate = () => {
+    if (newUsername !== username) {
+      logoutUsername(newUsername);
+    }
+    
+    window.location.href = `/manager-profile/${newUsername}`;
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -76,9 +97,23 @@ const ManagerProfile = () => {
             <div className="text-center mb-4">
               <i className="fa-solid fa-circle-user fa-3x"></i>
             </div>
-            <h4 className="text-center">{username}</h4>
+            <h4 className="text-center">Hi, {username}!</h4>
             <div className="mt-3">
               <Form>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Label for="editUsername">Username</Label>
+                      <Input
+                        type="username"
+                        name="username"
+                        id="editUsername"
+                        value={newUsername}
+                        onChange={(e) => setNewUsername(e.target.value)}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Row>
                   <Col md={6}>
                     <FormGroup>
@@ -188,6 +223,30 @@ const ManagerProfile = () => {
           </Row>
         </Col>
       </Row>
+
+      <Modal isOpen={modalOpen} toggle={handleCloseModal} backdrop="static">
+        <ModalHeader>Edit Successful</ModalHeader>
+        <ModalBody>
+          {newUsername !== username ? (
+            <p>
+              You changed your username. We will redirect you to your new
+              profile page.
+            </p>
+          ) : (
+            <p>Your changes have been successfully saved.</p>
+          )}{" "}
+          <div className="text-center mt-3">
+            <button
+              color="primary"
+              size="lg"
+              className="admin-button"
+              onClick={handleNavigate}
+            >
+              Close
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
     </Container>
   );
 };

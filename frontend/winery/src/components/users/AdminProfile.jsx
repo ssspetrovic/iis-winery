@@ -9,6 +9,9 @@ import {
   FormGroup,
   Label,
   Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import "@fortawesome/fontawesome-free/css/all.css";
 import useAuth from "../../hooks/useAuth";
@@ -23,6 +26,7 @@ const AdminProfile = () => {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
   const { auth } = useAuth();
   const { username, role } = auth || {};
   const { logoutUsername } = useContext(AuthProvider);
@@ -60,15 +64,19 @@ const AdminProfile = () => {
         password: password,
       });
 
-      if (newUsername !== username) {
-        // Ako jeste, izvrši navigaciju na odgovarajuću adresu
-        logoutUsername(newUsername); // Logout with the new username
-        window.location.href = `/admin-profile/${newUsername}`;
-      }
       console.log("Changes saved successfully!");
+      setModalOpen(true);
     } catch (error) {
       console.error("Error saving changes:", error);
     }
+  };
+
+  const handleNavigate = () => {
+    if (newUsername !== username) {
+      logoutUsername(newUsername);
+    }
+
+    window.location.href = `/admin-profile/${newUsername}`;
   };
 
   return (
@@ -190,6 +198,34 @@ const AdminProfile = () => {
         </Col>
       </Row>
       <div className="whitespace">.</div>
+
+      <Modal
+        isOpen={modalOpen}
+        toggle={() => setModalOpen(!modalOpen)}
+        backdrop="static"
+      >
+        <ModalHeader>Edit Successful</ModalHeader>
+        <ModalBody>
+          {newUsername !== username ? (
+            <p>
+              You changed your username. We will redirect you to your new
+              profile page.
+            </p>
+          ) : (
+            <p>Your changes have been successfully saved.</p>
+          )}
+          <div className="text-center mt-3">
+            <button
+              color="primary"
+              size="lg"
+              className="admin-button"
+              onClick={handleNavigate}
+            >
+              Close
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
     </Container>
   );
 };
