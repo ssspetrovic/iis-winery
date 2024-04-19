@@ -70,7 +70,7 @@ const WinemakerOrdersPage = () => {
             const wineResponse = await axios.get(`/wines/${wineId}/`);
 
             // Uporedi ID winemakera sa ID-jem trenutno ulogovanog winemakera
-            if (winemakerId === wineResponse.data.winemaker) {
+            if (username === wineResponse.data.winemaker) {
               isWinemakerOrder = true;
               break;
             }
@@ -80,9 +80,10 @@ const WinemakerOrdersPage = () => {
           if (!order.is_accepted && isWinemakerOrder) {
             // Izvuci podatke o korisniku (customer-u) iz narudžbine
             const customerResponse = await axios.get(
-              `/customers/?id=${order.customer}/`
+              `/customers/${order.customer}/`
             );
             const customerData = customerResponse.data;
+            console.log(customerData);
             const winesData = [];
             for (const wineId of order.wines) {
               const wineResponse = await axios.get(`/wines/${wineId}/`);
@@ -187,18 +188,18 @@ const WinemakerOrdersPage = () => {
                   </p>
                   <p>
                     <strong>Customer:</strong>{" "}
-                    {order.customerData[0].first_name}{" "}
-                    {order.customerData[0].last_name}
+                    {order.customerData.first_name}{" "}
+                    {order.customerData.last_name}
                   </p>
                   <p>
-                    <strong>Email:</strong> {order.customerData[0].email}
+                    <strong>Email:</strong> {order.customerData.email}
                   </p>
                   <p>
-                    <strong>Address:</strong> {order.customerData[0].address}{" "}
-                    {order.customerData[0].street_number}
+                    <strong>Address:</strong> {order.customerData.address}{" "}
+                    {order.customerData.street_number}
                     {", "}
-                    {order.customerData[0].city.name}{" "}
-                    {order.customerData[0].city.postal_code}
+                    {order.customerData.city.name}{" "}
+                    {order.customerData.city.postal_code}
                   </p>
                   <h3 className="mt-4">
                     <strong>Wines:</strong>

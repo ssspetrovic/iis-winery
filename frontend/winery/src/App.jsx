@@ -22,6 +22,7 @@ import WinemakerProfile from "./components/users/WinemakerProfile";
 import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
+import OrderPage from "./components/orders/OrderPage";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -90,6 +91,7 @@ function App() {
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}
           />
+          <Route path="/orders/:id" element={<OrderPage />} />
 
           {/* If no other routes are hooked, throw 404 */}
           <Route path="*" element={<NotFound />} />
