@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from vehicles.models import Vehicle
 
 class Wine(models.Model):
     SWEETNESS_CHOICES = [
@@ -23,6 +24,7 @@ class Order(models.Model):
     wines = models.ManyToManyField(Wine)
     is_accepted = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
+    driver = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"Order by {self.customer.username}"

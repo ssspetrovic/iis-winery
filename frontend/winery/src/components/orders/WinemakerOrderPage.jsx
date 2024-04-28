@@ -115,7 +115,7 @@ const WinemakerOrdersPage = () => {
   const handleVehicleChange = async (e) => {
     const selectedVehicleId = e.target.value;
     setSelectedVehicle(selectedVehicleId);
-    
+
     // Provera da li je selektovan ID vozila
     if (selectedVehicleId) {
       try {
@@ -132,13 +132,13 @@ const WinemakerOrdersPage = () => {
       setIsVehicleSelected(false);
     }
   };
-  
 
   const handleAcceptOrder = async () => {
     try {
       // Send request to accept order
       await axios.patch(`/orders/${selectedOrder.id}/`, {
         is_accepted: true,
+        driver: selectedVehicle,
       });
 
       await axios.patch(`/vehicles/${selectedVehicle}/`, {
@@ -187,8 +187,7 @@ const WinemakerOrdersPage = () => {
                     <strong>Order ID:</strong> {order.id}
                   </p>
                   <p>
-                    <strong>Customer:</strong>{" "}
-                    {order.customerData.first_name}{" "}
+                    <strong>Customer:</strong> {order.customerData.first_name}{" "}
                     {order.customerData.last_name}
                   </p>
                   <p>

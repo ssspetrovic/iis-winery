@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  Polyline,
-} from "@react-google-maps/api";
+import React, { useEffect, useState, useRef } from "react";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "../../api/axios";
 import { useParams } from "react-router-dom";
+import carIconUrl from "../../assets/images/google_car.png";
+import useAuth from "../../hooks/useAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const mapContainerStyle = {
   width: "100%",
-  height: "400px",
+  height: "100%",
 };
 
-const center = {
+// Default center coordinates
+const defaultCenter = {
   lat: 0,
   lng: 0,
+};
+
+const carIcon = {
+  url: carIconUrl, // Koristimo relativnu putanju do slike
 };
 
 const DeliveryMap = () => {
@@ -28,13 +33,25 @@ const DeliveryMap = () => {
   const [order, setOrder] = useState(null);
   const [customer, setCustomer] = useState("");
   const [winemaker, setWinemaker] = useState("");
-  const [vehiclePosition, setVehiclePosition] = useState(null);
   const [isAccepted, setIsAccepted] = useState(false);
+  const [isDelivered, setIsDelivered] = useState(false);
   const [customerLatLng, setCustomerLatLng] = useState(null);
   const [winemakerLatLng, setWinemakerLatLng] = useState(null);
+  const [vehiclePosition, setVehiclePosition] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State za prikazivanje modala
+  const prevPositionRef = useRef(null); // Ref za prethodnu poziciju vozila
+  const mapRef = useRef(null); // Ref za pristup instanci mape
+  const { auth } = useAuth();
+  const { username, role } = auth || {};
 
   useEffect(() => {
-    // Učitaj podatke o narudžbini iz backenda
+    if (order && isAccepted && customer && winemaker) {
+      optimizeRouteAndDisplayMap(order);
+    }
+  }, [order, isAccepted, customer, winemaker]);
+
+  useEffect(() => {
+    // Fetch order data from the backend
     axios
       .get(`/orders/${id}/`)
       .then((response) => {
@@ -56,18 +73,18 @@ const DeliveryMap = () => {
         });
 
         setIsAccepted(orderData.is_accepted);
-
-        // Proveri da li je narudžbina prihvaćena
+        setIsDelivered(orderData.is_delivered);
+        // Provera da li je porudžbina prihvaćena
         if (orderData.is_accepted) {
-          // Pozovi funkciju za optimizaciju rute i prikaz na mapi
+          // Poziv funkcije za optimizaciju rute i prikaz na mapi
           optimizeRouteAndDisplayMap(orderData);
         } else {
-          console.log("Order is not accepted.");
+          console.log("Porudžbina nije prihvaćena.");
           setIsAccepted(false);
         }
       })
       .catch((error) => {
-        console.error("Error fetching order data:", error);
+        console.error("Greška pri dohvatanju podataka o porudžbini:", error);
         setIsAccepted(false);
       });
   }, [id]);
@@ -78,13 +95,13 @@ const DeliveryMap = () => {
       !window.google.maps ||
       !window.google.maps.DirectionsService
     ) {
-      // Google Maps API ili DirectionsService nisu učitani, sačekajmo trenutak i pokušajmo ponovo
+      // Čekanje i ponovni pokušaj ako Google Maps API ili DirectionsService nisu učitani
       setTimeout(() => {
         optimizeRouteAndDisplayMap(orderData);
       }, 100);
       return;
     }
-  
+
     if (
       !customer ||
       !winemaker ||
@@ -93,15 +110,16 @@ const DeliveryMap = () => {
       !customer.city ||
       !winemaker.city
     ) {
+      // Ponovni pokušaj ako potrebni podaci o lokaciji nisu dostupni
       setTimeout(() => {
         optimizeRouteAndDisplayMap(orderData);
       }, 100);
       return;
     }
-  
-    // Kreiranje geokoder objekta
+
+    // Kreiranje objekta geokodera
     const geocoder = new window.google.maps.Geocoder();
-  
+
     // Geokodiranje adrese kupca
     geocoder.geocode({ address: customer.address }, (results, status) => {
       if (status === "OK" && results[0]) {
@@ -118,8 +136,9 @@ const DeliveryMap = () => {
             const winemakerLng = winemakerLocation.lng();
             setWinemakerLatLng({ lat: winemakerLat, lng: winemakerLng });
 
-            // Poziv Google Maps JavaScript API-ja za dobijanje optimalne rute
-            const directionsService = new window.google.maps.DirectionsService();
+            // Poziv Google Maps JavaScript API za dobijanje optimalne rute
+            const directionsService =
+              new window.google.maps.DirectionsService();
             directionsService.route(
               {
                 origin: {
@@ -134,68 +153,167 @@ const DeliveryMap = () => {
               },
               (response, status) => {
                 if (status === "OK") {
-                  // Ako je dobijen odgovor, prikazi rutu na mapi
-                  const directionsRenderer = new window.google.maps.DirectionsRenderer();
-                  directionsRenderer.setMap(mapInstance);
+                  // Ako je odgovor primljen, prikaži rutu na mapi
+                  const directionsRenderer =
+                    new window.google.maps.DirectionsRenderer();
+                  directionsRenderer.setMap(mapRef.current); // Postavi instancu mape ovde
                   directionsRenderer.setDirections(response);
+
+                  // Podesi poziciju vozila na početnu tačku (vinar)
+                  setVehiclePosition({ lat: winemakerLat, lng: winemakerLng });
+                  prevPositionRef.current = {
+                    lat: winemakerLat,
+                    lng: winemakerLng,
+                  };
+
+                  // Kreiranje intervala za ažuriranje pozicije vozila
+                  const interval = setInterval(() => {
+                    // Izračunaj novu poziciju vozila duž rute
+                    const nextStep = response.routes[0].legs[0].steps.find(
+                      (step) =>
+                        step.start_location.lat() ===
+                          prevPositionRef.current.lat &&
+                        step.start_location.lng() ===
+                          prevPositionRef.current.lng
+                    );
+                    if (nextStep) {
+                      const newPosition = {
+                        lat: nextStep.end_location.lat(),
+                        lng: nextStep.end_location.lng(),
+                      };
+                      setVehiclePosition(newPosition);
+                      prevPositionRef.current = newPosition;
+                    } else {
+                      // Vozilo je stiglo na odredište, prekini interval
+                      clearInterval(interval);
+
+                      axios
+                        .patch(`/vehicles/${orderData.driver}/`, {
+                          is_transporting: false,
+                        })
+                        .then((response) => {
+                          console.log("Vozač oslobodjen!");
+                        })
+                        .catch((error) => {
+                          console.error(
+                            "Vozaču nije dozvoljena sloboda: ",
+                            error
+                          );
+                        });
+
+                      axios
+                        .patch(`/orders/${id}/`, { is_delivered: true })
+                        .then((response) => {
+                          console.log(
+                            "Status porudžbine je ažuriran na isporučeno."
+                          );
+                        })
+                        .catch((error) => {
+                          console.error(
+                            "Greška pri ažuriranju statusa porudžbine:",
+                            error
+                          );
+                        });
+
+                      // Otvaranje modala
+                      setShowModal(true);
+                    }
+                  }, 5000); // Podesite interval prema potrebi
                 } else {
-                  console.error("Error fetching route:", status);
+                  console.error("Greška pri dohvatanju rute:", status);
                 }
               }
             );
           } else {
-            console.error("Geocode was not successful for the winemaker address:", status);
+            console.error("Geokodiranje nije uspelo za adresu vinara:", status);
           }
         });
       } else {
-        console.error("Geocode was not successful for the customer address:", status);
+        console.error("Geokodiranje nije uspelo za adresu kupca:", status);
       }
     });
   };
-  
-  return isLoaded && order && isAccepted ? (
-    <GoogleMap mapContainerStyle={mapContainerStyle} zoom={10} center={center}>
-      {/* Prikaz markera za kupca */}
-      <Marker position={{ lat: order.customer.lat, lng: order.customer.lng }} />
 
-      {/* Prikaz markera za vinara */}
-      <Marker
-        position={{
-          lat: winemaker.lat,
-          lng: winemaker.lng,
+  return isLoaded &&
+    order &&
+    isAccepted &&
+    customerLatLng &&
+    winemakerLatLng &&
+    isDelivered ? (
+    isDelivered ? (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-      />
+      >
+        <h1 className="text-center">Ova porudžbina je već izvršena!</h1>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <FontAwesomeIcon icon={faCheckSquare} size="10x" />
+        </div>
+      </div>
+    ) : (
+      <>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={10}
+          center={defaultCenter} // Postavi podrazumevani centar ovde
+          onLoad={(map) => (mapRef.current = map)} // Postavi ref mape kada se mapa učita
+        >
+          {/* Prikaz markera kupca */}
+          {customerLatLng && (
+            <Marker
+              position={{ lat: customerLatLng.lat, lng: customerLatLng.lng }}
+            />
+          )}
 
-      {/* Prikaz polilinije za optimalnu rutu */}
-      {vehiclePosition && (
-        <Polyline
-          path={[
-            { lat: vehiclePosition.startLat, lng: vehiclePosition.startLng },
-            { lat: vehiclePosition.endLat, lng: vehiclePosition.endLng },
-          ]}
-          options={{
-            strokeColor: "#FF0000",
-            strokeOpacity: 1,
-            strokeWeight: 3,
-          }}
-        />
-      )}
+          {/* Prikaz markera vinara */}
+          {winemakerLatLng && (
+            <Marker
+              position={{ lat: winemakerLatLng.lat, lng: winemakerLatLng.lng }}
+            />
+          )}
 
-      {/* Prikaz vozila */}
-      {vehiclePosition && (
-        <Marker
-          position={{ lat: vehiclePosition.lat, lng: vehiclePosition.lng }}
-          icon={{
-            url: "URL_TO_VEHICLE_ICON",
-            scaledSize: new window.google.maps.Size(50, 50), // Velicina ikonice
-          }}
-        />
-      )}
-    </GoogleMap>
+          {/* Prikaz markera vozila */}
+          {vehiclePosition && (
+            <Marker
+              position={{ lat: vehiclePosition.lat, lng: vehiclePosition.lng }}
+              icon={{
+                url: carIcon.url,
+                scaledSize: { width: 50, height: 50 }, // Veličina ikone
+              }}
+            />
+          )}
+        </GoogleMap>
+        {/* Modal za prikazivanje poruke o isporuci */}
+        <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+          <ModalHeader toggle={() => setShowModal(false)}>
+            Order Successful
+          </ModalHeader>
+          <ModalBody>
+            <p>
+              Thank you for your patience, your order is waiting for you at your
+              doorstep.
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" href={`/customer-profile/${username}`}>
+              Home Page
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </>
+    )
   ) : (
     <div>
-      {!isAccepted && <p>The order has not been accepted yet.</p>}
-      {!isLoaded && <p>Loading...</p>}
+      {!isAccepted && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ marginRight: "10px" }}>Porudžbina još nije prihvaćena.</p>
+          <FontAwesomeIcon icon={faTimes} size="lg" />
+        </div>
+      )}{" "}
+      {!isLoaded && <p>Učitavanje...</p>}
     </div>
   );
 };
