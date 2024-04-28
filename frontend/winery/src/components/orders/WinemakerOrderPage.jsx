@@ -18,18 +18,37 @@ import ConfirmationModal from "./ConformationModal";
 import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
+// Add your Google Maps API key here
+// Define map container style and default center coordinates
+const mapContainerStyle = {
+  width: "100%",
+  height: "400px", // Adjust the height as needed
+};
+const defaultCenter = {
+  lat: 45.2671,
+  lng: 19.8335,
+};
 
 const WinemakerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState("");
-  const [selectedVehicleData, setSelectedVehicleData] = useState("");
+  const [selectedVehicleData, setSelectedVehicleData] = useState(null);
   const [modal, setModal] = useState(false);
   const [vehicles, setVehicles] = useState([]);
   const [isVehicleSelected, setIsVehicleSelected] = useState(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [vehicleLatLng, setVehicleLatLng] = useState(null);
   const { auth } = useAuth();
   const { username, role } = auth || {};
+  const googleMapsApiKey = useGoogleMapsApiKey();
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: googleMapsApiKey,
+  });
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -121,6 +140,25 @@ const WinemakerOrdersPage = () => {
       try {
         const response = await axios.get(`/vehicles/${selectedVehicleId}`);
         setSelectedVehicleData(response.data);
+        // Geokodiranje adrese vozila
+        const { address, street_number, city, postal_code } = response.data;
+        const fullAddress = `${street_number} ${address}, ${city.name}, ${postal_code}`;
+        if (window.google && window.google.maps) {
+          const geocoder = new window.google.maps.Geocoder();
+          geocoder.geocode({ address: fullAddress }, (results, status) => {
+            if (status === "OK" && results[0]) {
+              setVehicleLatLng({
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng(),
+              });
+              console.log(vehicleLatLng);
+            } else {
+              console.error("No results found for the address:", fullAddress);
+            }
+          });
+        } else {
+          console.error("Google Maps API not available");
+        }
       } catch (error) {
         console.error("Error fetching vehicle data:", error);
         setSelectedVehicleData(null);
@@ -300,6 +338,26 @@ const WinemakerOrdersPage = () => {
               <p>
                 <strong>City:</strong> {selectedVehicleData.city.name}
               </p>
+              {/* Prikaz mape */}
+              <h3 className="text-center mt-4">Vehicle Location</h3>
+              {isLoaded && vehicleLatLng && (
+                <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  zoom={15}
+                  center={{
+                    lat: vehicleLatLng.lat,
+                    lng: vehicleLatLng.lng,
+                  }}
+                >
+                  {/* Marker za prikaz lokacije vozila */}
+                  <Marker
+                    position={{
+                      lat: vehicleLatLng.lat,
+                      lng: vehicleLatLng.lng,
+                    }}
+                  />
+                </GoogleMap>
+              )}
             </div>
           )}
         </ModalBody>
