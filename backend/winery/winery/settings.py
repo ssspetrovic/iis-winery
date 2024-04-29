@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'users',
     'vehicles',
     'wines',
-    'wine_production'
+    'wine_production',
+    'venues'
 ]
 
 MIDDLEWARE = [
