@@ -26,6 +26,7 @@ import OrderPage from "./components/orders/OrderPage";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
+import VenueList from "./components/venues/VenueList";
 
 function App() {
   return (
@@ -87,6 +88,7 @@ function App() {
           <Route path="/add-vehicle" element={<AddVehicle />} />
           <Route path="/update-vehicle" element={<UpdateVehicle />} />
           <Route path="/view-reports" element={<ReportList />} />
+          <Route path="/view-venues" element={<VenueList/>} />
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}
