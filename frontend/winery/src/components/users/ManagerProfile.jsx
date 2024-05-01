@@ -201,7 +201,7 @@ const ManagerProfile = () => {
           <Row>
             <Col>
               <div className="rounded p-4 text-center mb-4">
-                <Link to="/events" className="btn btn-outline-dark btn-lg mb-2">
+                <Link to="/view-venues" className="btn btn-outline-dark btn-lg mb-2">
                   <i className="fa-solid fa-champagne-glasses fa-3x"></i>
                   <h5 className="mt-2">Events</h5>
                 </Link>

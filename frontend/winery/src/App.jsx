@@ -27,6 +27,7 @@ import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
 import VenueList from "./components/venues/VenueList";
+import EventCreationForm from "./components/events/EventCreateionForm";
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
           <Route path="/update-vehicle" element={<UpdateVehicle />} />
           <Route path="/view-reports" element={<ReportList />} />
           <Route path="/view-venues" element={<VenueList/>} />
+          <Route path="/create-event" element={<EventCreationForm/>} />
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}

@@ -1,6 +1,5 @@
 from django.db import models
-from users.models import User
-from vehicles.models import Vehicle
+
 
 class Venue(models.Model):
     name = models.CharField(max_length=100)
