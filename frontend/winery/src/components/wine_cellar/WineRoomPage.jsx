@@ -31,7 +31,7 @@ const WineRoomsPage = () => {
   };
 
   return (
-    <div>
+    <div className='p-3 mb-2 bg-dark text-white'>
       {wineRooms.map((wineRoom) => (
         <WineRoom key={wineRoom.id} wineRoom={wineRoom} />
       ))}

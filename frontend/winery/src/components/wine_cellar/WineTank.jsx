@@ -1,18 +1,39 @@
 import React from 'react';
-import { Card, CardImg, CardBody, CardTitle, CardText, Progress } from 'reactstrap';
+import { Card, CardHeader, CardImg, CardBody, CardTitle, CardText, Progress, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown } from 'reactstrap';
+import rackingIcon from '../../assets/images/racking.png';
+import wineTankIcon from '../../assets/images/winetank.jpg';
+import barrelIcon from '../../assets/images/barrel_template.png'; 
 
 const WineTank = ({ wineTank }) => {
-  const { tank_id, capacity, current_volume } = wineTank;
+  const { tank_id, capacity, current_volume, tank_type } = wineTank;
 
   // Calculate the progress percentage
   const progress = (current_volume / capacity) * 100;
 
   return (
     <Card className="mb-3">
-      <CardImg top width="100%" src="../images/barrel_template.png"/>
+      <CardHeader className="d-flex justify-content-end" style={{ borderBottom: 'none', backgroundColor: 'inherit' }}>
+        <UncontrolledDropdown>
+          <DropdownToggle color="transparent">
+            <i className="bi bi-three-dots"/>
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem>
+              <img src={rackingIcon} style={{ width: '24px', height: '24px' }} /> Racking
+            </DropdownItem>
+            <DropdownItem>
+              <i class="bi bi-pencil-square"/> Modify
+            </DropdownItem>
+            <DropdownItem>
+              <i className="bi bi-trash" /> Delete
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </CardHeader>
+      <CardTitle className="font-weight-bold text-center"><strong>{tank_id}</strong></CardTitle>
+      <CardImg top style={{ height:'280px' }} src={tank_type === 'Inox' ? wineTankIcon : barrelIcon}/>
       <CardBody>
-        <CardTitle className="font-weight-bold">{tank_id}</CardTitle>
-        <CardText>
+        <CardText className="text-center">
           <strong>Capacity:</strong> {capacity} liters
         </CardText>
         <CardText>

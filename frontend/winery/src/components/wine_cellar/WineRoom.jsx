@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import WineTank from './WineTank';
 import axios from "../../api/axios";
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col, Button, Card, CardBody, CardImg } from 'reactstrap';
+import addIcon from '../../assets/images/plusicon.png';
 
 const WineRoom = ({ wineRoom }) => {
   const { id, name, area} = wineRoom;
@@ -34,12 +35,19 @@ const WineRoom = ({ wineRoom }) => {
           <Button color="primary">Edit Wine Room</Button>
         </Col> */}
       </Row>
-      <Row>
+      <Row md={12}>
         {wineTanks.map((wineTank) => (
-          <Col key={wineTank.tank_id} md={4} className="mb-3">
+          <Col key={wineTank.tank_id} className="mb-3">
             <WineTank wineTank={wineTank} />
           </Col>
         ))}
+        <Col>
+          <Card onClick={() => console.log('Add new wine tank')} style={{ height: '479px' }}>
+            <CardBody className="d-flex justify-content-center align-items-center">
+              <i class="bi bi-plus-circle-fill" style={{ fontSize: '12rem' }}/>
+            </CardBody>
+          </Card>
+        </Col>
       </Row>
     </Container>
   );
