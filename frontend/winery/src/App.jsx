@@ -23,6 +23,8 @@ import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
+import BrowseWines from "./components/auth/BrowseWines";
+
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -77,6 +79,21 @@ function App() {
               path="/winemaker-profile/:username"
               element={<WinemakerProfile />}
             />
+          </Route>
+
+          <Route
+            element={
+              <RequireAuth
+                allowedRoles={[
+                  ROLES.CUSTOMER,
+                  ROLES.ADMIN,
+                  ROLES.MANAGER,
+                  ROLES.WINEMAKER,
+                ]}
+              />
+            }
+          >
+            <Route path="/browse" element={<BrowseWines />} />
           </Route>
 
           {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}
