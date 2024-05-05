@@ -26,9 +26,11 @@ const MainNavbar = () => {
   };
 
   return (
-    <Navbar color="light" expand="md" className="sticky-top">
+    <Navbar color="dark" expand="md" className="sticky-top">
       <div className="mx-md-3">
-        <NavbarBrand href="/">Winery</NavbarBrand>
+        <NavbarBrand href="/">
+          <span style={{ color: "white" }}>Winery</span>
+        </NavbarBrand>
       </div>
       <NavbarToggler onClick={toggleNavbar} />
 
@@ -42,7 +44,7 @@ const MainNavbar = () => {
             <Nav navbar>
               <UncontrolledDropdown nav inNavbar>
                 <div className="mx-md-5">
-                  <DropdownToggle nav caret>
+                  <DropdownToggle nav caret style={{ color: "white" }}>
                     {username}
                   </DropdownToggle>
                 </div>
