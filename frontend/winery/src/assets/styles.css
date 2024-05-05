@@ -45,3 +45,28 @@
 .customer-form-container {
     width: 50%;
 }
+
+.bg-dark {
+    background: #212529;
+}
+
+.bg-light {
+    background: #f8f9fa;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.filter {
+    cursor: pointer;
+}
+
+.filter-container {
+    width: 25%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
