@@ -165,7 +165,7 @@ const BrowseWines = () => {
           <Col md={9}>
             <div>
               {wines.map((wine) => (
-                <Card className="mb-2 shadow">
+                <Card key={wine.id} className="mb-2 shadow">
                   <CardImg top width="100%" src={wine.image} alt={wine.name} />
                   <CardBody>
                     <CardTitle tag="h5">{wine.name}</CardTitle>
