@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardHeader, CardImg, CardBody, CardTitle, CardText, Progress, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown } from 'reactstrap';
 import rackingIcon from '../../assets/images/racking.png';
-import wineTankIcon from '../../assets/images/winetank.jpg';
+import wineTankIcon from '../../assets/images/winetank.png';
 import barrelIcon from '../../assets/images/barrel_template.png'; 
 import axios from "../../api/axios";
 
-const WineTank = ({ wineTank }) => {
+const WineTank = ({ wineTank, fetchWineTanks }) => {
   const { tank_id, capacity, current_volume, tank_type, room } = wineTank;
 
   // Calculate the progress percentage
@@ -15,6 +15,7 @@ const WineTank = ({ wineTank }) => {
     try {
       const response = await axios.delete(`/wine-prod/wine-tanks/${room}/${tank_id}/`);
       console.log('Wine tank deleted successfully:', response.data);
+      fetchWineTanks();
     } catch (error) {
       // Handle error or display an error message
       console.error('Error deleting wine tank:', error);
@@ -42,7 +43,7 @@ const WineTank = ({ wineTank }) => {
         </UncontrolledDropdown>
       </CardHeader>
       <CardTitle className="font-weight-bold text-center"><strong>{tank_id}</strong></CardTitle>
-      <CardImg top style={{ height:'280px' }} src={tank_type === 'Inox' ? wineTankIcon : barrelIcon}/>
+      <CardImg top src={tank_type === 'Inox' ? wineTankIcon : barrelIcon}/>
       <CardBody>
         <CardText className="text-center">
           <strong>Capacity:</strong> {capacity} liters

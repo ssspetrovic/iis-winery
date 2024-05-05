@@ -30,6 +30,9 @@ wine_tank_data = [
     {"tank_id": "T1", "description": "Tank 1", "room_id": 1, "capacity": 100.0, "current_volume": 50.0, "tank_type": "Inox", "wine_id": 1},
     {"tank_id": "T2", "description": "Tank 2", "room_id": 1, "capacity": 150.0, "current_volume": 100.0, "tank_type": "Barrel", "wine_id": 2},
     {"tank_id": "T3", "description": "Tank 3", "room_id": 2, "capacity": 200.0, "current_volume": 150.0, "tank_type": "Inox", "wine_id": 3},
+    {"tank_id": "T4", "description": "Tank 4", "room_id": 2, "capacity": 120.0, "current_volume": 80.0, "tank_type": "Inox", "wine_id": 2},
+    {"tank_id": "T5", "description": "Tank 5", "room_id": 3, "capacity": 180.0, "current_volume": 120.0, "tank_type": "Barrel", "wine_id": 3},
+    {"tank_id": "T6", "description": "Tank 6", "room_id": 3, "capacity": 250.0, "current_volume": 200.0, "tank_type": "Inox", "wine_id": 1},
 ]
 
 for data in wine_tank_data:

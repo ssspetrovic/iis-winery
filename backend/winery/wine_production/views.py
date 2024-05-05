@@ -17,6 +17,15 @@ class WineTankViewSet(viewsets.ModelViewSet):
     queryset = WineTank.objects.all()
     serializer_class = WineTankSerializer
 
+    def list(self, request):
+        room_id = request.query_params.get('room')
+        if room_id:
+            queryset = WineTank.objects.filter(room_id=room_id)
+        else:
+            queryset = WineTank.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
     def destroy(self, request, room, tank_id):
         try:
             # Attempt to get the wine tank with the given room and tank_id

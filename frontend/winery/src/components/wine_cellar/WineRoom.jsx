@@ -22,7 +22,7 @@ const WineRoom = ({ wineRoom }) => {
   const fetchWineTanks = async () => {
     try {
       // Make a GET request to retrieve wine tanks by wine cellar ID
-      const response = await axios.get(`/wine-tanks/?room_id=${id}`);
+      const response = await axios.get(`/wine-tanks/?room=${id}`);
       console.log(response.data)
       setWineTanks(response.data); // Update state with retrieved wine tanks
     } catch (error) {
@@ -41,10 +41,10 @@ const WineRoom = ({ wineRoom }) => {
           <Button color="primary">Edit Wine Room</Button>
         </Col> */}
       </Row>
-      <Row md={12}>
+      <Row md={'auto'}>
         {wineTanks.map((wineTank) => (
-          <Col key={wineTank.tank_id} className="mb-3">
-            <WineTank wineTank={wineTank} />
+          <Col key={wineTank.tank_id} md={3}>
+            <WineTank wineTank={wineTank} fetchWineTanks={fetchWineTanks} />
           </Col>
         ))}
         <Col>
