@@ -12,12 +12,15 @@ class WineTank(models.Model):
         ('Barrel', 'Barrel'),
     ]
     tank_id = models.CharField(primary_key=True, max_length=10)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=250, unique=True)
     room = models.ForeignKey(WineCellar, on_delete=models.CASCADE)
     wine = models.ForeignKey(Wine, on_delete=models.CASCADE)
     capacity = models.DecimalField(max_digits=10, decimal_places=2)
     current_volume = models.DecimalField(max_digits=10, decimal_places=2)
     tank_type = models.CharField(max_length=25, choices=TANK_TYPE)
+
+    class Meta:
+        unique_together = (('tank_id', 'room'),)
 
     def clean(self):
         if self.current_volume > self.capacity:

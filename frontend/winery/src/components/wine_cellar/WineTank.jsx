@@ -3,12 +3,23 @@ import { Card, CardHeader, CardImg, CardBody, CardTitle, CardText, Progress, Dro
 import rackingIcon from '../../assets/images/racking.png';
 import wineTankIcon from '../../assets/images/winetank.jpg';
 import barrelIcon from '../../assets/images/barrel_template.png'; 
+import axios from "../../api/axios";
 
 const WineTank = ({ wineTank }) => {
-  const { tank_id, capacity, current_volume, tank_type } = wineTank;
+  const { tank_id, capacity, current_volume, tank_type, room } = wineTank;
 
   // Calculate the progress percentage
   const progress = (current_volume / capacity) * 100;
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`/wine-prod/wine-tanks/${room}/${tank_id}/`);
+      console.log('Wine tank deleted successfully:', response.data);
+    } catch (error) {
+      // Handle error or display an error message
+      console.error('Error deleting wine tank:', error);
+    }
+  };
 
   return (
     <Card className="mb-3">
@@ -24,7 +35,7 @@ const WineTank = ({ wineTank }) => {
             <DropdownItem>
               <i class="bi bi-pencil-square"/> Modify
             </DropdownItem>
-            <DropdownItem>
+            <DropdownItem onClick={handleDelete}>
               <i className="bi bi-trash" /> Delete
             </DropdownItem>
           </DropdownMenu>

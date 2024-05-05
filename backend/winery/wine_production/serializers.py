@@ -5,23 +5,21 @@ from wines.serializers import WineSerializer
 from django.core.exceptions import ValidationError
 
 class WineTankSerializer(serializers.ModelSerializer):
-    # wine = WineSerializer()
+    wine = WineSerializer()
 
-    # def create(self, validated_data):
-    #     wine_room_name = validated_data.pop('wine_room')
+    def create(self, validated_data):
+        wine_room_name = validated_data.pop('wine_room')
         
-    #     wine_room_intance = WineCellar.objects.get(name=wine_room_name)
+        wine_room_intance = WineCellar.objects.get(name=wine_room_name)
 
-    #     wine_name = validated_data.pop('wine')
+        wine_name = validated_data.pop('wine')
 
-    #     wine_instance = Wine.objects.get(name=wine_name)
+        wine_instance = Wine.objects.get(name=wine_name)
 
+        wine_tank = WineTank.objects.create(room=wine_room_intance, wine=wine_instance, )
 
-    #     return wine_instance
+        return wine_tank
     
-    # class Meta:
-    #     model = WineTank
-    #     fields = ['tank_id', 'description', 'room', 'wine', 'capacity', 'current_volume', 'tank_type']
     class Meta:
         model = WineTank
         fields = '__all__'

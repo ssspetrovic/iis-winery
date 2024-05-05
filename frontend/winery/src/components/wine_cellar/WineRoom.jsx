@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import WineTank from './WineTank';
 import axios from "../../api/axios";
-import { Container, Row, Col, Button, Card, CardBody, CardImg } from 'reactstrap';
-import addIcon from '../../assets/images/plusicon.png';
+import { Container, Row, Col, Button, Card, CardBody, CardImg, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import AddWineTank from './WineTankCreationFrom';
 
 const WineRoom = ({ wineRoom }) => {
   const { id, name, area} = wineRoom;
 
   const [wineTanks, setWineTanks] = useState([]);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setModalOpen(!modalOpen);
+  };
 
   useEffect(() => {
     fetchWineTanks();
@@ -42,13 +48,23 @@ const WineRoom = ({ wineRoom }) => {
           </Col>
         ))}
         <Col>
-          <Card onClick={() => console.log('Add new wine tank')} style={{ height: '479px' }}>
+          <Card onClick={toggleModal} style={{ height: '479px' }}>
             <CardBody className="d-flex justify-content-center align-items-center">
-              <i class="bi bi-plus-circle-fill" style={{ fontSize: '12rem' }}/>
+              <i class="bi bi-plus-circle-fill" style={{ fontSize: '10rem' }}/>
             </CardBody>
           </Card>
         </Col>
       </Row>
+      <Modal isOpen={modalOpen} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}><h2 className="mb-3">Add New Wine Tank</h2></ModalHeader>
+        <ModalBody>
+          <AddWineTank />
+        </ModalBody>
+        <ModalFooter>
+          <Button type="submit" color="primary" className="mr-2">Add Wine Tank</Button>
+          <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
     </Container>
   );
 };
