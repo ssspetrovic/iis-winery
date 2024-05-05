@@ -23,7 +23,7 @@ import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
-import BrowseWines from "./components/auth/BrowseWines";
+import BrowseWines from "./components/users/BrowseWines";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
