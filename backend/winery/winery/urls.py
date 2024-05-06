@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
@@ -45,3 +47,6 @@ urlpatterns = [
     path('api/wines/', include('wines.urls'), name='wines'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
+# Serve media files during development
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

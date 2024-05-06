@@ -122,7 +122,7 @@ const BrowseWines = () => {
                     <Card className="mb-2 shadow">
                       <CardImg
                         className="card-img-top"
-                        src={getRandomImage(innerIndex)}
+                        src={wine.image}
                         alt="wine image"
                         loading="eager"
                       />
