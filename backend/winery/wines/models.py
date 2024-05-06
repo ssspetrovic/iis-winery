@@ -9,11 +9,26 @@ class Wine(models.Model):
         ('Sweet', 'Sweet'),
     ]
     
+    TYPE_CHOICES = [
+        ('Red', 'Red'),
+        ('White', 'White'),
+        ('Rose', 'Rose'),
+    ]
+    
+    AGE_CHOICES = [
+        ('Vintage', 'Vintage'),
+        ('Non-vintage', 'Non-vintage')    
+    ]
+    
     name = models.CharField(max_length=100)
-    sweetness = models.CharField(max_length=20, choices=SWEETNESS_CHOICES)
-    acidity = models.FloatField()
-    alcohol = models.FloatField()
-    pH = models.FloatField()
+    sweetness = models.CharField(max_length=20, choices=SWEETNESS_CHOICES, default='Dry')
+    acidity = models.FloatField(verbose_name='Acidity', default=0)
+    alcohol = models.FloatField(verbose_name='Alcohol', default=0)
+    pH = models.FloatField(verbose_name='pH Value', default=0)
+    price = models.DecimalField(verbose_name='Price', decimal_places=2, max_digits=10, default=0)
+    quantity = models.IntegerField(verbose_name='Quantity', default=0)
+    type = models.CharField(max_length=6, verbose_name='Type', default='Red')
+    age = models.CharField(max_length=12, verbose_name='Age', default='Non-vintage')
     winemaker = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
 
     def __str__(self):
