@@ -157,7 +157,7 @@ const BrowseWines = () => {
                             <Col md={4}>
                               <div className="d-flex justify-content-center align-items-center h-100">
                                 <Form>
-                                  <Input type="number" />
+                                  <Input id="wine-quantity" type="number" />
                                 </Form>
                               </div>
                             </Col>
@@ -249,6 +249,7 @@ const BrowseWines = () => {
                           <Row>
                             <span>
                               <Input
+                                id="sweetness-dry"
                                 type="checkbox"
                                 className="mb-1 mx-1"
                                 onChange={handleSweetnessChange}
@@ -258,6 +259,7 @@ const BrowseWines = () => {
                             </span>
                             <span>
                               <Input
+                                id="sweetness-medium"
                                 type="checkbox"
                                 className="mb-1 mx-1"
                                 onChange={handleSweetnessChange}
@@ -267,6 +269,7 @@ const BrowseWines = () => {
                             </span>
                             <span>
                               <Input
+                                id="sweetness-sweet"
                                 type="checkbox"
                                 className="mb-1 mx-1"
                                 onChange={handleSweetnessChange}
@@ -312,7 +315,11 @@ const BrowseWines = () => {
                         <InputGroup>
                           <Row>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="availability"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               Show only available wines
                             </span>
                           </Row>
@@ -350,11 +357,19 @@ const BrowseWines = () => {
                         <InputGroup>
                           <Row>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="age-vintage"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               Vintage
                             </span>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="age-non-vintage"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               Non vintage
                             </span>
                           </Row>
@@ -392,15 +407,27 @@ const BrowseWines = () => {
                         <InputGroup>
                           <Row>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="type-red"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               Red
                             </span>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="type-white"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               White
                             </span>
                             <span>
-                              <Input type="checkbox" className="mb-1 mx-1" />{" "}
+                              <Input
+                                id="type-rose"
+                                type="checkbox"
+                                className="mb-1 mx-1"
+                              />{" "}
                               Rose
                             </span>
                           </Row>
