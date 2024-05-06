@@ -153,24 +153,13 @@ const BrowseWines = () => {
             <Collapse isOpen={isFilterActive}>
               <div className="border shadow p-3">
                 <Row>
-                  <Col xs={2}>
-                    <div
-                      className="text-start cursor-pointer"
-                      onClick={handleClick}
-                    >
-                      Close
-                    </div>
-                  </Col>
+                  <Col xs={2} />
                   <Col xs={8}>
-                    <div className="text-center">
-                      <i className="fa fa-filter" /> Filter
+                    <div className="text-center lead">
+                      <i className="fa fa-filter" /> Filter Options
                     </div>
                   </Col>
-                  <Col xs={2} className="text-end">
-                    <div className="d-flex align-items-center justify-content-end cursor-pointer">
-                      Reset
-                    </div>
-                  </Col>
+                  <Col xs={2} className="text-end" />
                 </Row>
                 <hr />
                 <Row
@@ -477,7 +466,7 @@ const BrowseWines = () => {
               </div>
             </Collapse>
           </Col>
-          <Col md={9}>
+          <Col md={9} className="p-0">
             <div className="px-4">{memoizedCards}</div>
           </Col>
         </Row>
