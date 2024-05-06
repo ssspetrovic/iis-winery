@@ -30,7 +30,8 @@ class Wine(models.Model):
     type = models.CharField(max_length=6, verbose_name='Type', default='Red')
     age = models.CharField(max_length=12, verbose_name='Age', default='Non-vintage')
     winemaker = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
-
+    image = models.ImageField(verbose_name='Image', upload_to='wine_images/', null=True)
+    
     def __str__(self):
         return self.name
 
