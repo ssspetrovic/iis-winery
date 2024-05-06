@@ -26,6 +26,17 @@ class WineTankViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Call the create method of the serializer
+            wine_tank = serializer.create(serializer.validated_data)
+            return Response({'message': 'Wine tank created successfully'}, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     def destroy(self, request, room, tank_id):
         try:
             # Attempt to get the wine tank with the given room and tank_id

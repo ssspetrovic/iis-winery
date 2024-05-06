@@ -16,14 +16,13 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-function AddWineTank() {
+function AddWineTank({wineRoomId, toggleModal, fetchWineTanks}) {
   const [tankName, setTankName] = useState("");
   const [description, setDescription] = useState("");
   const [wineType, setWineType] = useState("");
   const [tankType, setTankType] = useState("");
   const [capacity, setCapacity] = useState("");
   const [currentVolume, setCurrentVolume] = useState("");
-  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [wines, setWines] = useState([]);
@@ -31,24 +30,27 @@ function AddWineTank() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if all fields are filled
     if (!tankName || !description || !wineType || !tankType || !capacity || !currentVolume) {
       setErrorMessage("All fields are required.");
       return;
     }
 
+    if (parseInt(currentVolume) > parseInt(capacity)) {
+      setErrorMessage("Current volume must be smaller than capacity!");
+      return;
+    }
+
     try {
-      // Make API call to create wine tank
       const response = await axios.post(`/wine-tanks/`, {
         tank_id: tankName,
         description: description,
-        wine_type: wineType,
+        wine: wineType,
+        room: wineRoomId,
         tank_type: tankType,
         capacity: parseInt(capacity),
         current_volume: parseInt(currentVolume),
       });
 
-      // Reset form fields and show success modal
       setTankName("");
       setDescription("");
       setWineType("");
@@ -57,33 +59,37 @@ function AddWineTank() {
       setCurrentVolume("");
       setErrorMessage("");
       setSuccessModal(true);
+      fetchWineTanks(); 
+      toggleModal();
     } catch (error) {
       console.error(error);
-      // Show error message if API call fails
       setErrorMessage("Failed to add wine tank. Please try again later.");
     }
   };
 
-  const fetchWine = async () => {
-    const response = await axios.get(`/wines/`);
-    console.log(response.data);
-    setWines(response.data);
-  };
+  const onCancel = () => {
+    toggleModal();
+  } 
 
-  const handleCancel = () => {
-    navigate("/cellar");
+  const fetchWine = async () => {
+    try {
+      const response = await axios.get(`/wines/`);
+      setWines(response.data);
+    } catch (error) {
+      console.error("Error fetching wines:", error);
+    }
   };
 
   useEffect(() => {
     fetchWine();
+    return () => {
+    };
   }, []);
 
   const successModalContent = (
     <Modal isOpen={successModal} toggle={() => setSuccessModal(false)}>
       <ModalHeader toggle={() => setSuccessModal(false)}>Success</ModalHeader>
-      <ModalBody>
-        Wine Tank Successfully Added
-      </ModalBody>
+      <ModalBody>Wine Tank Successfully Added</ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={() => setSuccessModal(false)}>Close</Button>
       </ModalFooter>
@@ -144,8 +150,8 @@ function AddWineTank() {
                 onChange={(e) => setTankType(e.target.value)}
               >
                 <option value="">Select Tank Type</option>
-                <option value="inox">Inox</option>
-                <option value="barrel">Barrel</option>
+                <option value="Inox">Inox</option>
+                <option value="Barrel">Barrel</option>
               </Input>
             </FormGroup>
           </Col>
@@ -175,6 +181,10 @@ function AddWineTank() {
           </Col>
         </Row>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <div className="d-flex justify-content-end">
+          <Button type="submit" color="primary" className="mx-4">Add Wine Tank</Button>
+          <Button color="secondary" onClick={onCancel}>Cancel</Button>
+        </div>
       </Form>
       {successModalContent}
     </Container>

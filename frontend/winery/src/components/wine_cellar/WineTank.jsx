@@ -14,7 +14,6 @@ const WineTank = ({ wineTank, fetchWineTanks }) => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`/wine-prod/wine-tanks/${room}/${tank_id}/`);
-      console.log('Wine tank deleted successfully:', response.data);
       fetchWineTanks();
     } catch (error) {
       // Handle error or display an error message

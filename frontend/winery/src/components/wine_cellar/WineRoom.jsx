@@ -8,10 +8,9 @@ const WineRoom = ({ wineRoom }) => {
   const { id, name, area} = wineRoom;
 
   const [wineTanks, setWineTanks] = useState([]);
-
   const [modalOpen, setModalOpen] = useState(false);
 
-  const toggleModal = () => {
+  function toggleModal () {
     setModalOpen(!modalOpen);
   };
 
@@ -23,7 +22,6 @@ const WineRoom = ({ wineRoom }) => {
     try {
       // Make a GET request to retrieve wine tanks by wine cellar ID
       const response = await axios.get(`/wine-tanks/?room=${id}`);
-      console.log(response.data)
       setWineTanks(response.data); // Update state with retrieved wine tanks
     } catch (error) {
       console.error("Error fetching wine tanks:", error);
@@ -35,7 +33,7 @@ const WineRoom = ({ wineRoom }) => {
       <h2 className="mb-3">{name}</h2>
       <Row>
         <Col md={6}>
-          <p><strong>Area:</strong> {area}</p>
+          <p><strong>Area:</strong> {parseInt(area) + 'm2'}</p>
         </Col>
         {/* <Col md={6} className="text-md-right">
           <Button color="primary">Edit Wine Room</Button>
@@ -58,12 +56,8 @@ const WineRoom = ({ wineRoom }) => {
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}><h2 className="mb-3">Add New Wine Tank</h2></ModalHeader>
         <ModalBody>
-          <AddWineTank />
+          <AddWineTank wineRoomId={id} toggleModal={toggleModal} fetchWineTanks={fetchWineTanks}/>
         </ModalBody>
-        <ModalFooter>
-          <Button type="submit" color="primary" className="mr-2">Add Wine Tank</Button>
-          <Button color="secondary" onClick={toggleModal}>Cancel</Button>
-        </ModalFooter>
       </Modal>
     </Container>
   );
