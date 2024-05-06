@@ -70,3 +70,6 @@
     cursor: pointer;
 }
 
+.cursor-default {
+    cursor: default;
+}

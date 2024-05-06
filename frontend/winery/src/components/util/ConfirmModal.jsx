@@ -17,7 +17,7 @@ const ConfirmModal = ({ isOpen, toggle, data }) => {
         <div className="text-center mx-auto w-50">
           <Button
             className="w-100"
-            color="primary"
+            color="dark"
             onClick={() => {
               toggle();
               func && func();

@@ -1,6 +1,4 @@
-from users.models import Winemaker
-from wines.models import Wine
-from wine_production.models import WineCellar, WineTank
+
 import os
 import django
 from django.core.exceptions import ValidationError
@@ -8,6 +6,9 @@ from django.core.exceptions import ValidationError
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'winery.settings')
 django.setup()
 
+from wine_production.models import WineCellar, WineTank
+from users.models import Winemaker
+from wines.models import Wine
 
 # Create WineCellar instances
 wine_cellar_data = [
@@ -29,7 +30,7 @@ if not Wine.objects.exists():
         acidity=0.5,
         alcohol=12.0,
         pH=3.5,
-        price=25.99,
+        price=10200,
         quantity=100,
         type='Red',
         age='Vintage',
@@ -43,7 +44,7 @@ if not Wine.objects.exists():
         acidity=0.6,
         alcohol=13.5,
         pH=3.6,
-        price=29.99,
+        price=3850,
         quantity=80,
         type='White',
         age='Non-vintage',
@@ -57,13 +58,28 @@ if not Wine.objects.exists():
         acidity=0.7,
         alcohol=11.5,
         pH=3.4,
-        price=19.99,
+        price=7800,
         quantity=50,
         type='Red',
         age='Vintage',
         winemaker=Winemaker.objects.get(username='mata123'),
         image=f'{base_image_path}/cabernet_sauvignon_02.jpg'
     )
+    
+    Wine.objects.create(
+        name='Sauvignon Blanc',
+        sweetness='Medium',
+        acidity=0.6,
+        alcohol=13.5,
+        pH=3.6,
+        price=5820,
+        quantity=30,
+        type='White',
+        age='Vintage',
+        winemaker=Winemaker.objects.get(username='mata123'),
+        image=f'{base_image_path}/sauvignon_blanc.jpg'
+    )
+
 
 
 # Create WineTank instances
