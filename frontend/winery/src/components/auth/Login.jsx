@@ -90,7 +90,7 @@ const Login = () => {
               <div className="text-center">
                 <small>
                   Forgot your password?{" "}
-                  <Link to="/reset-password  ">Click here to reset it</Link>
+                  <Link to="/reset-password ">Click here to reset it</Link>
                 </small>
               </div>
             </Col>
@@ -108,7 +108,7 @@ const Login = () => {
           </Row>
           <Row>
             <div className="text-center ">
-              <Button color="primary" className="w-100 p-2 mt-3">
+              <Button color="dark" className="w-100 p-2 mt-3">
                 Sign in
               </Button>
             </div>

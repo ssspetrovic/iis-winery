@@ -66,10 +66,14 @@ const MainNavbar = () => {
             <div className="mx-3">
               <Nav navbar>
                 <NavItem>
-                  <NavLink href="/login">Log in</NavLink>
+                  <NavLink href="/login" style={{ color: "white" }}>
+                    Log in
+                  </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/register">Register</NavLink>
+                  <NavLink href="/register" style={{ color: "white" }}>
+                    Register
+                  </NavLink>
                 </NavItem>
               </Nav>
             </div>

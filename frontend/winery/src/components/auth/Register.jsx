@@ -313,7 +313,7 @@ const Register = () => {
           </Row>
           <Row className="mt-2">
             <div className="text-center ">
-              <Button color="primary" className="w-100 p-2">
+              <Button color="dark" className="w-100 p-2">
                 Sign up
               </Button>
             </div>
