@@ -73,3 +73,14 @@
 .cursor-default {
     cursor: default;
 }
+
+input.number-input-blank::-webkit-outer-spin-button,
+input.number-input-blank::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number].number-input-blank {
+    appearance: none;
+    -moz-appearance: textfield;
+}

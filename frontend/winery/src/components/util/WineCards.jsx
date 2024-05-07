@@ -64,7 +64,11 @@ const WineCards = ({ filteredWines }) => {
                           <Col md={4}>
                             <div className="d-flex justify-content-center align-items-center h-100">
                               <Form>
-                                <Input id="wine-quantity" type="number" />
+                                <Input
+                                  id="wine-quantity"
+                                  type="number"
+                                  className="text-center px-1"
+                                />
                               </Form>
                             </div>
                           </Col>

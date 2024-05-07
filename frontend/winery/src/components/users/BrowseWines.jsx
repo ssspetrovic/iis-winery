@@ -15,7 +15,6 @@ import WineCards from "../util/WineCards";
 const BrowseWines = () => {
   const axiosPrivate = useAxiosPrivate();
 
-  const [isFilterActive, setIsFilterActive] = useState(true);
   const [wines, setWines] = useState([]);
 
   const [isSweetnessTabOpen, setIsSweetnessTabOpen] = useState(false);
@@ -23,11 +22,24 @@ const BrowseWines = () => {
   const [isAgeTabOpen, setIsAgeTabOpen] = useState(false);
   const [isTypeTabOpen, setIsTypeTabOpen] = useState(false);
   const [isSortByTabOpen, setIsSortByTabOpen] = useState(false);
+  const [isPriceTabOpen, setIsPriceTabOpen] = useState(false);
 
   const [selectedSweetness, setSelectedSweetness] = useState([]);
   const [selectedType, setSelectedType] = useState([]);
   const [selectedAge, setSelectedAge] = useState([]);
   const [selectedSort, setSelectedSort] = useState("name");
+  const [selectedPriceLower, setSelectedPriceLower] = useState("");
+  const [selectedPriceUpper, setSelectedPriceUpper] = useState("");
+
+  const [priceErrorMessage, setPriceErrorMessage] = useState("");
+
+  const handlePriceLowerChange = (event) => {
+    setSelectedPriceLower(event.target.value);
+  };
+
+  const handlePriceUpperChange = (event) => {
+    setSelectedPriceUpper(event.target.value);
+  };
 
   const handleSortChange = (event) => {
     const { value } = event.target;
@@ -45,6 +57,9 @@ const BrowseWines = () => {
     setSelectedType([]);
     setSelectedAge([]);
     setSelectedSort("");
+    setSelectedSort("Name");
+    setSelectedPriceLower("");
+    setSelectedPriceUpper("");
   };
 
   const handleSweetnessChange = (event) => {
@@ -82,25 +97,47 @@ const BrowseWines = () => {
 
   const filteredWines = useMemo(() => {
     let filteredList = wines.filter((wine) => {
+      // Check if no filters are selected, return true for all wines
       if (
         selectedSweetness.length === 0 &&
         selectedType.length === 0 &&
-        selectedAge.length === 0
-      )
+        selectedAge.length === 0 &&
+        selectedPriceLower === "" &&
+        selectedPriceUpper === ""
+      ) {
         return true;
+      }
 
+      // Filter by sweetness
       if (
         selectedSweetness.length > 0 &&
         !selectedSweetness.includes(wine.sweetness)
-      )
+      ) {
         return false;
+      }
 
-      if (selectedType.length > 0 && !selectedType.includes(wine.type))
+      // Filter by type
+      if (selectedType.length > 0 && !selectedType.includes(wine.type)) {
         return false;
+      }
 
-      if (selectedAge.length > 0 && !selectedAge.includes(wine.age))
+      // Filter by age
+      if (selectedAge.length > 0 && !selectedAge.includes(wine.age)) {
         return false;
+      }
 
+      // Filter by price range
+      const winePrice = parseFloat(wine.price);
+      if (
+        (selectedPriceLower !== "" &&
+          winePrice < parseFloat(selectedPriceLower)) ||
+        (selectedPriceUpper !== "" &&
+          winePrice > parseFloat(selectedPriceUpper))
+      ) {
+        return false;
+      }
+
+      // If all filters pass, return true
       return true;
     });
 
@@ -113,16 +150,32 @@ const BrowseWines = () => {
       filteredList.sort((a, b) => a.name.localeCompare(b.name));
     }
 
+    // Check if the selected lower price is greater than the selected upper price
+    const isInvalidPriceRange =
+      selectedPriceLower !== "" &&
+      selectedPriceUpper !== "" &&
+      parseFloat(selectedPriceLower) >= parseFloat(selectedPriceUpper);
+
+    // Set the message state based on the price range validity
+    setPriceErrorMessage(isInvalidPriceRange ? "Invalid price range" : "");
+
     return filteredList;
-  }, [wines, selectedSweetness, selectedType, selectedAge, selectedSort]);
+  }, [
+    wines,
+    selectedSweetness,
+    selectedType,
+    selectedAge,
+    selectedSort,
+    selectedPriceLower,
+    selectedPriceUpper,
+  ]);
 
   const fetchData = async () => {
     try {
       const response = await axiosPrivate.get(`/wines/`);
       setWines(response.data);
-      console.log(wines);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching wines:", error);
     }
   };
 
@@ -377,17 +430,66 @@ const BrowseWines = () => {
                 </div>
               </Collapse>
               <hr />
-              <Row>
+              <Row
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsPriceTabOpen(!isPriceTabOpen);
+                }}
+              >
                 <Col xs={4} className="text-start">
                   <div>Price</div>
                 </Col>
                 <Col xs={6}></Col>
                 <Col xs={2} className="text-end">
                   <div className="d-flex align-items-center justify-content-end cursor-pointer">
-                    <i className="fa-solid fa-chevron-right" />
+                    <i
+                      className={`fa-solid fa-chevron-${
+                        isPriceTabOpen ? "down" : "right"
+                      }`}
+                    />
                   </div>
                 </Col>
               </Row>
+              <Collapse isOpen={isPriceTabOpen} className="w-100 mt-2">
+                <div onClick={(e) => e.stopPropagation()}>
+                  <InputGroup>
+                    <Row className="d-flex align-items-center justify-content-center">
+                      <Col md={4}>
+                        <div>
+                          <Input
+                            id="price-lower"
+                            className="number-input-blank text-center"
+                            type="number"
+                            value={selectedPriceLower}
+                            onChange={handlePriceLowerChange}
+                          />
+                        </div>
+                      </Col>
+                      <Col md={1}>
+                        <div className="h-100 d-flex align-items-center justify-content-center">
+                          <span>-</span>
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div>
+                          <Input
+                            id="price-upper"
+                            className="number-input-blank text-center"
+                            type="number"
+                            value={selectedPriceUpper}
+                            onChange={handlePriceUpperChange}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    {priceErrorMessage && (
+                      <div className="text-danger text-center w-100">
+                        {priceErrorMessage}
+                      </div>
+                    )}
+                  </InputGroup>
+                </div>
+              </Collapse>
               <hr />
               <Row
                 className="cursor-pointer"
