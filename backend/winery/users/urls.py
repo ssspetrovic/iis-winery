@@ -6,6 +6,7 @@ from .views import (
     LogoutAPIView,
     GetUserRoleAPIView,
     AuthenticatedHelloAPIView,
+    CustomerViewSet,
     password_reset_token_created
 )
 
