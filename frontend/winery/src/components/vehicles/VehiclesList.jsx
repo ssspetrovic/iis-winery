@@ -28,7 +28,7 @@ const VehiclesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/vehicles");
+        const response = await axios.get("/vehicles/");
         setVehicles(response.data);
       } catch (error) {
         console.error("Error fetching vehicles data:", error);
@@ -54,7 +54,7 @@ const VehiclesList = () => {
   // Funkcija za brisanje vozila
   const handleDeleteVehicle = async () => {
     try {
-      await axios.delete(`/vehicles/${selectedVehicleId}`);
+      await axios.delete(`/vehicles/${selectedVehicleId}/`);
       // Nakon uspešnog brisanja, ažuriramo listu vozila tako da se ukloni obrisano vozilo
       setVehicles(
         vehicles.filter((vehicle) => vehicle.id !== selectedVehicleId)

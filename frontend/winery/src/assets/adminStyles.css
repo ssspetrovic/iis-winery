@@ -23,19 +23,29 @@
   color: white;
 }
 
+.admin-button-black {
+  background-color: black;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.admin-button-black:hover {
+  background-color: #444444; /* Promenite boju ovde prema potrebi */
+}
+
 .btn-pagination {
   border: 1px solid black;
   border-radius: 20px;
   padding: 8px 16px;
   background-color: transparent;
-  color: black;
+  color: rgb(49, 48, 48);
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .btn-pagination:hover {
-  background-color: black;
+  background-color: rgb(59, 59, 59);
   color: white;
   border-color: transparent;
 }
@@ -80,11 +90,11 @@
 
 /* Stilovi za glavni deo tabele */
 .admin-table thead th {
-  background-color: #4a5568;
+  background-color: #413f3f;
   /* Promenite boju pozadine */
   color: #ffffff;
   /* Promenite boju teksta */
-  border-bottom: 2px solid #cbd5e0;
+  border-bottom: 2px solid #6f7172;
   /* Dodajte donju liniju */
   padding: 8px;
   /* Prilagodite padding prema potrebi */
@@ -133,13 +143,13 @@
 }
 
 .view-user-btn:hover {
-  background-color: #4a5568;
+  background-color: #1e1e1e;
   color: #ffffff; /* Bela boja teksta prilikom hovera */
 }
 
 .view-user-btn {
-  border-color: #4a5568;
-  color: #4a5568;
+  border-color: #000000;
+  color: #1e1e1e;
 }
 
 .whitespace {
@@ -194,10 +204,12 @@
 /* Stilizovanje modalnog prozora */
 .order-modal-content {
   border-radius: 10px;
+  max-width: 1000px; /* Postavili smo maksimalnu širinu modala na 800 piksela */
+  width: 100%; /* Definisali smo širinu modala na 90% */
 }
 
 .order-modal-header {
-  background-color: #5e1717;
+  background-color: #000000;
   color: #fff;
 }
 
@@ -222,6 +234,27 @@
 }
 
 .order-form-control:focus {
-  border-color: #8B0000;
-  box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+  border-color: #000000;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+}
+
+input[type="radio"]:checked {
+  background-color: black; /* Boja pozadine prilikom klika */
+  box-shadow: none;
+  border: none;
+}
+
+.select-wrapper {
+  color: black; /* Postavljanje boje teksta na crnu */
+}
+
+.select-wrapper select {
+  color: black; /* Postavljanje boje teksta na crnu */
+  box-shadow: none; /* Uklanjanje box-shadow-a */
+}
+
+.select-wrapper select:hover,
+.select-wrapper select:focus {
+  box-shadow: none;
+  border-color: black; /* Postavljanje boje ivice na crnu na hover/focus */
 }

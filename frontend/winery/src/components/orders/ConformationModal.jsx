@@ -23,11 +23,11 @@ const ConfirmationModal = ({ isOpen, toggle }) => {
   return (
     <Modal isOpen={isOpen} toggle={handleCloseModal}>
       <ModalBody>
-        <h2 className="text-center text-uppercase" style={{color: "#5e1717"}}>SUCCESS</h2>
-        <p className="text-center" style={{color: "#5e1717"}}>Order has been sent to the customer.</p>
+        <h2 className="text-center text-uppercase" style={{color: "black"}}>SUCCESS</h2>
+        <p className="text-center" style={{color: "black"}}>Order has been sent to the customer.</p>
       </ModalBody>
       <ModalFooter>
-        <Button style={{backgroundColor: "#8B0000"}} onClick={handleHomePageRedirect}>
+        <Button style={{backgroundColor: "black"}} onClick={handleHomePageRedirect}>
           Home Page
         </Button>
       </ModalFooter>

@@ -68,7 +68,7 @@ const DeliveryMap = () => {
 
         axios.get(`/wines/${orderData.wines[0]}/`).then((response) => {
           axios
-            .get(`/winemakers/${response.data.winemaker}`)
+            .get(`/winemakers/${response.data.winemaker}/`)
             .then((response) => {
               const winemakerData = response.data;
               setWinemaker(winemakerData);

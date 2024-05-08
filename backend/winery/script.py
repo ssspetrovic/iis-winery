@@ -43,8 +43,7 @@ def load_cities_from_csv(csv_file_path):
                 city.save()
                 print(f"Dodan grad: {city_name}, Poštanski kod: {postal_code}")
             else:
-                print(f"Grad već postoji: {
-                      city_name}, Poštanski kod: {postal_code}")
+                print(f"Grad već postoji: {city_name}, Poštanski kod: {postal_code}")
 
 
 # Poziv funkcije za učitavanje gradova iz CSV datoteke
