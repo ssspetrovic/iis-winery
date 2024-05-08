@@ -1,12 +1,34 @@
-import React from 'react';
-import { Card, CardHeader, CardImg, CardBody, CardTitle, CardText, Progress, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown } from 'reactstrap';
+import React, {useState} from 'react';
+import { 
+  Card, 
+  CardHeader, 
+  CardImg, 
+  CardBody, 
+  CardTitle, 
+  CardText, 
+  Progress, 
+  DropdownToggle, 
+  DropdownMenu, 
+  DropdownItem, 
+  UncontrolledDropdown,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter, 
+} from 'reactstrap';
 import rackingIcon from '../../assets/images/racking.png';
 import wineTankIcon from '../../assets/images/winetank.png';
 import barrelIcon from '../../assets/images/barrel_template.png'; 
 import axios from "../../api/axios";
+import WineRacking from './WineRackingForm';
 
-const WineTank = ({ wineTank, fetchWineTanks }) => {
+function WineTank ({ wineTank, fetchWineTanks }) {
   const { tank_id, capacity, current_volume, tank_type, room } = wineTank;
+  const [modalOpen, setModalOpen] = useState(false);
+
+  function toggleModal () {
+    setModalOpen(!modalOpen);
+  };
 
   // Calculate the progress percentage
   const progress = (current_volume / capacity) * 100;
@@ -29,7 +51,7 @@ const WineTank = ({ wineTank, fetchWineTanks }) => {
             <i className="bi bi-three-dots"/>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>
+            <DropdownItem onClick={toggleModal}>
               <img src={rackingIcon} style={{ width: '24px', height: '24px' }} /> Racking
             </DropdownItem>
             <DropdownItem>
@@ -52,6 +74,12 @@ const WineTank = ({ wineTank, fetchWineTanks }) => {
           <Progress value={progress} />
         </CardText>
       </CardBody>
+      <Modal isOpen={modalOpen} toggle={toggleModal}>
+      <ModalHeader toggle={toggleModal}><h2 className="mb-3">Wine Racking</h2></ModalHeader>
+      <ModalBody>
+        <WineRacking wineTank={wineTank} toggleModal={toggleModal}/>
+      </ModalBody>
+      </Modal>
     </Card>
   );
 };

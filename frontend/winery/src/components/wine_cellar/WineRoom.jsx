@@ -4,7 +4,7 @@ import axios from "../../api/axios";
 import { Container, Row, Col, Button, Card, CardBody, CardImg, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import AddWineTank from './WineTankCreationFrom';
 
-const WineRoom = ({ wineRoom }) => {
+function WineRoom ({ wineRoom }) {
   const { id, name, area} = wineRoom;
 
   const [wineTanks, setWineTanks] = useState([]);

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import WineCellar, WineTank
-from .serializers import WineCellarSerializer, WineTankSerializer
+from .models import WineCellar, WineTank, WineRacking
+from .serializers import WineCellarSerializer, WineTankSerializer, WineRackingSerializer
 from rest_framework.generics import UpdateAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
@@ -51,3 +51,36 @@ class WineTankViewSet(viewsets.ModelViewSet):
         # Respond with success message
         return Response({'message': 'Wine tank deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
+class WineRackingViewSet(viewsets.ModelViewSet):
+    queryset = WineRacking.objects.all()
+    serializer_class = WineRackingSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid()
+        
+        from_tank = serializer.validated_data['from_tank']
+        to_tank = serializer.validated_data['to_tank']
+        amount = serializer.validated_data['amount']
+        
+        if amount > from_tank.current_volume:
+            return Response({"error": "Amount exceeds the current volume of the from tank."}, status=status.HTTP_400_BAD_REQUEST)
+    
+        # Check if taking away the amount doesn't result in a negative volume
+        if from_tank.current_volume - amount < 0:
+            return Response({"error": "Taking away this amount would result in a negative volume for the from tank."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if adding the amount doesn't exceed the capacity of the to tank
+        if to_tank.current_volume + amount > to_tank.capacity:
+            return Response({"error": "Adding this amount exceeds the capacity of the to tank."}, status=status.HTTP_400_BAD_REQUEST)
+
+        from_tank.current_volume -= amount
+        to_tank.current_volume += amount
+        from_tank.save()
+        to_tank.save()
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
