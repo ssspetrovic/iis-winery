@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from .models import Order, Wine, ShoppingCart, ShoppingCartItem
 from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer
-from django.http import JsonResponse
+
+
 # import googlemaps
 
 
@@ -23,6 +24,7 @@ class ShoppingCartItemViewSet(viewsets.ModelViewSet):
 class ShoppingCartViewSet(viewsets.ModelViewSet):
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
+
 
 # def optimize_delivery_route(request, order_id):
 #     try:

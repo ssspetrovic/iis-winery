@@ -2,11 +2,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import permission_classes
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django_rest_passwordreset.signals import reset_password_token_created

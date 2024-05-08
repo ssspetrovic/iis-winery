@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "../api/axios";
+import { ROLES } from "../components/auth/Roles";
 
 const AuthContext = createContext({});
 
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     "role",
     "access_token",
     "refresh_token",
+    "cart_id",
   ]);
 
   const [auth, setAuth] = useState({
@@ -63,6 +65,19 @@ export const AuthProvider = ({ children }) => {
       setCookie("role", role, { path: "/" });
       setCookie("access_token", accessToken, { path: "/" });
       setCookie("refresh_token", refreshToken, { path: "/" });
+
+      if (role == ROLES.CUSTOMER) {
+        const cartResponse = await axios.get("/carts/", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        const userCart = cartResponse.data.find(
+          (cart) => cart.customer.username === username
+        );
+
+        setCookie("cart_id", userCart.id, { path: "/" });
+        console.log("FOUND ID:", userCart.id);
+      }
 
       return { success: true, message: "" };
     } catch (error) {
