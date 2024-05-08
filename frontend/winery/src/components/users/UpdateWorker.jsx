@@ -155,7 +155,7 @@ function UpdateWorker() {
   return (
     <Container className="registration-container">
       <div className="registration-box">
-        <h1 className="text-center mb-5" style={{ color: "#007bff" }}>
+        <h1 className="text-center mb-5" style={{ color: "black" }}>
           Update Existing Workers
         </h1>
         <Form onSubmit={handleSubmit}>
@@ -196,7 +196,7 @@ function UpdateWorker() {
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup>
+              <FormGroup className="select-wrapper">
                 <Label for="selectedUser">
                   {userRole === "manager"
                     ? "Select Manager"
@@ -331,7 +331,11 @@ function UpdateWorker() {
           )}
           {errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
           <div className="d-flex justify-content-between">
-            <Button type="submit" color="primary" className="mr-2">
+            <Button
+              type="submit"
+              color="primary"
+              className="mr-2 admin-button-black"
+            >
               Update
             </Button>
             <Button color="secondary" onClick={handleCancel}>

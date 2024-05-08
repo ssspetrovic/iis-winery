@@ -53,7 +53,7 @@ function RegisterWorker() {
     }
 
     const encodedCity = encodeURIComponent(city);
-    const cityResponse = await axios.get(`/cities/${encodedCity}`);
+    const cityResponse = await axios.get(`/cities/${encodedCity}/`);
 
     try {
       if (userRole === "manager") {
@@ -112,15 +112,15 @@ function RegisterWorker() {
   return (
     <Container className="registration-container">
       <div className="registration-box">
-        <h1 className="text-center mb-4" style={{ color: "#007bff" }}>
+        <h1 className="text-center mb-4" style={{ color: "black" }}>
           Register New Workers
         </h1>
         <Form onSubmit={handleSubmit}>
-          <Label>Role</Label>
+          <Label style={{ color: "black" }}>Role</Label>
           <Row>
             <Col md={6}>
               <FormGroup check inline>
-                <Label check>
+                <Label check style={{ color: "black" }}>
                   <Input
                     type="radio"
                     name="userRole"
@@ -134,7 +134,7 @@ function RegisterWorker() {
             </Col>
             <Col md={6}>
               <FormGroup check inline>
-                <Label check>
+                <Label check style={{ color: "black" }}>
                   <Input
                     type="radio"
                     name="userRole"
@@ -151,7 +151,9 @@ function RegisterWorker() {
           <Row>
             <Col md={6}>
               <FormGroup>
-                <Label for="username">Username</Label>
+                <Label for="username" style={{ color: "black" }}>
+                  Username
+                </Label>
                 <Input
                   type="text"
                   id="username"
@@ -163,7 +165,9 @@ function RegisterWorker() {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for="first_name">First Name</Label>
+                <Label for="first_name" style={{ color: "black" }}>
+                  First Name
+                </Label>
                 <Input
                   type="text"
                   id="first_name"
@@ -177,7 +181,9 @@ function RegisterWorker() {
           <Row>
             <Col md={6}>
               <FormGroup>
-                <Label for="password">Password</Label>
+                <Label for="password" style={{ color: "black" }}>
+                  Password
+                </Label>
                 <Input
                   type="password"
                   id="password"
@@ -189,7 +195,9 @@ function RegisterWorker() {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for="last_name">Last Name</Label>
+                <Label for="last_name" style={{ color: "black" }}>
+                  Last Name
+                </Label>
                 <Input
                   type="text"
                   id="last_name"
@@ -203,7 +211,9 @@ function RegisterWorker() {
           <Row>
             <Col md={6}>
               <FormGroup>
-                <Label for="confirmPassword">Confirm Password</Label>
+                <Label for="confirmPassword" style={{ color: "black" }}>
+                  Confirm Password
+                </Label>
                 <Input
                   type="password"
                   id="confirmPassword"
@@ -215,7 +225,9 @@ function RegisterWorker() {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for="email">Email</Label>
+                <Label for="email" style={{ color: "black" }}>
+                  Email
+                </Label>
                 <Input
                   type="email"
                   id="email"
@@ -231,7 +243,9 @@ function RegisterWorker() {
               <Row>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="address">Address</Label>
+                    <Label for="address" style={{ color: "black" }}>
+                      Address
+                    </Label>
                     <Input
                       type="text"
                       id="address"
@@ -243,7 +257,9 @@ function RegisterWorker() {
                 </Col>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="street_number">Street Number</Label>
+                    <Label for="street_number" style={{ color: "black" }}>
+                      Street Number
+                    </Label>
                     <Input
                       type="text"
                       id="street_number"
@@ -257,7 +273,9 @@ function RegisterWorker() {
               <Row>
                 <Col className="mx-auto">
                   <FormGroup>
-                    <Label for="city">City</Label>
+                    <Label for="city" style={{ color: "black" }}>
+                      City
+                    </Label>
                     <Input
                       type="text"
                       id="city"
@@ -272,7 +290,9 @@ function RegisterWorker() {
           )}
           {userRole === "manager" && (
             <FormGroup>
-              <Label for="phone_number">Phone Number</Label>
+              <Label for="phone_number" style={{ color: "black" }}>
+                Phone Number
+              </Label>
               <Input
                 type="text"
                 id="phone_number"
@@ -282,11 +302,19 @@ function RegisterWorker() {
               />
             </FormGroup>
           )}
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="error-message" style={{ color: "black" }}>
+              {errorMessage}
+            </p>
+          )}
           <div className="d-flex justify-content-between">
-            <Button type="submit" color="primary">
+            <Button
+              type="submit"
+              className="admin-button-black"
+            >
               Register
             </Button>
+
             <Button color="secondary" onClick={handleCancel}>
               Cancel Registration
             </Button>
@@ -296,7 +324,9 @@ function RegisterWorker() {
       {/* Modal */}
       {isModalOpen && (
         <Modal isOpen={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
-          <ModalHeader>New Worker Successfully Added!</ModalHeader>
+          <ModalHeader style={{ color: "black" }}>
+            New Worker Successfully Added!
+          </ModalHeader>
           <ModalFooter>
             <Button color="secondary" onClick={() => setIsModalOpen(false)}>
               Add Another User

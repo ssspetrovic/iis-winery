@@ -1,6 +1,6 @@
-
 import os
 import django
+import random
 from django.core.exceptions import ValidationError
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'winery.settings')
@@ -17,8 +17,14 @@ wine_cellar_data = [
     {"name": "Cellar 3", "area": 200.0},
 ]
 
-for data in wine_cellar_data:
-    WineCellar.objects.create(**data)
+# Provera da li postoje WineCellar instance pre dodavanja novih
+if WineCellar.objects.exists():
+    print("WineCellar instance već postoje.")
+else:
+    for data in wine_cellar_data:
+        WineCellar.objects.create(**data)
+    print("WineCellar instance su uspešno kreirane.")
+
 
 if not Wine.objects.exists():
     # Create Wine instances
@@ -80,23 +86,40 @@ if not Wine.objects.exists():
         image=f'{base_image_path}/sauvignon_blanc.jpg'
     )
 
+wine_ids = list(Wine.objects.values_list('id', flat=True))
 
-
-# Create WineTank instances
-wine_tank_data = [
-    {"tank_id": "T1", "description": "Tank 1", "room_id": 1, "capacity": 100.0,
-        "current_volume": 50.0, "tank_type": "Inox", "wine_id": 1},
-    {"tank_id": "T2", "description": "Tank 2", "room_id": 1, "capacity": 150.0,
-        "current_volume": 100.0, "tank_type": "Barrel", "wine_id": 2},
-    {"tank_id": "T3", "description": "Tank 3", "room_id": 2, "capacity": 200.0,
-        "current_volume": 150.0, "tank_type": "Inox", "wine_id": 3},
+# Lista podataka o vinima
+wine_data_list = [
+    {"capacity": random.uniform(100, 200), "current_volume": random.uniform(50, 150), "tank_type": random.choice(["Barrel", "Inox"]), "wine_id": wine_ids[0]},
+    {"capacity": random.uniform(100, 200), "current_volume": random.uniform(50, 150), "tank_type": random.choice(["Barrel", "Inox"]), "wine_id": wine_ids[1]},
+    {"capacity": random.uniform(100, 200), "current_volume": random.uniform(50, 150), "tank_type": random.choice(["Barrel", "Inox"]), "wine_id": wine_ids[2]},
+    {"capacity": random.uniform(100, 200), "current_volume": random.uniform(50, 150), "tank_type": random.choice(["Barrel", "Inox"]), "wine_id": wine_ids[3]},
 ]
 
-for data in wine_tank_data:
-    try:
-        wine_id = data.pop('wine_id')
-        wine = Wine.objects.get(pk=wine_id)
+if WineTank.objects.exists():
+    print("WineTank instance već postoje.")
+else:
+    # Kreiranje WineTank instanci
+    wine_cellar_ids = list(WineCellar.objects.values_list('id', flat=True))
+    for i, data in enumerate(wine_data_list, start=1):
+        try:
+            tank_id = f"T{i}"
+            description = f"Tank {i}"
+            room_id = random.choice(wine_cellar_ids)  # Random izbor wine_cellar_id-a
+            capacity = data["capacity"]  # Kapacitet je već generisan
+            current_volume = data["current_volume"]  # Trenutni volumen je već generisan
+            tank_type = data["tank_type"]  # Tip tanka je već generisan
+            wine_id = data["wine_id"]  # ID vina je već odabran
 
-        WineTank.objects.create(**data, wine=wine)
-    except ValidationError as e:
-        print(f"Validation Error: {e}")
+            wine = Wine.objects.get(pk=wine_id)
+            WineTank.objects.create(
+                tank_id=tank_id,
+                description=description,
+                room_id=room_id,
+                capacity=capacity,
+                current_volume=current_volume,
+                tank_type=tank_type,
+                wine=wine
+            )
+        except ValidationError as e:
+            print(f"Validation Error: {e}")

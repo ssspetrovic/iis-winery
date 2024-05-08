@@ -125,7 +125,7 @@ const ReportList = () => {
       accessor: "id",
       Cell: ({ row }) => (
         <Button
-          color="primary"
+          className="admin-button-black"
           onClick={() => handleOpenReplyModal(row.original)} // Ovde prosleđujemo ceo red (izveštaj)
         >
           Reply
@@ -192,9 +192,14 @@ const ReportList = () => {
             </Link>
           )}
           {role === "MANAGER" && (
-            <Link to={`/manager-profile/${username}`} className="view-user-btn">
+            <Button
+              onClick={() => {
+                window.location.href = `/manager-profile/${username}`;
+              }}
+              className="admin-button-black"
+            >
               Go Back
-            </Link>
+            </Button>
           )}
         </ModalFooter>
       </Modal>
@@ -206,9 +211,14 @@ const ReportList = () => {
         </ModalBody>
         <ModalFooter>
           <ModalFooter>
-            <Link to={`/admin-profile/${username}`} className="view-user-btn">
+            <Button
+              onClick={() => {
+                window.location.href = `/admin-profile/${username}`;
+              }}
+              className="admin-button-black"
+            >
               Go Back
-            </Link>
+            </Button>
           </ModalFooter>{" "}
         </ModalFooter>
       </Modal>
@@ -219,12 +229,13 @@ const ReportList = () => {
           <textarea
             className="form-control"
             value={replyText}
+            style={{ boxShadow: "none", borderColor: "black" }}
             onChange={(e) => setReplyText(e.target.value)}
             rows="4"
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleReply}>
+          <Button className="admin-button-black" onClick={handleReply}>
             Reply
           </Button>{" "}
           <Button color="secondary" onClick={toggleReplyModal}>
@@ -234,17 +245,20 @@ const ReportList = () => {
       </Modal>
       {/* Report Modal */}
       <Modal isOpen={reportModal} toggle={toggleReportModal}>
-        <ModalHeader toggle={toggleReportModal}>Report a Problem</ModalHeader>
+        <ModalHeader toggle={toggleReportModal} color="black">
+          Report a Problem
+        </ModalHeader>
         <ModalBody>
           <textarea
             className="form-control"
             value={newReport}
+            style={{ boxShadow: "none", borderColor: "black" }}
             onChange={(e) => setNewReport(e.target.value)}
             rows="4"
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleReportProblem}>
+          <Button className="admin-button-black" onClick={handleReportProblem}>
             Submit
           </Button>{" "}
           <Button color="secondary" onClick={toggleReportModal}>

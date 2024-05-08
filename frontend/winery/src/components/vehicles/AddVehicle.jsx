@@ -102,7 +102,7 @@ function AddVehicle() {
   return (
     <Container className="registration-container">
       <div className="registration-box">
-        <h1 className="text-center mb-4" style={{ color: "#007bff" }}>
+        <h1 className="text-center mb-4" style={{ color: "black" }}>
           Add New Vehicle
         </h1>
         <Form onSubmit={handleSubmit}>
@@ -172,7 +172,7 @@ function AddVehicle() {
               </FormGroup>
             </Col>
             <Col md={6}>
-              <FormGroup>
+              <FormGroup className="select-wrapper">
                 <Label for="vehicleType">Vehicle Type</Label>
                 <Input
                   type="select"
@@ -207,7 +207,7 @@ function AddVehicle() {
           </Row>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
           <div className="d-flex justify-content-between">
-            <Button type="submit" color="primary" className="mr-2">
+            <Button type="submit" color="primary" className="mr-2 admin-button-black">
               Add Vehicle
             </Button>
             <Button color="secondary" onClick={handleCancel}>

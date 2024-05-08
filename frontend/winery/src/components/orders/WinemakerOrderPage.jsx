@@ -20,6 +20,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
+import wineImage from "../../assets/images/wine_01.jpg"; // Zamijenite putanjom do vaše slike
+
 // Add your Google Maps API key here
 // Define map container style and default center coordinates
 const mapContainerStyle = {
@@ -138,7 +140,7 @@ const WinemakerOrdersPage = () => {
     // Provera da li je selektovan ID vozila
     if (selectedVehicleId) {
       try {
-        const response = await axios.get(`/vehicles/${selectedVehicleId}`);
+        const response = await axios.get(`/vehicles/${selectedVehicleId}/`);
         setSelectedVehicleData(response.data);
         // Geokodiranje adrese vozila
         const { address, street_number, city, postal_code } = response.data;
@@ -204,7 +206,7 @@ const WinemakerOrdersPage = () => {
                 <li
                   key={order.id}
                   className="my-3 border p-3 col-sm-5 mx-auto order-card"
-                  style={{ position: "relative", color: "#5e1717" }}
+                  style={{ position: "relative", color: "black" }}
                 >
                   <FontAwesomeIcon
                     icon={faWineBottle}
@@ -214,13 +216,12 @@ const WinemakerOrdersPage = () => {
                       top: "130px" /* Pomeramo ikonu na dno ekrana */,
                       right: "0" /* Pomeramo ikonu na desni kraj ekrana */,
                       fontSize: "400px",
-                      color: "#8B0000",
-                      opacity: "0.5",
+                      color: "black",
+                      opacity: "0.7",
                       zIndex:
                         "-1" /* Postavljamo z-index na negativnu vrednost kako bi ikona bila ispod ostalih elemenata */,
                     }}
                   />
-
                   <p>
                     <strong>Order ID:</strong> {order.id}
                   </p>
@@ -251,7 +252,7 @@ const WinemakerOrdersPage = () => {
                           className="h-100"
                           style={{
                             backgroundColor: "#fafafa",
-                            color: "#5e1717",
+                            color: "black",
                           }}
                         >
                           <CardBody>
@@ -259,11 +260,13 @@ const WinemakerOrdersPage = () => {
                             <CardText>
                               <b>Sweetness:</b> {wine.sweetness}
                               <br />
-                              <b>Acidity:</b> {wine.acidity}
-                              <br />
                               <b>Alcohol:</b> {wine.alcohol}%
                               <br />
-                              <b>pH:</b> {wine.pH}
+                              <b>Quantity:</b> {wine.quantity}
+                              <br />
+                              <b>Type:</b> {wine.type}
+                              <br />
+                              <b>Age:</b> {wine.age}
                             </CardText>
                           </CardBody>
                         </Card>
@@ -271,12 +274,11 @@ const WinemakerOrdersPage = () => {
                     ))}
                   </ul>
                   <Button
-                    style={{ backgroundColor: "#8B0000" }}
                     onClick={() => {
                       setSelectedOrder(order);
                       toggleModal();
                     }}
-                    className="accept-order-button"
+                    className="accept-order-button admin-button-black"
                   >
                     Accept Order
                   </Button>
@@ -298,72 +300,92 @@ const WinemakerOrdersPage = () => {
           Accept Order
         </ModalHeader>
         <ModalBody>
+          <Row>
           <select
-            value={selectedVehicle}
-            onChange={handleVehicleChange}
-            className="form-control order-form-control"
-          >
-            <option value="">Select Vehicle</option>
-            {vehicles.map((vehicle) => (
-              <option key={vehicle.id} value={vehicle.id}>
-                {vehicle.driver_name}
-              </option>
-            ))}
-          </select>
-          {selectedVehicleData && (
-            <div>
-              <h4 className="mt-4 mb-4">Selected Vehicle Data</h4>
-              <p>
-                <strong>Driver Name:</strong> {selectedVehicleData.driver_name}
-              </p>
-              <p>
-                <strong>Capacity:</strong>{" "}
-                {selectedVehicleData.capacity === 1
-                  ? `${selectedVehicleData.capacity} ton`
-                  : `${selectedVehicleData.capacity} tons`}
-              </p>
-              <p>
-                <strong>Phone Number:</strong>{" "}
-                {selectedVehicleData.phone_number}
-              </p>
-              <p>
-                <strong>Vehicle Type:</strong>{" "}
-                {selectedVehicleData.vehicle_type.charAt(0).toUpperCase() +
-                  selectedVehicleData.vehicle_type.slice(1)}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedVehicleData.address}{" "}
-                {selectedVehicleData.street_number}
-              </p>
-              <p>
-                <strong>City:</strong> {selectedVehicleData.city.name}
-              </p>
-              {/* Prikaz mape */}
-              <h3 className="text-center mt-4">Vehicle Location</h3>
-              {isLoaded && vehicleLatLng && (
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  zoom={15}
-                  center={{
-                    lat: vehicleLatLng.lat,
-                    lng: vehicleLatLng.lng,
-                  }}
-                >
-                  {/* Marker za prikaz lokacije vozila */}
-                  <Marker
-                    position={{
-                      lat: vehicleLatLng.lat,
-                      lng: vehicleLatLng.lng,
-                    }}
-                  />
-                </GoogleMap>
+                value={selectedVehicle}
+                onChange={handleVehicleChange}
+                className="form-control order-form-control"
+              >
+                <option value="">Select Vehicle</option>
+                {vehicles.map((vehicle) => (
+                  <option key={vehicle.id} value={vehicle.id}>
+                    {vehicle.driver_name}
+                  </option>
+                ))}
+              </select>
+            <Col>
+              
+              {selectedVehicleData && (
+                <div>
+                  <h4 className="mt-4 mb-4">Selected Vehicle Data</h4>
+                  <p>
+                    <strong>Driver Name:</strong>{" "}
+                    {selectedVehicleData.driver_name}
+                  </p>
+                  <p>
+                    <strong>Capacity:</strong>{" "}
+                    {selectedVehicleData.capacity === 1
+                      ? `${selectedVehicleData.capacity} ton`
+                      : `${selectedVehicleData.capacity} tons`}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong>{" "}
+                    {selectedVehicleData.phone_number}
+                  </p>
+                  <p>
+                    <strong>Vehicle Type:</strong>{" "}
+                    {selectedVehicleData.vehicle_type.charAt(0).toUpperCase() +
+                      selectedVehicleData.vehicle_type.slice(1)}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {selectedVehicleData.address}{" "}
+                    {selectedVehicleData.street_number}
+                  </p>
+                  <p>
+                    <strong>City:</strong> {selectedVehicleData.city.name}
+                  </p>
+                </div>
               )}
-            </div>
-          )}
+            </Col>
+            <Col>
+              <div>
+                {isLoaded && vehicleLatLng && (
+                  <div>
+                    <h3 className="text-center mt-4">Vehicle Location</h3>
+                    <div
+                      style={{
+                        border: "1px solid black",
+                        borderRadius: "5px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        zoom={15}
+                        center={{
+                          lat: vehicleLatLng.lat,
+                          lng: vehicleLatLng.lng,
+                        }}
+                      >
+                        {/* Marker za prikaz lokacije vozila */}
+                        <Marker
+                          position={{
+                            lat: vehicleLatLng.lat,
+                            lng: vehicleLatLng.lng,
+                          }}
+                        />
+                      </GoogleMap>
+                    </div>{" "}
+                  </div>
+                )}
+              </div>
+            </Col>
+          </Row>
         </ModalBody>
+
         <ModalFooter className="order-modal-footer">
           <Button
-            style={{ backgroundColor: "#8B0000" }}
+            className="admin-button-black"
             onClick={handleAcceptOrder}
             disabled={!isVehicleSelected}
           >
