@@ -14,12 +14,14 @@ import {
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useCookies } from "react-cookie";
 
-const WineCardsTest = () => {
+const WineCards = () => {
   const axiosPrivate = useAxiosPrivate();
   const [cookies] = useCookies(["cart_id"]);
 
   const [wines, setWines] = useState([]);
   const [selectedQuantities, setSelectedQuantities] = useState({});
+  const [buttonTexts, setButtonTexts] = useState({});
+  const [buttonDisabled, setButtonDisabled] = useState({});
 
   const fetchData = async () => {
     try {
@@ -44,11 +46,12 @@ const WineCardsTest = () => {
         quantity: selectedQuantity,
       });
       console.log(response.data);
-      if (response.data.created) {
-        console.log(`Added new item to cart: ${wine.name}`);
-      } else {
-        console.log(`Updated quantity of existing item in cart: ${wine.name}`);
-      }
+      setButtonTexts({ ...buttonTexts, [wine.id]: "Successfully added!" });
+      setButtonDisabled({ ...buttonDisabled, [wine.id]: true });
+      setTimeout(() => {
+        setButtonTexts({ ...buttonTexts, [wine.id]: "Add to cart" });
+        setButtonDisabled({ ...buttonDisabled, [wine.id]: false });
+      }, 1500);
     } catch (error) {
       console.error(error);
     }
@@ -124,11 +127,14 @@ const WineCardsTest = () => {
                             <Button
                               color="dark"
                               className="w-100"
+                              disabled={buttonDisabled[wine.id]}
                               onClick={() => {
                                 addToCart(wine);
                               }}
                             >
-                              <small>Add to cart</small>
+                              <small>
+                                {buttonTexts[wine.id] || "Add to cart"}
+                              </small>
                             </Button>
                           </div>
                         </Col>
@@ -148,4 +154,4 @@ const WineCardsTest = () => {
   );
 };
 
-export default WineCardsTest;
+export default WineCards;
