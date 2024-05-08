@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
-from wines.views import OrderViewSet, WineViewSet
+from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, ShoppingCartViewSet
 from wine_production.views import WineCellarViewSet, WineTankViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -38,6 +38,8 @@ router.register(r'orders', OrderViewSet)
 router.register(r'wines', WineViewSet)
 router.register(r'wine-rooms', WineCellarViewSet)
 router.register(r'wine-tanks', WineTankViewSet)
+router.register(r'carts', ShoppingCartViewSet)
+router.register(r'cart-items', ShoppingCartItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
