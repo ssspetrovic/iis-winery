@@ -24,6 +24,7 @@ import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
 import BrowseWines from "./components/users/BrowseWines";
+import { CartContext } from "./components/orders/CartContext";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -93,7 +94,9 @@ function App() {
               />
             }
           >
-            <Route path="/browse" element={<BrowseWines />} />
+            <CartProvider>
+              <Route path="/browse" element={<BrowseWines />} />
+            </CartProvider>
           </Route>
 
           {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}

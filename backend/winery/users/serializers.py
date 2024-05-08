@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Customer, City, Winemaker, Manager, Admin, Report
+from wines.models import ShoppingCart
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -32,12 +33,12 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if Customer.objects.filter(email=value).exists():
-            raise ValidationError(_('Email already exists'))
+            raise serializers.ValidationError(_('Email already exists'))
         return value
 
     def validate_username(self, value):
         if Customer.objects.filter(username=value).exists():
-            raise ValidationError(_('Username already exists'))
+            raise serializers.ValidationError(_('Username already exists'))
         return value
 
     def create(self, validated_data):
@@ -48,9 +49,9 @@ class CustomerSerializer(serializers.ModelSerializer):
         email = validated_data.get('email')
         username = validated_data.get('username')
         if Customer.objects.filter(email=email).exists():
-            raise ValidationError(_('Email already exists'))
+            raise serializers.ValidationError(_('Email already exists'))
         if Customer.objects.filter(username=username).exists():
-            raise ValidationError(_('Username already exists'))
+            raise serializers.ValidationError(_('Username already exists'))
 
         # Hash the password before saving the user
         password = validated_data.pop('password')
@@ -58,8 +59,13 @@ class CustomerSerializer(serializers.ModelSerializer):
 
         validated_data['role'] = Customer.Role.CUSTOMER
 
+        # Create customer instance
         customer = Customer.objects.create(
             password=hashed_password, city=city_instance, **validated_data)
+
+        # Create shopping cart for the customer
+        ShoppingCart.objects.create(customer=customer)
+
         return customer
 
     def update(self, instance, validated_data):

@@ -55,13 +55,16 @@ class Order(models.Model):
 
 
 class ShoppingCart(models.Model):
-    customer = models.ForeignKey(
-        Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="shopping_cart")
-    items = models.ManyToManyField(
-        'ShoppingCartItem', verbose_name="Items", related_name="shopping_carts")
+    customer = models.OneToOneField(
+        Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="shopping_cart"
+    )
 
 
 class ShoppingCartItem(models.Model):
+    shopping_cart = models.ForeignKey(
+        ShoppingCart, verbose_name="Shopping Cart", on_delete=models.CASCADE, related_name="items"
+    )
     wine = models.ForeignKey(
-        Wine, verbose_name="Wine item", on_delete=models.CASCADE, related_name="shopping_cart_items")
+        Wine, verbose_name="Wine item", on_delete=models.CASCADE, related_name="shopping_cart_items"
+    )
     quantity = models.IntegerField(verbose_name="Wine quantity", default=0)

@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import {
   Button,
   Row,
@@ -11,8 +10,25 @@ import {
   Form,
   Input,
 } from "reactstrap";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const WineCards = ({ filteredWines }) => {
+  const axiosPrivate = useAxiosPrivate();
+
+  const { addToCart } = useContext(CartContext);
+
+  const handleAddToCart = async (wine) => {
+    try {
+      console.log("XD");
+      // Make a POST request to add the wine to the cart on the backend
+      const response = await axiosPrivate.post("/cart-item/", { wine });
+      // Assuming your backend returns the updated cart or cart item, you can use it to update the local cart context
+      addToCart(response.data);
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
+
   return filteredWines.length > 0 ? (
     filteredWines.map(
       (wine, outerIndex) =>
@@ -74,7 +90,11 @@ const WineCards = ({ filteredWines }) => {
                           </Col>
                           <Col md={8}>
                             <div className="text-center my-auto">
-                              <Button color="dark" className="w-100">
+                              <Button
+                                color="dark"
+                                className="w-100"
+                                onClick={() => handleAddToCart(wine)}
+                              >
                                 <small>Add to cart</small>
                               </Button>
                             </div>
