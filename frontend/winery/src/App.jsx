@@ -25,6 +25,7 @@ import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
+import Home from "../../Home";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -37,7 +38,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
-          <Route path="/" element={<Test />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/test" element={<Test />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
@@ -55,6 +57,7 @@ function App() {
               element={<CustomerProfile />}
             />
           </Route>
+
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
           </Route>

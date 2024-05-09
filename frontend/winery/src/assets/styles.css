@@ -54,6 +54,14 @@
     background: #f8f9fa;
 }
 
+.color-dark {
+    color: #212529;
+}
+
+.color-light {
+    color: #f8f9fa;
+}
+
 .overflow-hidden {
     overflow: hidden;
 }
@@ -86,7 +94,7 @@ input[type=number].number-input-blank {
 }
 
 .cart-img {
-    width: 3.5rem; 
+    width: 3.5rem;
 }
 
 .cart-input-quantity {
