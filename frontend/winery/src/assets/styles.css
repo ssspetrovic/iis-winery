@@ -84,3 +84,11 @@ input[type=number].number-input-blank {
     appearance: none;
     -moz-appearance: textfield;
 }
+
+.cart-img {
+    width: 3.5rem; 
+}
+
+.cart-input-quantity {
+    width: 4rem;
+}

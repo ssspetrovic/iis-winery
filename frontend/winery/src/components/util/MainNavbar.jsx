@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   Nav,
@@ -42,25 +42,38 @@ const MainNavbar = () => {
         >
           {username ? (
             <Nav navbar>
-              <UncontrolledDropdown nav inNavbar>
-                <div className="mx-md-5">
+              <NavItem className="mx-md-2">
+                <NavLink href="/browse" style={{ color: "white" }}>
+                  Browse
+                </NavLink>
+              </NavItem>
+              <div className="mx-md-2">
+                <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret style={{ color: "white" }}>
                     {username}
                   </DropdownToggle>
-                </div>
-                <DropdownMenu>
-                  <DropdownItem>
-                    <NavLink
-                      href={`/${role.toLowerCase()}-profile/${username}`}
-                    >
-                      Profile
-                    </NavLink>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <NavLink onClick={() => logout()}>Log out</NavLink>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+                  <DropdownMenu>
+                    <DropdownItem>
+                      <NavLink
+                        href={`/${role.toLowerCase()}-profile/${username}`}
+                      >
+                        Profile
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <NavLink onClick={() => logout()}>Log out</NavLink>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </div>
+              <NavItem className="mx-md-2">
+                <NavLink href="/cart">
+                  <i
+                    className="fa fa-shopping-cart"
+                    style={{ color: "white" }}
+                  ></i>
+                </NavLink>
+              </NavItem>
             </Nav>
           ) : (
             <div className="mx-3">

@@ -24,6 +24,7 @@ import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
 import BrowseWines from "./components/customers/BrowseWines";
+import ShoppingCart from "./components/customers/ShoppingCart";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -94,6 +95,10 @@ function App() {
             }
           >
             <Route path="/browse" element={<BrowseWines />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
+            <Route path="/cart" element={<ShoppingCart />} />
           </Route>
 
           {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}

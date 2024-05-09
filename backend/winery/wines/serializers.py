@@ -25,7 +25,8 @@ class WineSerializer(serializers.ModelSerializer):
 
 
 class ShoppingCartItemSerializer(serializers.ModelSerializer):
-    wine = serializers.PrimaryKeyRelatedField(queryset=Wine.objects.all())
+    wine_id = serializers.IntegerField(write_only=True)
+    wine = WineSerializer(read_only=True)
 
     class Meta:
         model = ShoppingCartItem
@@ -33,10 +34,11 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         shopping_cart = validated_data['shopping_cart']
-        wine = validated_data['wine']
+        wine_id = validated_data.pop('wine_id')
         quantity = validated_data['quantity']
 
-        # Check if a ShoppingCartItem with the given shopping_cart and wine already exists
+        wine = Wine.objects.get(pk=wine_id)
+
         item, created = ShoppingCartItem.objects.get_or_create(
             shopping_cart=shopping_cart,
             wine=wine,
@@ -44,7 +46,6 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
         )
 
         if not created:
-            # If the item already exists, update its quantity
             item.quantity += quantity
             item.save()
 

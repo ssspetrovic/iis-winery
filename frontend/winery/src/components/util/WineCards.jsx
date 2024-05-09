@@ -42,7 +42,7 @@ const WineCards = () => {
       const cartId = cookies.cart_id;
       const response = await axiosPrivate.post("/cart-items/", {
         shopping_cart: cartId,
-        wine: wine.id,
+        wine_id: wine.id,
         quantity: selectedQuantity,
       });
       console.log(response.data);
@@ -55,6 +55,16 @@ const WineCards = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const updateQuantity = (itemId, quantity, maxQuantity) => {
+    if (quantity > maxQuantity) {
+      quantity = maxQuantity;
+    }
+    setSelectedQuantities({
+      ...selectedQuantities,
+      [itemId]: parseInt(quantity) || 1,
+    });
   };
 
   return wines.length > 0 ? (
@@ -109,15 +119,17 @@ const WineCards = () => {
                               <Input
                                 id={`wine-quantity-${wine.id}`}
                                 type="number"
-                                min="1" // Disable values below 1
+                                min="1"
+                                max={wine.quantity}
                                 className="text-center px-1"
-                                value={selectedQuantities[wine.id] || "1"} // Set default value to 1
-                                onChange={(e) =>
-                                  setSelectedQuantities({
-                                    ...selectedQuantities,
-                                    [wine.id]: e.target.value,
-                                  })
-                                }
+                                value={selectedQuantities[wine.id] || "1"}
+                                onChange={(e) => {
+                                  updateQuantity(
+                                    wine.id,
+                                    e.target.value,
+                                    wine.quantity
+                                  );
+                                }}
                               />
                             </Form>
                           </div>
