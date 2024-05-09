@@ -23,6 +23,7 @@ import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
+import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
 import Home from "../../Home";
@@ -33,7 +34,77 @@ import "./assets/styles.css";
 
 function App() {
   return (
-    <>
+    // <>
+    //   <MainNavbar />
+    //   <NavigationBar />
+    //   <Routes>
+    //     <Route path="/" element={<Layout />}>
+    //       {/* Unprotected */}
+    //       <Route path="/" element={<Test />} />
+    //       <Route path="/login" element={<Login />} />
+    //       <Route path="/register" element={<Register />} />
+    //       <Route path="/unauthorized" element={<Unauthorized />} />
+
+    //       <Route path="/reset-password" element={<PasswordResetForm />} />
+    //       <Route
+    //         path="/reset-password-confirm/:token"
+    //         element={<PasswordResetConfirmForm />}
+    //       />
+
+    //       {/* Private */}
+    //       <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
+    //         <Route
+    //           path="/customer-profile/:username"
+    //           element={<CustomerProfile />}
+    //         />
+    //       </Route>
+    //       <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
+    //         <Route path="/admin-profile/:username" element={<AdminProfile />} />
+    //       </Route>
+
+    //       <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
+    //         <Route
+    //           path="/winemaker-profile/:username"
+    //           element={<WinemakerProfile />}
+    //         />
+    //       </Route>
+
+    //       <Route
+    //         path="/manager-profile/:username"
+    //         element={<ManagerProfile />}
+    //       />
+
+    //       <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
+    //         <Route path="/cellar" element={<WineRoomsPage />} />
+    //       </Route>
+
+    //       <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
+    //         <Route
+    //           path="/winemaker-profile/:username"
+    //           element={<WinemakerProfile />}
+    //         />
+    //       </Route>
+
+    //       {/* TODO: Update roles accordingly (you can import constant role dictionary from Roles.jsx) */}
+    //       <Route path="/view-users" element={<ViewUsers />} />
+    //       <Route path="/register-worker" element={<RegisterWorker />} />
+    //       <Route path="/update-worker" element={<UpdateWorker />} />
+    //       <Route path="/view-vehicles" element={<VehiclesList />} />
+    //       <Route path="/add-vehicle" element={<AddVehicle />} />
+    //       <Route path="/update-vehicle" element={<UpdateVehicle />} />
+    //       <Route path="/view-reports" element={<ReportList />} />
+    //       <Route
+    //         path="/winemaker-order-page"
+    //         element={<WinemakerOrdersPage />}
+    //       />
+    //       <Route path="/orders/:id" element={<OrderPage />} />
+
+    //       {/* If no other routes are hooked, throw 404 */}
+    //       <Route path="*" element={<NotFound />} />
+    //     </Route>
+    //   </Routes>
+    // </>
+    <div>
       <MainNavbar />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -122,7 +193,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </>
+      </div>
   );
 }
 

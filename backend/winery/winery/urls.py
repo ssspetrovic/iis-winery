@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/vehicles/', include('vehicles.urls'), name='vehicles'),
     path('api/wines/', include('wines.urls'), name='wines'),
+    path('api/wine-prod/', include('wine_production.urls'), name='wine_production'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

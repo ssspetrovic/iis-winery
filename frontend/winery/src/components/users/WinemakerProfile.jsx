@@ -237,7 +237,7 @@ const WinemakerProfile = () => {
                     >
                       Edit Profile
                     </button>
-                    <Link to="/wine-rooms" className="btn admin-button" 
+                    <Link to="/cellar" className="btn admin-button" 
                     style={{ height: "50px" }}>
                       Wine Cellar
                     </Link>

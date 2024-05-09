@@ -1,27 +1,28 @@
 from rest_framework import serializers
-from .models import WineTank, WineCellar
+from .models import WineTank, WineCellar, WineRacking
 from wines.models import Wine
 from wines.serializers import WineSerializer
 from django.core.exceptions import ValidationError
 
 class WineTankSerializer(serializers.ModelSerializer):
-    # wine = WineSerializer()
+    wine = serializers.CharField()
 
-    # def create(self, validated_data):
-    #     wine_room_name = validated_data.pop('wine_room')
+    def create(self, validated_data):
+        room_instance = validated_data.pop('room')
+
+        # Get the wine data from validated data
+        wine_type = validated_data.pop('wine')
+        try:
+            # Get the WineCellar instance using the room ID
+            wine_instance = Wine.objects.get(name=wine_type)
+        except Wine.DoesNotExist:
+            raise serializers.ValidationError("Invalid wine name")
         
-    #     wine_room_intance = WineCellar.objects.get(name=wine_room_name)
+        # Create the wine tank instance with the room and wine instances
+        wine_tank = WineTank.objects.create(room=room_instance, wine=wine_instance, **validated_data)
 
-    #     wine_name = validated_data.pop('wine')
-
-    #     wine_instance = Wine.objects.get(name=wine_name)
-
-
-    #     return wine_instance
+        return wine_tank
     
-    # class Meta:
-    #     model = WineTank
-    #     fields = ['tank_id', 'description', 'room', 'wine', 'capacity', 'current_volume', 'tank_type']
     class Meta:
         model = WineTank
         fields = '__all__'
@@ -39,4 +40,9 @@ class WineCellarSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = WineCellar
+        fields = '__all__'
+    
+class WineRackingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WineRacking
         fields = '__all__'

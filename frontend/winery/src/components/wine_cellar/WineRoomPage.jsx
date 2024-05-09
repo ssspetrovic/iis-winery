@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "../../api/axios";
 import WineRoom from './WineRoom';
 
-const WineRoomsPage = () => {
+function WineRoomsPage () {
   const [wineRooms, setWineRooms] = useState([]);
 
   useEffect(() => {
@@ -14,7 +14,6 @@ const WineRoomsPage = () => {
       const response = await axios.get("/wine-rooms/", {
         headers: { "Content-Type": "application/json" },
       })
-      console.log(response.data)
       setWineRooms(response.data);
     } catch (error) {
       console.error('Error fetching wine rooms:', error);
@@ -31,7 +30,7 @@ const WineRoomsPage = () => {
   };
 
   return (
-    <div>
+    <div className='p-3 mb-2 bg-dark text-white'>
       {wineRooms.map((wineRoom) => (
         <WineRoom key={wineRoom.id} wineRoom={wineRoom} />
       ))}
