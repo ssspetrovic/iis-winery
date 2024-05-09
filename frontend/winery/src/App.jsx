@@ -106,6 +106,7 @@ function App() {
     // </>
     <div>
       <MainNavbar />
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
@@ -146,7 +147,7 @@ function App() {
           />
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
-            <Route path="/wine-rooms" element={<WineRoomsPage />} />
+            <Route path="/cellar" element={<WineRoomsPage />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
