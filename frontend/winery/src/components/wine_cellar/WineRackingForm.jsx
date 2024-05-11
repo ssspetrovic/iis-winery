@@ -52,6 +52,7 @@ function WineRacking({ wineTank, toggleModal }) {
         amount: amount,
         date_time: dateTime,
     });
+      console.log(response)
       setSuccessModal(true);
       toggleModal();
     } catch (error) {
@@ -72,6 +73,9 @@ function WineRacking({ wineTank, toggleModal }) {
 
   function handleChangeFromTank (e) {
     const selectedTankId = e.target.value;
+    const tank1 = wineTanks.find(tank1.tank_id === selectedTankId)
+    const tank2 = wineTanks.find(tank2.tank_id === toTankId)
+
     setFromTank(selectedTankId);
     if (selectedTankId === toTankId) {
       setErrorMessage("From Tank and To Tank cannot be the same.");
