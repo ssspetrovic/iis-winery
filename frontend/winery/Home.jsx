@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import useAuth from "./winery/src/hooks/useAuth";
+import useAuth from "./src/hooks/useAuth";
 
 const Home = () => {
   const navigate = useNavigate();

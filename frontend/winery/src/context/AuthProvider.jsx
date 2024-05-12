@@ -67,16 +67,29 @@ export const AuthProvider = ({ children }) => {
       setCookie("refresh_token", refreshToken, { path: "/" });
 
       if (role == ROLES.CUSTOMER) {
+        const customerResponse = await axios.get("/customers/", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        const customer = customerResponse.data.find(
+          (customer) => customer.username === username
+        );
+        const customerId = customer ? customer.id : null;
+
         const cartResponse = await axios.get("/carts/", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         const userCart = cartResponse.data.find(
-          (cart) => cart.customer.username === username
+          (cart) => cart.customer === customerId
         );
 
-        setCookie("cart_id", userCart.id, { path: "/" });
-        console.log("FOUND ID:", userCart.id);
+        if (userCart) {
+          setCookie("cart_id", userCart.id, { path: "/" });
+          console.log("FOUND ID:", userCart.id);
+        } else {
+          console.log("No matching cart found for user:", username);
+        }
       }
 
       return { success: true, message: "" };

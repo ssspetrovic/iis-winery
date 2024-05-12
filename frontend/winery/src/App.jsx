@@ -26,7 +26,7 @@ import OrderPage from "./components/orders/OrderPage";
 import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
-import Home from "../../Home";
+import Home from "../Home";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
