@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Button,
@@ -314,7 +314,7 @@ const CustomerProfile = () => {
               <Col md="12" className="text-center">
                 <Button
                   className="w-50"
-                  color="primary"
+                  color="dark"
                   hidden={isEditing}
                   onClick={edit}
                 >
@@ -387,7 +387,7 @@ const CustomerProfile = () => {
                   vitae quibusdam debitis earum fugit?
                 </CardText>
                 <div className="text-center">
-                  <Button color="primary">Learn more</Button>
+                  <Button color="dark">Learn more</Button>
                 </div>
               </CardBody>
             </Card>
@@ -408,7 +408,7 @@ const CustomerProfile = () => {
                   vitae quibusdam debitis earum fugit?
                 </CardText>
                 <div className="text-center">
-                  <Button color="primary">Learn more</Button>
+                  <Button color="dark">Learn more</Button>
                 </div>
               </CardBody>
             </Card>
@@ -429,7 +429,7 @@ const CustomerProfile = () => {
                   vitae quibusdam debitis earum fugit?
                 </CardText>
                 <div className="text-center">
-                  <Button color="primary">Learn more</Button>
+                  <Button color="dark">Learn more</Button>
                 </div>
               </CardBody>
             </Card>
