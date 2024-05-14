@@ -20,7 +20,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
-import wineImage from "../../assets/images/wine_01.jpg"; // Zamijenite putanjom do vaše slike
 
 // Add your Google Maps API key here
 // Define map container style and default center coordinates

@@ -52,9 +52,6 @@ function RegisterWorker() {
       return;
     }
 
-    const encodedCity = encodeURIComponent(city);
-    const cityResponse = await axios.get(`/cities/${encodedCity}/`);
-
     try {
       if (userRole === "manager") {
         const response = await axios.post("/managers/", {
@@ -67,6 +64,8 @@ function RegisterWorker() {
         });
         console.log(response.data);
       } else if (userRole === "winemaker") {
+        const encodedCity = encodeURIComponent(city);
+        const cityResponse = await axios.get(`/cities/${encodedCity}/`);
         const response = await axios.post("/winemakers/", {
           username,
           password,
@@ -308,10 +307,7 @@ function RegisterWorker() {
             </p>
           )}
           <div className="d-flex justify-content-between">
-            <Button
-              type="submit"
-              className="admin-button-black"
-            >
+            <Button type="submit" className="admin-button-black">
               Register
             </Button>
 
