@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Order, Wine, ShoppingCart, ShoppingCartItem
-from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer
+from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem
+from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer, OrderItemSerializer
 
 
 # import googlemaps
@@ -24,6 +24,11 @@ class ShoppingCartItemViewSet(viewsets.ModelViewSet):
 class ShoppingCartViewSet(viewsets.ModelViewSet):
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
+
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
 
 
 # def optimize_delivery_route(request, order_id):

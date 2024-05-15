@@ -27,6 +27,7 @@ import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
 import Home from "../Home";
+import Orders from "./components/orders/OrderTest";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -115,6 +116,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/ordertest" element={<Orders />} />
 
           <Route path="/reset-password" element={<PasswordResetForm />} />
           <Route
@@ -194,7 +196,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-      </div>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Navbar,
   Nav,
@@ -19,7 +19,7 @@ const MainNavbar = () => {
   const { auth, logout } = useAuth();
   const { username, role } = auth || {};
   const [isOpen, setIsOpen] = useState(false);
-  const [redirectPath, setRedirectPath] = useState("");
+  // const [redirectPath, setRedirectPath] = useState("");
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);

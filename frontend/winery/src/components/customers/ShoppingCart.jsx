@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -69,6 +69,29 @@ const ShoppingCart = () => {
       const quantity = selectedQuantities[item.id] || item.quantity;
       return total + (selectedItems[item.id] ? item.wine.price * quantity : 0);
     }, 0);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const items = Object.keys(selectedItems).map((itemId) =>
+        parseInt(itemId)
+      );
+      const customer = cookies.username; // assuming the username is stored in cookies
+
+      const response = await axiosPrivate.post("/orders/", { items, customer });
+
+      if (response.status === 201) {
+        console.log("Order created successfully:", response.data);
+        // Clear the cart after successful checkout
+        setCartItems([]);
+        setSelectedItems({});
+        setSelectedQuantities({});
+      } else {
+        console.error("Error creating order:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
   };
 
   return (
@@ -224,8 +247,9 @@ const ShoppingCart = () => {
                     disabled={Object.values(selectedItems).every(
                       (item) => !item
                     )}
+                    onClick={handleCheckout}
                   >
-                    Complete order
+                    Checkout
                   </Button>
                 </div>
               </Row>

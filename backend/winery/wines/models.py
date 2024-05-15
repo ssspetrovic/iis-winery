@@ -42,18 +42,6 @@ class Wine(models.Model):
         return self.name
 
 
-class Order(models.Model):
-    customer = models.ForeignKey(
-        User, on_delete=models.CASCADE, to_field='username')
-    wines = models.ManyToManyField(Wine)
-    is_accepted = models.BooleanField(default=False)
-    is_delivered = models.BooleanField(default=False)
-    driver = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return f"Order by {self.customer.username}"
-
-
 class ShoppingCart(models.Model):
     customer = models.OneToOneField(
         Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="shopping_cart"
@@ -68,3 +56,23 @@ class ShoppingCartItem(models.Model):
         Wine, verbose_name="Wine item", on_delete=models.CASCADE, related_name="shopping_cart_items"
     )
     quantity = models.IntegerField(verbose_name="Wine quantity", default=0)
+
+
+class Order(models.Model):
+    total_price = models.DecimalField(
+        verbose_name='Total Price', decimal_places=2, max_digits=10, default=0)
+    is_accepted = models.BooleanField(default=False)
+    is_delivered = models.BooleanField(default=False)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
+    driver = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"Order by {self.customer.username}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    wine = models.ForeignKey(Wine, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.quantity} of {self.wine.name} for {self.order}"
