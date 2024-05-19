@@ -153,210 +153,213 @@ function UpdateWorker() {
   }
 
   return (
-    <Container className="registration-container">
-      <div className="registration-box">
-        <h1 className="text-center mb-5" style={{ color: "black" }}>
-          Update Existing Workers
-        </h1>
-        <Form onSubmit={handleSubmit}>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="userRole">Role</Label>
+    <div>
+      <div className="admin-background"></div>
+      <Container className="registration-container">
+        <div className="registration-box">
+          <h1 className="text-center mb-5" style={{ color: "black" }}>
+            Update Existing Workers
+          </h1>
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="userRole">Role</Label>
+                  <Row>
+                    <Col md={6}>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input
+                            type="radio"
+                            name="userRole"
+                            value="manager"
+                            checked={userRole === "manager"}
+                            onChange={() => setUserRole("manager")}
+                          />
+                          Manager
+                        </Label>
+                      </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input
+                            type="radio"
+                            name="userRole"
+                            value="winemaker"
+                            checked={userRole === "winemaker"}
+                            onChange={() => setUserRole("winemaker")}
+                          />
+                          Winemaker
+                        </Label>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup className="select-wrapper">
+                  <Label for="selectedUser">
+                    {userRole === "manager"
+                      ? "Select Manager"
+                      : "Select Winemaker"}
+                  </Label>
+                  <Input
+                    type="select"
+                    name="selectedUser"
+                    id="selectedUser"
+                    value={selectedUser}
+                    onChange={handleUserSelect}
+                  >
+                    <option key="default" value="">
+                      Select User
+                    </option>
+                    {users.map((user) => (
+                      <option key={user.username} value={user.username}>
+                        {user.username}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="username">Username</Label>
+                  <Input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="email">Email</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="first_name">First Name</Label>
+                  <Input
+                    type="text"
+                    id="first_name"
+                    value={first_name}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="last_name">Last Name</Label>
+                  <Input
+                    type="text"
+                    id="last_name"
+                    value={last_name}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            {userRole === "winemaker" && (
+              <div>
                 <Row>
                   <Col md={6}>
-                    <FormGroup check inline>
-                      <Label check>
-                        <Input
-                          type="radio"
-                          name="userRole"
-                          value="manager"
-                          checked={userRole === "manager"}
-                          onChange={() => setUserRole("manager")}
-                        />
-                        Manager
-                      </Label>
+                    <FormGroup>
+                      <Label for="address">Address</Label>
+                      <Input
+                        type="text"
+                        id="address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="form-control"
+                      />
                     </FormGroup>
                   </Col>
                   <Col md={6}>
-                    <FormGroup check inline>
-                      <Label check>
-                        <Input
-                          type="radio"
-                          name="userRole"
-                          value="winemaker"
-                          checked={userRole === "winemaker"}
-                          onChange={() => setUserRole("winemaker")}
-                        />
-                        Winemaker
-                      </Label>
+                    <FormGroup>
+                      <Label for="street_number">Street Number</Label>
+                      <Input
+                        type="text"
+                        id="street_number"
+                        value={street_number}
+                        onChange={(e) => setStreetNo(e.target.value)}
+                        className="form-control"
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup className="select-wrapper">
-                <Label for="selectedUser">
-                  {userRole === "manager"
-                    ? "Select Manager"
-                    : "Select Winemaker"}
-                </Label>
-                <Input
-                  type="select"
-                  name="selectedUser"
-                  id="selectedUser"
-                  value={selectedUser}
-                  onChange={handleUserSelect}
-                >
-                  <option key="default" value="">
-                    Select User
-                  </option>
-                  {users.map((user) => (
-                    <option key={user.username} value={user.username}>
-                      {user.username}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6}>
+                <Row>
+                  <Col>
+                    <FormGroup className="mx-auto">
+                      <Label for="city">City</Label>
+                      <Input
+                        type="text"
+                        id="city"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="form-control"
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </div>
+            )}
+            {userRole === "manager" && (
               <FormGroup>
-                <Label for="username">Username</Label>
+                <Label for="phone_number">Phone Number</Label>
                 <Input
                   type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="phone_number"
+                  value={phone_number}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   className="form-control"
                 />
               </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="first_name">First Name</Label>
-                <Input
-                  type="text"
-                  id="first_name"
-                  value={first_name}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="last_name">Last Name</Label>
-                <Input
-                  type="text"
-                  id="last_name"
-                  value={last_name}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          {userRole === "winemaker" && (
-            <div>
-              <Row>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="address">Address</Label>
-                    <Input
-                      type="text"
-                      id="address"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="form-control"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="street_number">Street Number</Label>
-                    <Input
-                      type="text"
-                      id="street_number"
-                      value={street_number}
-                      onChange={(e) => setStreetNo(e.target.value)}
-                      className="form-control"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <FormGroup className="mx-auto">
-                    <Label for="city">City</Label>
-                    <Input
-                      type="text"
-                      id="city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="form-control"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
+            )}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
+            <div className="d-flex justify-content-between">
+              <Button
+                type="submit"
+                color="primary"
+                className="mr-2 admin-button-black"
+              >
+                Update
+              </Button>
+              <Button color="secondary" onClick={handleCancel}>
+                Cancel Update
+              </Button>
             </div>
-          )}
-          {userRole === "manager" && (
-            <FormGroup>
-              <Label for="phone_number">Phone Number</Label>
-              <Input
-                type="text"
-                id="phone_number"
-                value={phone_number}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="form-control"
-              />
-            </FormGroup>
-          )}
-          {errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
-          <div className="d-flex justify-content-between">
-            <Button
-              type="submit"
-              color="primary"
-              className="mr-2 admin-button-black"
-            >
-              Update
+          </Form>
+        </div>
+        {/* Modal */}
+        <Modal isOpen={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
+          <ModalHeader>Worker Successfully Updated!</ModalHeader>
+          <ModalFooter>
+            <Button color="secondary" onClick={() => setIsModalOpen(false)}>
+              Update Another Worker
             </Button>
-            <Button color="secondary" onClick={handleCancel}>
-              Cancel Update
+            <Button color="primary" onClick={() => navigate("/view-users")}>
+              View Users
             </Button>
-          </div>
-        </Form>
-      </div>
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} toggle={() => setIsModalOpen(!isModalOpen)}>
-        <ModalHeader>Worker Successfully Updated!</ModalHeader>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => setIsModalOpen(false)}>
-            Update Another Worker
-          </Button>
-          <Button color="primary" onClick={() => navigate("/view-users")}>
-            View Users
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </Container>
+          </ModalFooter>
+        </Modal>
+      </Container>
+    </div>
   );
 }
 
