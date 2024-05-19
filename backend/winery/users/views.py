@@ -191,6 +191,10 @@ class GenerateAdminPDF(APIView):
             column_names = [f.replace('_', ' ').replace('.', ' ').title() for f in fields]
             if 'First Name' in column_names:
                 column_names[column_names.index('First Name')] = 'Full Name'
+            if 'Is Reviewed' in column_names:
+                column_names[column_names.index('Is Reviewed')] = 'Is Reviewed?'
+            if 'City Name' in column_names:
+                column_names[column_names.index('City Name')] = 'City'
 
             data = [column_names]
             for obj in queryset:
@@ -210,6 +214,10 @@ class GenerateAdminPDF(APIView):
                         row.append(f"{getattr(obj, 'address')} {getattr(obj, 'street_number')}")
                     elif field == 'street_number':
                         continue
+                    elif field == 'reply' and not getattr(obj, field):
+                        row.append('/')
+                    elif field == 'vehicle_type':
+                        row.append(getattr(obj, field).capitalize())
                     else:
                         row.append(getattr(obj, field))
                 data.append(row)
@@ -430,17 +438,30 @@ class GenerateAdminPDF(APIView):
         signature_text = f"{user.first_name} {user.last_name}, Winery Inc."
         signature = Paragraph(signature_text, styles['Signature'])
 
+        # Funkcija za preuzimanje i čuvanje slike ako već ne postoji
+        def get_or_download_image(image_url, image_name):
+            if not default_storage.exists(image_name):
+                response = requests.get(image_url)
+                if response.status_code == 200:
+                    # Sačuvajte sliku u lokalnom sistemu
+                    image_path = default_storage.save(image_name, ContentFile(response.content))
+                else:
+                    print("Greška prilikom preuzimanja slike:", response.status_code)
+                    return None
+            else:
+                image_path = default_storage.path(image_name)
+            
+            return image_path
+
         # Preuzimanje slike sa URL-a
         url = "https://cdn.pixabay.com/photo/2014/10/23/19/25/wine-500131_1280.png"
-        response = requests.get(url)
-        if response.status_code == 200:
-            # Sačuvajte sliku u lokalnom sistemu
-            image_name = "wine_stamp.png"
-            image_path = default_storage.save(image_name, ContentFile(response.content))
-            
+        image_name = "wine_stamp.png"
+        image_path = get_or_download_image(url, image_name)
+
+        if image_path:
             # Dodajte sliku u dokument
-            stamp = Image(image_path, width=inch * 1.5, height=inch * 1.5)  
-            stamp.hAlign = 'RIGHT'  
+            stamp = Image(image_path, width=inch * 1.5, height=inch * 1.5)
+            stamp.hAlign = 'RIGHT'
 
             # Dodavanje potpisa i slike u isti blok
             signature_and_stamp = [signature, stamp]

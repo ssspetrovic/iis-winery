@@ -5,6 +5,7 @@ import "../../assets/adminReport.css";
 import "../../assets/adminStyles.css";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../util/LoadingSpinner";
 
 function AdminReport() {
   const [data, setData] = useState({
@@ -14,6 +15,7 @@ function AdminReport() {
     vehicles: [],
     reports: [],
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { auth } = useAuth();
   const { username, role } = auth || {};
@@ -45,6 +47,7 @@ function AdminReport() {
   }, []);
 
   const generatePDF = () => {
+    setIsLoading(true);
     axios
       .get(`http://127.0.0.1:8000/generate-admin-pdf/?username=${username}`, {
         responseType: "blob",
@@ -56,11 +59,13 @@ function AdminReport() {
         link.setAttribute("download", "admin_report.pdf");
         document.body.appendChild(link);
         link.click();
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error generating PDF:", error);
+        setIsLoading(false);
       });
-};
+  };
 
   const handleCardClick = (route) => {
     navigate(route);
@@ -70,8 +75,12 @@ function AdminReport() {
     <div>
       <div className="bottom-button mb-4">
         <h1>Admin Data Summary</h1>
-        <button onClick={generatePDF} className="admin-button">
-          Generate PDF
+        <button
+          onClick={generatePDF}
+          className="admin-button"
+          disabled={isLoading}
+        >
+          {isLoading ? <Spinner /> : "Generate PDF"}
         </button>
       </div>
       <div className="admin-report-container">
@@ -235,4 +244,5 @@ function AdminReport() {
     </div>
   );
 }
+
 export default AdminReport;
