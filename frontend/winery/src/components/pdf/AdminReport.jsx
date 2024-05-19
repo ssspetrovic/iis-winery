@@ -93,6 +93,7 @@ function AdminReport() {
             <CardText>
               {data.winemakers.map((winemaker) => (
                 <div key={winemaker.id}>
+                  <hr /> {/* Separator */}
                   <p>
                     <strong>Username:</strong> {winemaker.username}
                   </p>
@@ -109,7 +110,6 @@ function AdminReport() {
                     <strong>Address:</strong> {winemaker.address},{" "}
                     {winemaker.street_number}, {winemaker.city.name}
                   </p>
-                  <hr /> {/* Separator */}
                 </div>
               ))}
             </CardText>
@@ -125,6 +125,7 @@ function AdminReport() {
             <CardText>
               {data.managers.map((manager) => (
                 <div key={manager.username}>
+                  <hr /> {/* Separator */}
                   <p>
                     <strong>Username:</strong> {manager.username}
                   </p>
@@ -140,7 +141,6 @@ function AdminReport() {
                   <p>
                     <strong>Phone Number:</strong> {manager.phone_number}
                   </p>
-                  <hr /> {/* Separator */}
                 </div>
               ))}
             </CardText>
@@ -156,6 +156,7 @@ function AdminReport() {
             <CardText>
               {data.customers.map((customer) => (
                 <div key={customer.id}>
+                  <hr /> {/* Separator */}
                   <p>
                     <strong>Username:</strong> {customer.username}
                   </p>
@@ -175,7 +176,6 @@ function AdminReport() {
                     <strong>Address:</strong> {customer.address},{" "}
                     {customer.street_number}, {customer.city.name}
                   </p>
-                  <hr /> {/* Separator */}
                 </div>
               ))}
             </CardText>
@@ -191,6 +191,7 @@ function AdminReport() {
             <CardText>
               {data.vehicles.map((vehicle) => (
                 <div key={vehicle.id}>
+                  <hr /> {/* Separator */}
                   <p>
                     <strong>Driver Name:</strong> {vehicle.driver_name}
                   </p>
@@ -207,7 +208,6 @@ function AdminReport() {
                     <strong>Address:</strong> {vehicle.address},{" "}
                     {vehicle.street_number}, {vehicle.city.name}
                   </p>
-                  <hr /> {/* Separator */}
                 </div>
               ))}
             </CardText>
@@ -223,6 +223,7 @@ function AdminReport() {
             <CardText>
               {data.reports.map((report) => (
                 <div key={report.id}>
+                  <hr /> {/* Separator */}
                   <p>
                     <strong>Description:</strong> {report.description}
                   </p>
@@ -233,7 +234,6 @@ function AdminReport() {
                   <p>
                     <strong>Reply:</strong> {report.reply}
                   </p>
-                  <hr /> {/* Separator */}
                 </div>
               ))}
             </CardText>

@@ -108,8 +108,10 @@ const AdminProfile = () => {
                       id="editFirstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      readOnly={!isEditing} 
-                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
+                      readOnly={!isEditing}
+                      style={{
+                        backgroundColor: isEditing ? "inherit" : "#f0f0f0",
+                      }}
                     />
                   </FormGroup>
                 </Col>
@@ -122,8 +124,10 @@ const AdminProfile = () => {
                       id="editLastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      readOnly={!isEditing} 
-                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
+                      readOnly={!isEditing}
+                      style={{
+                        backgroundColor: isEditing ? "inherit" : "#f0f0f0",
+                      }}
                     />
                   </FormGroup>
                 </Col>
@@ -138,8 +142,10 @@ const AdminProfile = () => {
                       id="editUsername"
                       value={newUsername}
                       onChange={(e) => setNewUsername(e.target.value)}
-                      readOnly={!isEditing} 
-                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
+                      readOnly={!isEditing}
+                      style={{
+                        backgroundColor: isEditing ? "inherit" : "#f0f0f0",
+                      }}
                     />
                   </FormGroup>
                 </Col>
@@ -152,8 +158,10 @@ const AdminProfile = () => {
                       id="editEmail"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      readOnly={!isEditing} 
-                      style={{ backgroundColor: isEditing ? 'inherit' : '#f0f0f0' }} 
+                      readOnly={!isEditing}
+                      style={{
+                        backgroundColor: isEditing ? "inherit" : "#f0f0f0",
+                      }}
                     />
                   </FormGroup>
                 </Col>
@@ -220,6 +228,18 @@ const AdminProfile = () => {
             style={{ borderWidth: "3px", borderRadius: "20px" }}
           >
             <i className="fas fa-truck fa-6x mb-2"></i>
+          </Link>
+        </Col>
+        <Col className="d-flex flex-column align-items-center">
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            Generate PDF
+          </span>
+          <Link
+            to={`/admin-profile/${username}/generate-pdf`}
+            className="btn btn-outline-dark"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
+            <i className="fas fa-file-pdf fa-6x mb-2"></i>
           </Link>
         </Col>
       </Row>
