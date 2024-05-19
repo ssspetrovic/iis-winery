@@ -258,3 +258,17 @@ input[type="radio"]:checked {
   box-shadow: none;
   border-color: black; /* Postavljanje boje ivice na crnu na hover/focus */
 }
+
+.admin-cog-icon {
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Dodajemo prijelaz transformacije */
+}
+
+.admin-cog-icon:hover {
+  transform: rotate(360deg); /* Rotacija točka na hover */
+}
+
+.admin-modal-footer-buttons {
+  display: flex;
+  justify-content: space-between;
+}
