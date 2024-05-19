@@ -136,7 +136,10 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
-            <Route path="/admin-profile/generate-pdf" element={<AdminReport />} />
+            <Route
+              path="/admin-profile/:username/generate-pdf"
+              element={<AdminReport />}
+            />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
@@ -199,7 +202,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-      </div>
+    </div>
   );
 }
 
