@@ -27,6 +27,7 @@ import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
 import Home from "../Home";
+import AdminReport from "./components/pdf/AdminReport";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
@@ -132,6 +133,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
+            <Route path="/admin-profile/generate-pdf" element={<AdminReport />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>

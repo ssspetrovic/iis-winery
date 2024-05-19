@@ -1,0 +1,78 @@
+.admin-report-container {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+h1 {
+    width: 100%;
+}
+
+.data-section {
+    position: relative;
+    width: calc(50% - 10px);
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer; /* Dodajmo pokazivač kao indikator da su kartice klikabilne */
+}
+
+.data-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.data-section::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.data-section:hover::before {
+    opacity: 1;
+}
+
+.show-more-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Siva sa niskom prozirnošću */
+    color: white; /* Boja teksta */
+    font-size: 1.2rem; /* Veličina teksta */
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.data-section:hover .show-more-overlay {
+    opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+    .data-section {
+        width: 100%;
+    }
+}
+
+.bottom-button {
+    clear: both;
+    text-align: center;
+}
