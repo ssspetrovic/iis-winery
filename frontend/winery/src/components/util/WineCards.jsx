@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   Card,
@@ -14,27 +15,13 @@ import {
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useCookies } from "react-cookie";
 
-const WineCards = () => {
+const WineCards = ({ filteredWines }) => {
   const axiosPrivate = useAxiosPrivate();
   const [cookies] = useCookies(["cart_id"]);
 
-  const [wines, setWines] = useState([]);
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [buttonTexts, setButtonTexts] = useState({});
   const [buttonDisabled, setButtonDisabled] = useState({});
-
-  const fetchData = async () => {
-    try {
-      const response = await axiosPrivate.get(`/wines/`);
-      setWines(response.data);
-    } catch (error) {
-      console.error("Error fetching wines:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const addToCart = async (wine) => {
     try {
@@ -67,95 +54,97 @@ const WineCards = () => {
     });
   };
 
-  return wines.length > 0 ? (
-    wines.map(
+  return filteredWines.length > 0 ? (
+    filteredWines.map(
       (wine, outerIndex) =>
         outerIndex % 4 === 0 && (
           <Row key={outerIndex}>
-            {wines.slice(outerIndex, outerIndex + 4).map((wine, innerIndex) => (
-              <Col md={3} key={innerIndex} className="p-1">
-                <Card className="mb-2 shadow">
-                  <CardImg
-                    className="card-img-top"
-                    src={wine.image}
-                    alt="wine image"
-                    loading="eager"
-                  />
-                  <CardBody>
-                    <Row>
-                      <Col md={10}>
-                        <CardTitle tag="h5">{wine.name}</CardTitle>
-                      </Col>
-                      <Col md={2}>
-                        <div className="d-flex justify-content-center align-items-center h-100">
-                          <i className="fa fa-heart"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted">
-                      <b>Type:</b> {wine.type}
-                    </CardSubtitle>
-                    <div>
-                      <p className="mb-1">
-                        <b>Sweetness:</b> {wine.sweetness}
-                      </p>
-                      <p className="mb-1">
-                        <b>Age:</b> {wine.age}
-                      </p>
-                      <p className="mb-1">
-                        <b>Winemaker:</b> {wine.winemaker}
-                      </p>
-                      <hr />
-                      <p className="mb-1 text-center lead">
-                        <b>{wine.price} RSD</b>
-                      </p>
-                      <p className="mb-1 text-center">
-                        <b>In stock:</b> {wine.quantity}
-                      </p>
-                      <Row className="mt-3">
-                        <Col md={4}>
-                          <div className="d-flex justify-content-center align-items-center h-100">
-                            <Form>
-                              <Input
-                                id={`wine-quantity-${wine.id}`}
-                                type="number"
-                                min="1"
-                                max={wine.quantity}
-                                className="text-center px-1"
-                                value={selectedQuantities[wine.id] || "1"}
-                                onChange={(e) => {
-                                  updateQuantity(
-                                    wine.id,
-                                    e.target.value,
-                                    wine.quantity
-                                  );
-                                }}
-                              />
-                            </Form>
-                          </div>
+            {filteredWines
+              .slice(outerIndex, outerIndex + 4)
+              .map((wine, innerIndex) => (
+                <Col md={3} key={innerIndex} className="p-1">
+                  <Card className="mb-2 shadow">
+                    <CardImg
+                      className="card-img-top"
+                      src={wine.image}
+                      alt="wine image"
+                      loading="eager"
+                    />
+                    <CardBody>
+                      <Row>
+                        <Col md={10}>
+                          <CardTitle tag="h5">{wine.name}</CardTitle>
                         </Col>
-                        <Col md={8}>
-                          <div className="text-center my-auto">
-                            <Button
-                              color="dark"
-                              className="w-100"
-                              disabled={buttonDisabled[wine.id]}
-                              onClick={() => {
-                                addToCart(wine);
-                              }}
-                            >
-                              <small>
-                                {buttonTexts[wine.id] || "Add to cart"}
-                              </small>
-                            </Button>
+                        <Col md={2}>
+                          <div className="d-flex justify-content-center align-items-center h-100">
+                            <i className="fa fa-heart"></i>
                           </div>
                         </Col>
                       </Row>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            ))}
+                      <CardSubtitle tag="h6" className="mb-2 text-muted">
+                        <b>Type:</b> {wine.type}
+                      </CardSubtitle>
+                      <div>
+                        <p className="mb-1">
+                          <b>Sweetness:</b> {wine.sweetness}
+                        </p>
+                        <p className="mb-1">
+                          <b>Age:</b> {wine.age}
+                        </p>
+                        <p className="mb-1">
+                          <b>Winemaker:</b> {wine.winemaker}
+                        </p>
+                        <hr />
+                        <p className="mb-1 text-center lead">
+                          <b>{wine.price} RSD</b>
+                        </p>
+                        <p className="mb-1 text-center">
+                          <b>In stock:</b> {wine.quantity}
+                        </p>
+                        <Row className="mt-3">
+                          <Col md={4}>
+                            <div className="d-flex justify-content-center align-items-center h-100">
+                              <Form>
+                                <Input
+                                  id={`wine-quantity-${wine.id}`}
+                                  type="number"
+                                  min="1"
+                                  max={wine.quantity}
+                                  className="text-center px-1"
+                                  value={selectedQuantities[wine.id] || "1"}
+                                  onChange={(e) => {
+                                    updateQuantity(
+                                      wine.id,
+                                      e.target.value,
+                                      wine.quantity
+                                    );
+                                  }}
+                                />
+                              </Form>
+                            </div>
+                          </Col>
+                          <Col md={8}>
+                            <div className="text-center my-auto">
+                              <Button
+                                color="dark"
+                                className="w-100"
+                                disabled={buttonDisabled[wine.id]}
+                                onClick={() => {
+                                  addToCart(wine);
+                                }}
+                              >
+                                <small>
+                                  {buttonTexts[wine.id] || "Add to cart"}
+                                </small>
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ))}
           </Row>
         )
     )
@@ -164,6 +153,22 @@ const WineCards = () => {
       <h1 className="lead">No wines matching the given criteria found.</h1>
     </div>
   );
+};
+
+WineCards.propTypes = {
+  filteredWines: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      sweetness: PropTypes.string.isRequired,
+      age: PropTypes.string.isRequired,
+      winemaker: PropTypes.string.isRequired,
+      price: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default WineCards;

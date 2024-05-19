@@ -25,6 +25,7 @@ const BrowseWines = () => {
   const [isPriceTabOpen, setIsPriceTabOpen] = useState(false);
 
   const [selectedSweetness, setSelectedSweetness] = useState([]);
+  const [selectedAvailability, setSelectedAvailability] = useState(false);
   const [selectedType, setSelectedType] = useState([]);
   const [selectedAge, setSelectedAge] = useState([]);
   const [selectedSort, setSelectedSort] = useState("name");
@@ -54,12 +55,17 @@ const BrowseWines = () => {
 
   const resetFilter = () => {
     setSelectedSweetness([]);
+    setSelectedAvailability(false);
     setSelectedType([]);
     setSelectedAge([]);
     setSelectedSort("");
     setSelectedSort("Name");
     setSelectedPriceLower("");
     setSelectedPriceUpper("");
+  };
+
+  const handleAvailabilityChange = () => {
+    setSelectedAvailability(!selectedAvailability);
   };
 
   const handleSweetnessChange = (event) => {
@@ -243,6 +249,7 @@ const BrowseWines = () => {
                           className="mb-1 mx-1 cursor-pointer"
                           onChange={handleSweetnessChange}
                           value="Dry"
+                          checked={selectedSweetness.includes("Dry")}
                         />{" "}
                         Dry
                       </span>
@@ -253,6 +260,7 @@ const BrowseWines = () => {
                           className="mb-1 mx-1 cursor-pointer"
                           onChange={handleSweetnessChange}
                           value="Medium"
+                          checked={selectedSweetness.includes("Medium")}
                         />{" "}
                         Medium
                       </span>
@@ -263,6 +271,7 @@ const BrowseWines = () => {
                           className="mb-1 mx-1 cursor-pointer"
                           onChange={handleSweetnessChange}
                           value="Sweet"
+                          checked={selectedSweetness.includes("Sweet")}
                         />{" "}
                         Sweet
                       </span>
@@ -303,6 +312,8 @@ const BrowseWines = () => {
                           id="availability"
                           type="checkbox"
                           className="mb-1 mx-1 cursor-pointer"
+                          onChange={handleAvailabilityChange}
+                          checked={selectedAvailability}
                         />{" "}
                         Only show available wines
                       </span>
@@ -346,6 +357,7 @@ const BrowseWines = () => {
                           onClick={(e) => e.stopPropagation()}
                           onChange={handleAgeChange}
                           value="Vintage"
+                          checked={selectedAge.includes("Vintage")}
                         />{" "}
                         Vintage
                       </span>
@@ -357,6 +369,7 @@ const BrowseWines = () => {
                           onClick={(e) => e.stopPropagation()}
                           onChange={handleAgeChange}
                           value="Non-vintage"
+                          checked={selectedAge.includes("Non-vintage")}
                         />{" "}
                         Non-vintage
                       </span>
@@ -400,6 +413,7 @@ const BrowseWines = () => {
                           onClick={(e) => e.stopPropagation()}
                           onChange={handleTypeChange}
                           value="Red"
+                          checked={selectedType.includes("Red")}
                         />{" "}
                         Red
                       </span>
@@ -411,6 +425,7 @@ const BrowseWines = () => {
                           onClick={(e) => e.stopPropagation()}
                           onChange={handleTypeChange}
                           value="White"
+                          checked={selectedType.includes("White")}
                         />{" "}
                         White
                       </span>
@@ -422,6 +437,7 @@ const BrowseWines = () => {
                           onClick={(e) => e.stopPropagation()}
                           onChange={handleTypeChange}
                           value="Rose"
+                          checked={selectedType.includes("Rose")}
                         />{" "}
                         Rose
                       </span>
