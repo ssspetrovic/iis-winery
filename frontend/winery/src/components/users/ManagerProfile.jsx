@@ -212,7 +212,7 @@ const ManagerProfile = () => {
             <Col>
               <div className="rounded p-4 text-center">
                 <Link
-                  to="/partnerships"
+                  to="/view-partners"
                   className="btn btn-outline-dark btn-lg"
                 >
                   <i className="fa-solid fa-handshake fa-3x"></i>

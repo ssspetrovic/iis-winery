@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Partner
 from .serializers import PartnerSerializer
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import City
@@ -30,3 +30,13 @@ class PartnerCreateAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class PartnerDeleteAPIView(DestroyAPIView):
+    queryset = Partner.objects.all()
+    serializer_class = PartnerSerializer
+    lookup_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

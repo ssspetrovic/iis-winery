@@ -8,7 +8,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partner
-        fields = ['name', 'email', 'phone_number', 'address', 'street_number', 'city']
+        fields = ['id', 'name', 'email', 'phone_number', 'address', 'street_number', 'city']
 
     def create(self, validated_data):
         city_data = validated_data.pop('city')
