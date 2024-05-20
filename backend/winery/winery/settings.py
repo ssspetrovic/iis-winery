@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'wine_production',
     'venues',
     'events',
+    'partnerships',
 ]
 
 MIDDLEWARE = [

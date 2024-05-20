@@ -36,6 +36,7 @@ import EventCreationForm from "./components/events/EventCreateionForm";
 import Events from "./components/events/Events";
 import SendInvitation from "./components/events/SendInvitation";
 import UpcomingEvents from "./components/events/UpcomingEvents";
+import AddPartner from "./components/partnerships/AddPartner";
 
 function App() {
   return (
@@ -200,6 +201,7 @@ function App() {
           <Route path="/events" element={<Events/>}/>
           <Route path="/send-invitations/:id" element={<SendInvitation/>}/>
           <Route path="/upcoming-events" element={<UpcomingEvents/>}/>
+          <Route path="/add-partner" element={<AddPartner/>}/>
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}
