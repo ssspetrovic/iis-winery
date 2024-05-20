@@ -415,7 +415,7 @@ class GenerateAdminPDF(APIView):
         elements.append(Spacer(1, 20))
 
         # Grafikon statistike modela - Pie Chart
-        add_chart_with_title_to_elements(generate_user_pie_chart, "Model Statistics Chart")
+        add_chart_with_title_to_elements(generate_user_pie_chart, "User Statistics Chart")
         elements.append(Spacer(1, 20))
 
         # Distribucija korisnika i vozila po gradovima - Bar Chart
