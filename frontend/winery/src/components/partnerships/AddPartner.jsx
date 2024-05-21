@@ -58,7 +58,7 @@ function AddPartner() {
       }
 
       // Ako grad postoji, dodaj partnera
-      const response = await axios.post(`/partnerships/`, {
+      const response = await axios.post(`/partnerships/partners/`, {
         name: partnerName,
         email: email,
         phone_number: phoneNumber,

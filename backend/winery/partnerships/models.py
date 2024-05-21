@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import City
 from datetime import date
+from django.conf import settings
 
 class Partner(models.Model):
 

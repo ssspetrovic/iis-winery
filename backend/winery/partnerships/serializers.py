@@ -1,4 +1,4 @@
-from .models import Partner
+from .models import Partner, Partnership
 from users.models import City
 from users.serializers import CitySerializer
 from rest_framework import serializers
@@ -27,3 +27,20 @@ class PartnerSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+
+class PartnershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partnership
+        fields = '__all__'
+
+    def create(self, validated_data):
+        partnership = Partnership.objects.create(**validated_data)
+        return partnership
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
+

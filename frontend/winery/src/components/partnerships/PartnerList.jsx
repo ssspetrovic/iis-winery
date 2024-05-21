@@ -13,7 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Table from "../util/Table";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Unauthorized from "../auth/Unauthorized";
 
@@ -24,11 +24,12 @@ const PartnersList = () => {
   const [selectedPartnerId, setSelectedPartnerId] = useState(null);
   const { auth } = useAuth();
   const { username, role } = auth || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/partners/");
+        const response = await axios.get("/partnerships/partners/");
         setPartners(response.data);
       } catch (error) {
         console.error("Error fetching partners data:", error);
@@ -52,7 +53,7 @@ const PartnersList = () => {
   const handleDeletePartner = async () => {
     try {
       console.log("Deleting Partner with ID: ", selectedPartnerId);
-      await axios.delete(`/partnerships/delete/${selectedPartnerId}/`);
+      await axios.delete(`/partnerships/partners/delete/${selectedPartnerId}/`);
       setPartners(partners.filter((partner) => partner.id !== selectedPartnerId));
       toggleModal(null);
       setDeleteSuccessModal(true);
@@ -104,10 +105,10 @@ const PartnersList = () => {
     { Header: "Phone Number", accessor: "phone_number" },
     {
       Header: "Actions",
-      accessor: "id",
-      Cell: ({ value }) => (
+      accessor: "actions",  // Unique accessor for Actions column
+      Cell: ({ row }) => (
         <div className="text-center">
-          <Button color="danger" size="sm" onClick={() => toggleModal(value)}>
+          <Button color="danger" size="sm" onClick={() => toggleModal(row.original.id)}>
             Delete
           </Button>
         </div>
@@ -115,10 +116,10 @@ const PartnersList = () => {
     },
     {
       Header: "Contact",
-      accessor: "contact",
-      Cell: () => (
+      accessor: "contact",  // Unique accessor for Contact column
+      Cell: ({ row }) => (
         <div className="text-center">
-          <Button color="primary" size="sm">
+          <Button color="primary" size="sm" onClick={() => navigate(`/send-contract/${row.original.id}`)}>
             Contact
           </Button>
         </div>
