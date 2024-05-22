@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import DeliveryMap from "./DeliveryMap";
 import { Card, CardBody, CardTitle, CardText, Row, Col } from "reactstrap";
@@ -7,51 +7,55 @@ const OrderPage = () => {
   const [order, setOrder] = useState("");
   const [customer, setCustomer] = useState("");
   const [driver, setDriver] = useState("");
-  const [wines, setWines] = useState([]);
+  const [items, setItems] = useState([]);
   const [winemaker, setWinemaker] = useState("");
 
   // Izvući ID narudžbine iz URL-a
   const orderId = window.location.pathname.split("/").pop();
 
-  useEffect(() => {
-    // Fetch order details and additional details about customer, driver, wines, and winemaker
-    const fetchOrderDetails = async () => {
-      try {
-        // Fetch order details
-        const orderResponse = await axios.get(`/orders/${orderId}/`);
-        const orderData = orderResponse.data;
-        setOrder(orderData);
+  // Fetch order details and additional details about customer, driver, wines, and winemaker
+  const fetchOrderDetails = async () => {
+    try {
+      // Fetch order details
+      const orderResponse = await axios.get(`/orders/${orderId}/`);
+      const orderData = orderResponse.data;
+      setOrder(orderData);
 
-        // Fetch customer details
-        const customerResponse = await axios.get(
-          `/customers/${orderData.customer}/`
-        );
-        setCustomer(customerResponse.data);
+      // Fetch customer details
+      const customerResponse = await axios.get(
+        `/customers/${orderData.customer}/`
+      );
+      setCustomer(customerResponse.data);
 
-        // Fetch driver details
+      // Fetch driver details
+      if (orderData.driver) {
         const driverResponse = await axios.get(
           `/vehicles/${orderData.driver}/`
         );
         setDriver(driverResponse.data);
-
-        // Fetch wine details
-        const winePromises = orderData.wines.map(async (wineId) => {
-          const wineResponse = await axios.get(`/wines/${wineId}/`);
-          return wineResponse.data;
-        });
-        const wineData = await Promise.all(winePromises);
-        setWines(wineData);
-
-        // Fetch winemaker details
-        const winemakerResponse = await axios.get(
-          `/winemakers/${wineData[0].winemaker}/`
-        );
-        setWinemaker(winemakerResponse.data);
-      } catch (error) {
-        console.error("Error fetching order details:", error);
       }
-    };
 
+      // Fetch item details
+      const itemPromises = orderData.items.map(async (itemId) => {
+        const itemResponse = await axios.get(`/order-items/${itemId}/`);
+        return itemResponse.data;
+      });
+
+      const itemData = await Promise.all(itemPromises);
+      setItems(itemData);
+      console.log(itemData);
+
+      // Fetch winemaker details
+      const winemakerResponse = await axios.get(
+        `/winemakers/${itemData[0].wine.winemaker}/`
+      );
+      setWinemaker(winemakerResponse.data);
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+    }
+  };
+
+  useEffect(() => {
     // Call the function to fetch order details and additional details
     fetchOrderDetails();
   }, [orderId]);
@@ -71,21 +75,28 @@ const OrderPage = () => {
             <Card>
               <CardBody>
                 <CardTitle tag="h3">Order ID: {order.id}</CardTitle>
-                <CardBody tag="h4">Wines:</CardBody>
+                <h5>
+                  Customer: <span className="lead">{customer.username}</span>
+                </h5>
+                <h5>Order items:</h5>
                 <Row>
-                  {wines.map((wine, index) => (
+                  {items.map((item, index) => (
                     <Col key={index} xs="6">
                       <Card>
                         <CardBody>
-                          <CardTitle tag="h5">{wine.name}</CardTitle>
+                          <CardTitle tag="h5">{item.wine.name}</CardTitle>
                           <CardText>
-                            Sweetness: {wine.sweetness}
+                            Sweetness: {item.wine.sweetness}
                             <br />
-                            Acidity: {wine.acidity}
+                            Acidity: {item.wine.acidity}
                             <br />
-                            Alcohol: {wine.alcohol}%
+                            Alcohol: {item.wine.alcohol}%
                             <br />
-                            pH: {wine.pH}
+                            pH: {item.wine.pH}
+                            <br />
+                            Quantity: {item.quantity}
+                            <br />
+                            Price: {item.wine.price}
                           </CardText>
                         </CardBody>
                       </Card>
@@ -99,16 +110,22 @@ const OrderPage = () => {
                 <Card>
                   <CardBody>
                     <CardTitle tag="h4">Driver Data:</CardTitle>
-                    <CardText>
-                      Name: {driver.driver_name}
-                      <br />
-                      Phone Number: {driver.phone_number}
-                      <br />
-                      Vehicle Type:{" "}
-                      {driver.vehicle_type &&
-                        driver.vehicle_type.charAt(0).toUpperCase() +
-                          driver.vehicle_type.slice(1)}
-                    </CardText>
+                    {driver ? (
+                      <CardText>
+                        Name: {driver.driver_name}
+                        <br />
+                        Phone Number: {driver.phone_number}
+                        <br />
+                        Vehicle Type:{" "}
+                        {driver.vehicle_type &&
+                          driver.vehicle_type.charAt(0).toUpperCase() +
+                            driver.vehicle_type.slice(1)}
+                      </CardText>
+                    ) : (
+                      <CardText>
+                        <span>No driver found</span>
+                      </CardText>
+                    )}
                   </CardBody>
                 </Card>
               </Col>

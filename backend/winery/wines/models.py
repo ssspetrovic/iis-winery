@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User, Customer
 from vehicles.models import Vehicle
+from django.utils.timezone import now
 
 
 class Wine(models.Model):
@@ -65,6 +66,7 @@ class Order(models.Model):
     is_delivered = models.BooleanField(default=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
     driver = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
+    datetime = models.DateTimeField(default=now)
 
     def __str__(self):
         return f"Order by {self.customer.username}"
