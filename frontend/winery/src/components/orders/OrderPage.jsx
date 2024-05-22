@@ -76,7 +76,7 @@ const OrderPage = () => {
               <CardBody>
                 <CardTitle tag="h3">Order ID: {order.id}</CardTitle>
                 <h5>
-                  Customer: <span className="lead">{customer.username}</span>
+                  Customer: <span className="">{customer.username}</span>
                 </h5>
                 <h5>Order items:</h5>
                 <Row>

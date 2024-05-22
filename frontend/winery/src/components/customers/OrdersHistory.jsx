@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Table, Button } from "reactstrap";
 
 const OrdersHistory = () => {
+  const navigate = useNavigate();
+
   const { auth } = useAuth();
   const { username } = auth || {};
   const [orders, setOrders] = useState([]);
@@ -48,29 +50,40 @@ const OrdersHistory = () => {
           </Col>
         </Row>
         <Row>
-          <Container className="w-50">
-            <div className="rounded shadow">
+          <Container className="w-75">
+            <div className="rounded shadow m-5">
               <Table hover className="rounded overflow-hidden text-center">
                 <thead>
                   <tr>
-                    <th>Order Id</th>
-                    <th>Total Price</th>
-                    <th>Accepted</th>
-                    <th>Delivered</th>
-                    <th>Order time</th>
-                    <th></th>
+                    <th className="align-middle">Order Id</th>
+                    <th className="align-middle">Total Price</th>
+                    <th className="align-middle">Accepted</th>
+                    <th className="align-middle">Delivered</th>
+                    <th className="align-middle">Order time</th>
+                    <th className="align-middle"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {orders.map((order) => (
                     <tr key={order.id}>
-                      <td>{order.id}</td>
-                      <td>{order.total_price}</td>
-                      <td>{order.is_accepted ? "Yes" : "No"}</td>
-                      <td>{order.is_delivered ? "Yes" : "No"}</td>
-                      <td>{new Date(order.datetime).toLocaleString()}</td>
-                      <td>
-                        <Button color="dark">Order Details</Button>
+                      <td className="align-middle">{order.id}</td>
+                      <td className="align-middle">{order.total_price} RSD</td>
+                      <td className="align-middle">
+                        {order.is_accepted ? "Yes" : "No"}
+                      </td>
+                      <td className="align-middle">
+                        {order.is_delivered ? "Yes" : "No"}
+                      </td>
+                      <td className="align-middle">
+                        {new Date(order.datetime).toLocaleString()}
+                      </td>
+                      <td className="align-middle">
+                        <Button
+                          color="dark"
+                          onClick={() => navigate(`/orders/${order.id}`)}
+                        >
+                          Order Details
+                        </Button>
                       </td>
                     </tr>
                   ))}
