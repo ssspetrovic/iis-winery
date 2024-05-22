@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import DeliveryMap from "./DeliveryMap";
 import { Card, CardBody, CardTitle, CardText, Row, Col } from "reactstrap";
-import "../../assets/adminStyles.css"
 
 const OrderPage = () => {
   const [order, setOrder] = useState("");
@@ -61,22 +60,22 @@ const OrderPage = () => {
     <div>
       <div className="admin-background"></div>
       <div>
-        <h1 className="text-center mt-4 mb-4">Order Details</h1>
-        <Row className="order-center order-full-width">
-          <Col xs="6" className="delivery-map">
-            <Card className="order-card" style={{ width: "600px", height: "600px", backgroundColor: "transparent" }}>
+        <h1 className="text-center mb-4">Order Details</h1>
+        <Row>
+          <Col xs="6">
+            <Card style={{ width: "600px", height: "600px" }}>
               <DeliveryMap orderId={orderId} />
             </Card>
           </Col>
           <Col xs="6">
-            <Card className="order-card" style={{backgroundColor: "transparent"}}>
+            <Card>
               <CardBody>
                 <CardTitle tag="h3">Order ID: {order.id}</CardTitle>
                 <CardBody tag="h4">Wines:</CardBody>
                 <Row>
                   {wines.map((wine, index) => (
                     <Col key={index} xs="6">
-                      <Card className="order-card order-card-animation">
+                      <Card>
                         <CardBody>
                           <CardTitle tag="h5">{wine.name}</CardTitle>
                           <CardText>
@@ -97,7 +96,7 @@ const OrderPage = () => {
             </Card>
             <Row>
               <Col xs="6">
-                <Card className="order-card">
+                <Card>
                   <CardBody>
                     <CardTitle tag="h4">Driver Data:</CardTitle>
                     <CardText>
@@ -114,7 +113,7 @@ const OrderPage = () => {
                 </Card>
               </Col>
               <Col xs="6">
-                <Card className="order-card">
+                <Card>
                   <CardBody>
                     <CardTitle tag="h4">Winemaker Data:</CardTitle>
                     <CardText>

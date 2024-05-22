@@ -23,6 +23,7 @@ import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
+import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
 import Home from "../Home";
@@ -112,6 +113,7 @@ function App() {
     // </>
     <div>
       <MainNavbar />
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}

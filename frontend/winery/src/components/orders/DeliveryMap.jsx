@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import carIconUrl from "../../assets/images/google_car.png";
 import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheckSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
 import googleAPIKey from "../../hooks/googleAPIKey";
 import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
 
@@ -282,9 +282,9 @@ const DeliveryMap = () => {
           alignItems: "center",
         }}
       >
-        <h1 className="text-center" style={{paddingTop: "100px"}}>Ova porudžbina je već izvršena! Hvala!</h1>
+        <h1 className="text-center">Ova porudžbina je već izvršena!</h1>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <FontAwesomeIcon icon={faCheck} className="check-animation" size="10x" />
+          <FontAwesomeIcon icon={faCheckSquare} size="10x" />
         </div>
       </div>
     ) : (
@@ -342,13 +342,10 @@ const DeliveryMap = () => {
   ) : (
     <div>
       {!isAccepted && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <h1 className="text-center" style={{ paddingTop: "100px" }}>Porudžbina još nije prihvaćena.</h1>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <FontAwesomeIcon icon={faTimes} size="10x" className="check-animation" />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ marginRight: "10px" }}>Porudžbina još nije prihvaćena.</p>
+          <FontAwesomeIcon icon={faTimes} size="lg" />
         </div>
-      </div>
-      
       )}{" "}
       {!isLoaded && <p>Učitavanje...</p>}
     </div>
