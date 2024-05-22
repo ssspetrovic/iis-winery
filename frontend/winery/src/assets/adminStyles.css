@@ -298,3 +298,70 @@ input[type="radio"]:checked {
   display: flex;
   justify-content: space-between;
 }
+
+.order-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-full-width {
+  width: 100%;
+}
+
+.delivery-map {
+  padding-left: 100px;
+}
+
+.order-card-animation {
+  position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.order-card-animation:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.order-card-animation::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.order-card-animation:hover::before {
+  opacity: 1;
+}
+
+.check-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInLeftPopup 2s ease-in-out infinite;
+}
+
+@keyframes fadeInLeftPopup {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%) scale(1);
+  }
+}

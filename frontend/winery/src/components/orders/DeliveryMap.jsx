@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import carIconUrl from "../../assets/images/google_car.png";
 import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import googleAPIKey from "../../hooks/googleAPIKey";
 import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
 
@@ -55,28 +55,37 @@ const DeliveryMap = () => {
 
   useEffect(() => {
     // Fetch order data from the backend
-    axios
-      .get(`/orders/${id}/`)
-      .then((response) => {
-        const orderData = response.data;
+    const fetchOrderData = async () => {
+      try {
+        const orderResponse = await axios.get(`/orders/${id}/`);
+        const orderData = orderResponse.data;
         setOrder(orderData);
 
-        axios.get(`/customers/${orderData.customer}/`).then((response) => {
-          const customerData = response.data;
-          setCustomer(customerData);
-        });
+        const customerResponse = await axios.get(
+          `/customers/${orderData.customer}/`
+        );
+        const customerData = customerResponse.data;
+        setCustomer(customerData);
 
-        axios.get(`/wines/${orderData.wines[0]}/`).then((response) => {
-          axios
-            .get(`/winemakers/${response.data.winemaker}/`)
-            .then((response) => {
-              const winemakerData = response.data;
-              setWinemaker(winemakerData);
-            });
-        });
+        const items = await Promise.all(
+          orderData.items.map(async (itemId) => {
+            const itemResponse = await axios.get(`/order-items/${itemId}/`);
+            return itemResponse.data;
+          })
+        );
+
+        if (items.length > 0) {
+          const winemakerId = items[0].wine.winemaker;
+          const winemakerResponse = await axios.get(
+            `/winemakers/${winemakerId}/`
+          );
+          const winemakerData = winemakerResponse.data;
+          setWinemaker(winemakerData);
+        }
 
         setIsAccepted(orderData.is_accepted);
         setIsDelivered(orderData.is_delivered);
+
         // Provera da li je porudžbina prihvaćena
         if (orderData.is_accepted) {
           // Poziv funkcije za optimizaciju rute i prikaz na mapi
@@ -85,11 +94,13 @@ const DeliveryMap = () => {
           console.log("Porudžbina nije prihvaćena.");
           setIsAccepted(false);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Greška pri dohvatanju podataka o porudžbini:", error);
         setIsAccepted(false);
-      });
+      }
+    };
+
+    fetchOrderData();
   }, [id]);
 
   const optimizeRouteAndDisplayMap = (orderData) => {
@@ -282,9 +293,15 @@ const DeliveryMap = () => {
           alignItems: "center",
         }}
       >
-        <h1 className="text-center">Ova porudžbina je već izvršena!</h1>
+        <h1 className="text-center" style={{ paddingTop: "100px" }}>
+          Ova porudžbina je već izvršena! Hvala!
+        </h1>{" "}
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <FontAwesomeIcon icon={faCheckSquare} size="10x" />
+          <FontAwesomeIcon
+            icon={faCheck}
+            className="check-animation"
+            size="10x"
+          />{" "}
         </div>
       </div>
     ) : (
@@ -342,9 +359,23 @@ const DeliveryMap = () => {
   ) : (
     <div>
       {!isAccepted && (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ marginRight: "10px" }}>Porudžbina još nije prihvaćena.</p>
-          <FontAwesomeIcon icon={faTimes} size="lg" />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <h1 className="text-center" style={{ paddingTop: "100px" }}>
+            Porudžbina još nije prihvaćena.
+          </h1>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <FontAwesomeIcon
+              icon={faTimes}
+              size="10x"
+              className="check-animation"
+            />
+          </div>
         </div>
       )}{" "}
       {!isLoaded && <p>Učitavanje...</p>}

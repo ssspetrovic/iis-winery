@@ -43,7 +43,6 @@ function App() {
   return (
     <div>
       <MainNavbar />
-      <NavigationBar />
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}

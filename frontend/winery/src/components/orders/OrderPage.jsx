@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import DeliveryMap from "./DeliveryMap";
 import { Card, CardBody, CardTitle, CardText, Row, Col } from "reactstrap";
+import "../../assets/adminStyles.css";
 
 const OrderPage = () => {
   const [order, setOrder] = useState("");
@@ -64,15 +65,25 @@ const OrderPage = () => {
     <div>
       <div className="admin-background"></div>
       <div>
-        <h1 className="text-center mb-4">Order Details</h1>
-        <Row>
-          <Col xs="6">
-            <Card style={{ width: "600px", height: "600px" }}>
+        <h1 className="text-center mt-4 mb-4">Order Details</h1>
+        <Row className="order-center order-full-width">
+          <Col xs="6" className="delivery-map">
+            <Card
+              className="order-card"
+              style={{
+                width: "600px",
+                height: "600px",
+                backgroundColor: "transparent",
+              }}
+            >
               <DeliveryMap orderId={orderId} />
             </Card>
           </Col>
           <Col xs="6">
-            <Card>
+            <Card
+              className="order-card"
+              style={{ backgroundColor: "transparent" }}
+            >
               <CardBody>
                 <CardTitle tag="h3">Order ID: {order.id}</CardTitle>
                 <h5>
@@ -82,7 +93,7 @@ const OrderPage = () => {
                 <Row>
                   {items.map((item, index) => (
                     <Col key={index} xs="6">
-                      <Card>
+                      <Card className="order-card order-card-animation">
                         <CardBody>
                           <CardTitle tag="h5">{item.wine.name}</CardTitle>
                           <CardText>
@@ -107,7 +118,7 @@ const OrderPage = () => {
             </Card>
             <Row>
               <Col xs="6">
-                <Card>
+                <Card className="order-card">
                   <CardBody>
                     <CardTitle tag="h4">Driver Data:</CardTitle>
                     {driver ? (
@@ -130,7 +141,7 @@ const OrderPage = () => {
                 </Card>
               </Col>
               <Col xs="6">
-                <Card>
+                <Card className="order-card">
                   <CardBody>
                     <CardTitle tag="h4">Winemaker Data:</CardTitle>
                     <CardText>
