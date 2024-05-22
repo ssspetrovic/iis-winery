@@ -20,6 +20,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import useGoogleMapsApiKey from "../../hooks/googleAPIKey";
+import "../../assets/adminStyles.css";
+import Spinner from "../util/LoadingSpinner";
 
 // Add your Google Maps API key here
 // Define map container style and default center coordinates
@@ -45,6 +47,7 @@ const WinemakerOrdersPage = () => {
   const { auth } = useAuth();
   const { username, role } = auth || {};
   const googleMapsApiKey = useGoogleMapsApiKey();
+  const [loading, setLoading] = useState(true);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -118,7 +121,7 @@ const WinemakerOrdersPage = () => {
             winemakerOrders.push(orderWithCustomer);
           }
         }
-
+        setLoading(false);
         setOrders(winemakerOrders);
       } catch (error) {
         console.error("Error fetching winemaker's orders:", error);
@@ -195,212 +198,234 @@ const WinemakerOrdersPage = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h1 className="text-center">Winemaker Orders</h1>
-          {orders.length > 0 ? (
-            <ul className="list-unstyled row row-cols-3 column column-gap-9">
-              {orders.map((order) => (
-                <li
-                  key={order.id}
-                  className="my-3 border p-3 col-sm-5 mx-auto order-card"
-                  style={{ position: "relative", color: "black" }}
-                >
-                  <FontAwesomeIcon
-                    icon={faWineBottle}
-                    style={{
-                      position:
-                        "absolute" /* Postavljamo ikonu na fiksnu poziciju */,
-                      top: "130px" /* Pomeramo ikonu na dno ekrana */,
-                      right: "0" /* Pomeramo ikonu na desni kraj ekrana */,
-                      fontSize: "400px",
-                      color: "black",
-                      opacity: "0.7",
-                      zIndex:
-                        "-1" /* Postavljamo z-index na negativnu vrednost kako bi ikona bila ispod ostalih elemenata */,
-                    }}
-                  />
-                  <p>
-                    <strong>Order ID:</strong> {order.id}
-                  </p>
-                  <p>
-                    <strong>Customer:</strong> {order.customerData.first_name}{" "}
-                    {order.customerData.last_name}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {order.customerData.email}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {order.customerData.address}{" "}
-                    {order.customerData.street_number}
-                    {", "}
-                    {order.customerData.city.name}{" "}
-                    {order.customerData.city.postal_code}
-                  </p>
-                  <h3 className="mt-4">
-                    <strong>Wines:</strong>
-                  </h3>
-                  <ul className="list-unstyled row row-cols-3 column column-gap-9">
-                    {order.winesData.map((wine) => (
-                      <li
-                        key={wine.id}
-                        className="my-3  p-2 col-md-6 mx-7 mb-3"
-                      >
-                        <Card
-                          className="h-100"
-                          style={{
-                            backgroundColor: "#fafafa",
-                            color: "black",
-                          }}
-                        >
-                          <CardBody>
-                            <CardTitle tag="h5">{wine.name}</CardTitle>
-                            <CardText>
-                              <b>Sweetness:</b> {wine.sweetness}
-                              <br />
-                              <b>Alcohol:</b> {wine.alcohol}%
-                              <br />
-                              <b>Quantity:</b> {wine.quantity}
-                              <br />
-                              <b>Type:</b> {wine.type}
-                              <br />
-                              <b>Age:</b> {wine.age}
-                            </CardText>
-                          </CardBody>
-                        </Card>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    onClick={() => {
-                      setSelectedOrder(order);
-                      toggleModal();
-                    }}
-                    className="accept-order-button admin-button-black"
-                  >
-                    Accept Order
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No winemaker orders available</p>
-          )}
-        </Col>
-      </Row>
-      {/* Modal section */}
-      <Modal
-        isOpen={modal}
-        toggle={toggleModal}
-        className="order-modal-content"
-      >
-        <ModalHeader toggle={toggleModal} className="order-modal-header">
-          Accept Order
-        </ModalHeader>
-        <ModalBody>
+    <div>
+      {" "}
+      <div className="admin-background"></div>
+      {loading ? (
+        <div className="spinner-container">
+          <Spinner />
+        </div>
+      ) : (
+        <Container>
           <Row>
-          <select
-                value={selectedVehicle}
-                onChange={handleVehicleChange}
-                className="form-control order-form-control"
-              >
-                <option value="">Select Vehicle</option>
-                {vehicles.map((vehicle) => (
-                  <option key={vehicle.id} value={vehicle.id}>
-                    {vehicle.driver_name}
-                  </option>
-                ))}
-              </select>
             <Col>
-              
-              {selectedVehicleData && (
-                <div>
-                  <h4 className="mt-4 mb-4">Selected Vehicle Data</h4>
-                  <p>
-                    <strong>Driver Name:</strong>{" "}
-                    {selectedVehicleData.driver_name}
-                  </p>
-                  <p>
-                    <strong>Capacity:</strong>{" "}
-                    {selectedVehicleData.capacity === 1
-                      ? `${selectedVehicleData.capacity} ton`
-                      : `${selectedVehicleData.capacity} tons`}
-                  </p>
-                  <p>
-                    <strong>Phone Number:</strong>{" "}
-                    {selectedVehicleData.phone_number}
-                  </p>
-                  <p>
-                    <strong>Vehicle Type:</strong>{" "}
-                    {selectedVehicleData.vehicle_type.charAt(0).toUpperCase() +
-                      selectedVehicleData.vehicle_type.slice(1)}
-                  </p>
-                  <p>
-                    <strong>Address:</strong> {selectedVehicleData.address}{" "}
-                    {selectedVehicleData.street_number}
-                  </p>
-                  <p>
-                    <strong>City:</strong> {selectedVehicleData.city.name}
-                  </p>
-                </div>
+              <h1 className="text-center mt-4 mb-4">Winemaker Orders</h1>
+              {orders.length > 0 ? (
+                <ul className="list-unstyled row row-cols-3 column column-gap-9">
+                  {orders.map((order) => (
+                    <li
+                      key={order.id}
+                      className="my-3 border p-3 col-sm-5 mx-auto order-card order-card-animation"
+                      style={{ position: "relative", color: "black" }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faWineBottle}
+                        style={{
+                          position:
+                            "absolute" /* Postavljamo ikonu na fiksnu poziciju */,
+                          top: "130px" /* Pomeramo ikonu na dno ekrana */,
+                          right: "0" /* Pomeramo ikonu na desni kraj ekrana */,
+                          fontSize: "400px",
+                          color: "black",
+                          opacity: "0.7",
+                          zIndex:
+                            "-1" /* Postavljamo z-index na negativnu vrednost kako bi ikona bila ispod ostalih elemenata */,
+                        }}
+                      />
+                      <p>
+                        <strong>Order ID:</strong> {order.id}
+                      </p>
+                      <p>
+                        <strong>Customer:</strong>{" "}
+                        {order.customerData.first_name}{" "}
+                        {order.customerData.last_name}
+                      </p>
+                      <p>
+                        <strong>Email:</strong> {order.customerData.email}
+                      </p>
+                      <p>
+                        <strong>Address:</strong> {order.customerData.address}{" "}
+                        {order.customerData.street_number}
+                        {", "}
+                        {order.customerData.city.name}{" "}
+                        {order.customerData.city.postal_code}
+                      </p>
+                      <h3 className="mt-4">
+                        <strong>Wines:</strong>
+                      </h3>
+                      <ul className="list-unstyled row row-cols-3 column column-gap-9">
+                        {order.winesData.map((wine) => (
+                          <li
+                            key={wine.id}
+                            className="my-3  p-2 col-md-6 mx-7 mb-3"
+                          >
+                            <Card
+                              className="h-100 order-card-animation"
+                              style={{
+                                backgroundColor: "#fafafa",
+                                color: "black",
+                              }}
+                            >
+                              <CardBody>
+                                <CardTitle tag="h5">{wine.name}</CardTitle>
+                                <CardText>
+                                  <b>Sweetness:</b> {wine.sweetness}
+                                  <br />
+                                  <b>Alcohol:</b> {wine.alcohol}%
+                                  <br />
+                                  <b>Quantity:</b> {wine.quantity}
+                                  <br />
+                                  <b>Type:</b> {wine.type}
+                                  <br />
+                                  <b>Age:</b> {wine.age}
+                                </CardText>
+                              </CardBody>
+                            </Card>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          toggleModal();
+                        }}
+                        className="accept-order-button admin-button-black"
+                      >
+                        Accept Order
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No winemaker orders available</p>
               )}
             </Col>
-            <Col>
-              <div>
-                {isLoaded && vehicleLatLng && (
-                  <div>
-                    <h3 className="text-center mt-4">Vehicle Location</h3>
-                    <div
-                      style={{
-                        border: "1px solid black",
-                        borderRadius: "5px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <GoogleMap
-                        mapContainerStyle={mapContainerStyle}
-                        zoom={15}
-                        center={{
-                          lat: vehicleLatLng.lat,
-                          lng: vehicleLatLng.lng,
-                        }}
-                      >
-                        {/* Marker za prikaz lokacije vozila */}
-                        <Marker
-                          position={{
-                            lat: vehicleLatLng.lat,
-                            lng: vehicleLatLng.lng,
-                          }}
-                        />
-                      </GoogleMap>
-                    </div>{" "}
-                  </div>
-                )}
-              </div>
-            </Col>
           </Row>
-        </ModalBody>
-
-        <ModalFooter className="order-modal-footer">
-          <Button
-            className="admin-button-black"
-            onClick={handleAcceptOrder}
-            disabled={!isVehicleSelected}
+          {/* Modal section */}
+          <Modal
+            isOpen={modal}
+            toggle={toggleModal}
+            className="order-modal-content"
+            style={{ paddingTop: "100px" }}
           >
-            Confirm
-          </Button>
-          <Button color="secondary" onClick={toggleModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      {/* Confirmation modal */}
-      <ConfirmationModal
-        isOpen={confirmationModalOpen}
-        toggle={() => setConfirmationModalOpen(false)}
-      />
-    </Container>
+            <ModalHeader toggle={toggleModal} className="order-modal-header">
+              Accept Order
+            </ModalHeader>
+            <ModalBody>
+              <Row>
+                <select
+                  value={selectedVehicle}
+                  onChange={handleVehicleChange}
+                  className="form-control order-form-control"
+                >
+                  <option value="">Select Vehicle</option>
+                  {vehicles.map((vehicle) => (
+                    <option key={vehicle.id} value={vehicle.id}>
+                      {vehicle.driver_name}
+                    </option>
+                  ))}
+                </select>
+                <Col style={{ paddingTop: "100px" }}>
+                  <Card
+                    className="order-card-animation"
+                    style={{ color: "black" }}
+                  >
+                    <CardBody>
+                      <CardTitle tag="h4">Selected Vehicle Data:</CardTitle>
+                      {selectedVehicleData && (
+                        <CardText>
+                          <p>
+                            <strong>Driver Name:</strong>{" "}
+                            {selectedVehicleData.driver_name}
+                          </p>
+                          <p>
+                            <strong>Capacity:</strong>{" "}
+                            {selectedVehicleData.capacity === 1
+                              ? `${selectedVehicleData.capacity} ton`
+                              : `${selectedVehicleData.capacity} tons`}
+                          </p>
+                          <p>
+                            <strong>Phone Number:</strong>{" "}
+                            {selectedVehicleData.phone_number}
+                          </p>
+                          <p>
+                            <strong>Vehicle Type:</strong>{" "}
+                            {selectedVehicleData.vehicle_type
+                              .charAt(0)
+                              .toUpperCase() +
+                              selectedVehicleData.vehicle_type.slice(1)}
+                          </p>
+                          <p>
+                            <strong>Address:</strong>{" "}
+                            {selectedVehicleData.address}{" "}
+                            {selectedVehicleData.street_number}
+                          </p>
+                          <p>
+                            <strong>City:</strong>{" "}
+                            {selectedVehicleData.city.name}
+                          </p>
+                        </CardText>
+                      )}
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col>
+                  <div>
+                    {isLoaded && vehicleLatLng && (
+                      <div>
+                        <h3 className="text-center mt-4">Vehicle Location</h3>
+                        <div
+                          style={{
+                            border: "1px solid black",
+                            borderRadius: "5px",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <GoogleMap
+                            mapContainerStyle={mapContainerStyle}
+                            zoom={15}
+                            center={{
+                              lat: vehicleLatLng.lat,
+                              lng: vehicleLatLng.lng,
+                            }}
+                          >
+                            {/* Marker za prikaz lokacije vozila */}
+                            <Marker
+                              position={{
+                                lat: vehicleLatLng.lat,
+                                lng: vehicleLatLng.lng,
+                              }}
+                            />
+                          </GoogleMap>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+            </ModalBody>
+
+            <ModalFooter className="order-modal-footer">
+              <Button
+                className="admin-button-black"
+                onClick={handleAcceptOrder}
+                disabled={!isVehicleSelected}
+              >
+                Confirm
+              </Button>
+              <Button color="secondary" onClick={toggleModal}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+          {/* Confirmation modal */}
+          <ConfirmationModal
+            isOpen={confirmationModalOpen}
+            toggle={() => setConfirmationModalOpen(false)}
+          />
+        </Container>
+      )}
+    </div>
   );
 };
 

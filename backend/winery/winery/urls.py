@@ -23,6 +23,8 @@ from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerV
 from vehicles.views import VehicleViewSet
 from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, ShoppingCartViewSet, OrderItemViewSet
 from wine_production.views import WineCellarViewSet, WineTankViewSet
+from venues.views import VenueViewSet
+from events.views import EventViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -41,6 +43,8 @@ router.register(r'wine-tanks', WineTankViewSet)
 router.register(r'carts', ShoppingCartViewSet)
 router.register(r'cart-items', ShoppingCartItemViewSet)
 router.register(r'order-items', OrderItemViewSet)
+router.register(r'venues', VenueViewSet)
+router.register(r'events', EventViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -49,6 +53,8 @@ urlpatterns = [
     path('api/vehicles/', include('vehicles.urls'), name='vehicles'),
     path('api/wines/', include('wines.urls'), name='wines'),
     path('api/wine-prod/', include('wine_production.urls'), name='wine_production'),
+    path('api/venues/', include('venues.urls'), name='venues'),
+    path('api/event/', include('events.urls'), name='events'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 

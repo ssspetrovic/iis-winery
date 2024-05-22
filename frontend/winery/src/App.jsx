@@ -23,15 +23,20 @@ import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
 import OrderPage from "./components/orders/OrderPage";
-import NavigationBar from "./components/util/WinemakerNavbar";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
 import Home from "../Home";
 import Orders from "./components/orders/OrderTest";
+import AdminReport from "./components/pdf/AdminReport";
 
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
+import VenueList from "./components/venues/VenueList";
+import EventCreationForm from "./components/events/EventCreateionForm";
+import Events from "./components/events/Events";
+import SendInvitation from "./components/events/SendInvitation";
+import UpcomingEvents from "./components/events/UpcomingEvents";
 
 function App() {
   return (
@@ -107,7 +112,6 @@ function App() {
     // </>
     <div>
       <MainNavbar />
-      <NavigationBar />
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
@@ -134,6 +138,13 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
             <Route path="/admin-profile/:username" element={<AdminProfile />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
+            <Route
+              path="/admin-profile/:username/generate-pdf"
+              element={<AdminReport />}
+            />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
@@ -186,6 +197,11 @@ function App() {
           <Route path="/add-vehicle" element={<AddVehicle />} />
           <Route path="/update-vehicle" element={<UpdateVehicle />} />
           <Route path="/view-reports" element={<ReportList />} />
+          <Route path="/view-venues" element={<VenueList />} />
+          <Route path="/create-event" element={<EventCreationForm />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/send-invitations/:id" element={<SendInvitation />} />
+          <Route path="/upcoming-events" element={<UpcomingEvents />} />
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}

@@ -13,7 +13,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from "reactstrap";
 import "../../assets/styles.css";
 
@@ -90,134 +90,145 @@ function AddVehicle() {
   const successModalContent = (
     <Modal isOpen={successModal} toggle={() => setSuccessModal(false)}>
       <ModalHeader toggle={() => setSuccessModal(false)}>Success</ModalHeader>
-      <ModalBody>
-        Vehicle Successfully Added
-      </ModalBody>
+      <ModalBody>Vehicle Successfully Added</ModalBody>
       <ModalFooter>
-        <Button style={{ backgroundColor: "#4a5568" }} onClick={() => setSuccessModal(false)}>Close</Button>
+        <Button
+          style={{ backgroundColor: "#4a5568" }}
+          onClick={() => setSuccessModal(false)}
+        >
+          Close
+        </Button>
       </ModalFooter>
     </Modal>
   );
 
   return (
-    <Container className="registration-container">
-      <div className="registration-box">
-        <h1 className="text-center mb-4" style={{ color: "black" }}>
-          Add New Vehicle
-        </h1>
-        <Form onSubmit={handleSubmit}>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="driverName">Driver Name</Label>
-                <Input
-                  type="text"
-                  id="driverName"
-                  value={driverName}
-                  onChange={(e) => setDriverName(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="capacity">Capacity</Label>
-                <Input
-                  type="number"
-                  id="capacity"
-                  value={capacity}
-                  onChange={(e) => setCapacity(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="address">Address</Label>
-                <Input
-                  type="text"
-                  id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="streetNumber">Street Number</Label>
-                <Input
-                  type="number"
-                  id="streetNumber"
-                  value={streetNumber}
-                  onChange={(e) => setStreetNumber(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="phoneNumber">Phone Number</Label>
-                <Input
-                  type="text"
-                  id="phoneNumber"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup className="select-wrapper">
-                <Label for="vehicleType">Vehicle Type</Label>
-                <Input
-                  type="select"
-                  id="vehicleType"
-                  value={vehicleType}
-                  onChange={(e) => setVehicleType(e.target.value)}
-                  className="form-control"
-                >
-                  <option value="">Select Vehicle Type</option>
-                  <option value="scooter">Scooter</option>
-                  <option value="truck">Truck</option>
-                  <option value="van">Van</option>
-                  <option value="motorcycle">Motorcycle</option>
-                  <option value="bicycle">Bicycle</option>
-                </Input>
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="mx-auto">
-              <FormGroup>
-                <Label for="city">City</Label>
-                <Input
-                  type="text"
-                  id="city"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="form-control"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <div className="d-flex justify-content-between">
-            <Button type="submit" color="primary" className="mr-2 admin-button-black">
-              Add Vehicle
-            </Button>
-            <Button color="secondary" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </div>
-        </Form>
-      </div>
-      {successModalContent}
-    </Container>
+    <div>
+      {" "}
+      <div className="admin-background"></div>
+      <Container className="registration-container">
+        <div className="registration-box">
+          <h1 className="text-center mb-4" style={{ color: "black" }}>
+            Add New Vehicle
+          </h1>
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="driverName">Driver Name</Label>
+                  <Input
+                    type="text"
+                    id="driverName"
+                    value={driverName}
+                    onChange={(e) => setDriverName(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="capacity">Capacity</Label>
+                  <Input
+                    type="number"
+                    id="capacity"
+                    value={capacity}
+                    onChange={(e) => setCapacity(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="address">Address</Label>
+                  <Input
+                    type="text"
+                    id="address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="streetNumber">Street Number</Label>
+                  <Input
+                    type="number"
+                    id="streetNumber"
+                    value={streetNumber}
+                    onChange={(e) => setStreetNumber(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="phoneNumber">Phone Number</Label>
+                  <Input
+                    type="text"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup className="select-wrapper">
+                  <Label for="vehicleType">Vehicle Type</Label>
+                  <Input
+                    type="select"
+                    id="vehicleType"
+                    value={vehicleType}
+                    onChange={(e) => setVehicleType(e.target.value)}
+                    className="form-control"
+                  >
+                    <option value="">Select Vehicle Type</option>
+                    <option value="scooter">Scooter</option>
+                    <option value="truck">Truck</option>
+                    <option value="van">Van</option>
+                    <option value="motorcycle">Motorcycle</option>
+                    <option value="bicycle">Bicycle</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="mx-auto">
+                <FormGroup>
+                  <Label for="city">City</Label>
+                  <Input
+                    type="text"
+                    id="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="form-control"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <div className="d-flex justify-content-between">
+              <Button
+                type="submit"
+                color="primary"
+                className="mr-2 admin-button-black"
+              >
+                Add Vehicle
+              </Button>
+              <Button color="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
+          </Form>
+        </div>
+        {successModalContent}
+      </Container>
+    </div>
   );
 }
 

@@ -160,69 +160,78 @@ const VehiclesList = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          {role === "ADMIN" ? (
-            <>
-              <div className="mb-8">
-                <h1 className="text-xl font-semibold">Vehicles List</h1>
-                <div className="mt-4">
-                  <Table columns={vehicleColumns} data={vehiclesWithAddress} />
+    <div>
+      <div className="admin-background"></div>
+      <Container>
+        <Row>
+          <Col>
+            {role === "ADMIN" ? (
+              <>
+                <div className="mb-8">
+                  <h1 className="text-xl font-semibold">Vehicles List</h1>
+                  <div className="mt-4">
+                    <Table
+                      columns={vehicleColumns}
+                      data={vehiclesWithAddress}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 mb-4 d-flex justify-content-between">
-                <Link
-                  to="/add-vehicle"
-                  className="btn view-user-btn btn-lg"
-                  style={{ borderWidth: "3px", borderRadius: "20px" }}
-                >
-                  <i>
-                    <FontAwesomeIcon icon={faPen} className="mr-2" /> Register
-                    New Worker{" "}
-                  </i>
-                </Link>
+                <div className="mt-4 mb-4 d-flex justify-content-between">
+                  <Link
+                    to="/add-vehicle"
+                    className="btn view-user-btn btn-lg"
+                    style={{ borderWidth: "3px", borderRadius: "20px" }}
+                  >
+                    <i>
+                      <FontAwesomeIcon icon={faPen} className="mr-2" /> Register
+                      New Worker{" "}
+                    </i>
+                  </Link>
 
-                <Link
-                  to={getProfileLink()}
-                  className="btn view-user-btn btn-lg"
-                  style={{ borderWidth: "3px", borderRadius: "20px" }}
-                >
-                  <i>
-                    <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go
-                    Back
-                  </i>
-                </Link>
+                  <Link
+                    to={getProfileLink()}
+                    className="btn view-user-btn btn-lg"
+                    style={{ borderWidth: "3px", borderRadius: "20px" }}
+                  >
+                    <i>
+                      <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go
+                      Back
+                    </i>
+                  </Link>
 
-                <Link
-                  to="/update-vehicle"
-                  className="btn view-user-btn btn-lg"
-                  style={{ borderWidth: "3px", borderRadius: "20px" }}
-                >
-                  <i>
-                    <FontAwesomeIcon icon={faSync} className="mr-2" /> Update
-                    Worker{" "}
-                  </i>
-                </Link>
-              </div>
-            </>
-          ) : role === "WINEMAKER" ? (
-            <>
-              <div className="mb-8">
-                <h1 className="text-xl font-semibold">Vehicles List</h1>
-                <div className="mt-4">
-                  <Table columns={vehicleColumns} data={vehiclesWithAddress} />
+                  <Link
+                    to="/update-vehicle"
+                    className="btn view-user-btn btn-lg"
+                    style={{ borderWidth: "3px", borderRadius: "20px" }}
+                  >
+                    <i>
+                      <FontAwesomeIcon icon={faSync} className="mr-2" /> Update
+                      Worker{" "}
+                    </i>
+                  </Link>
                 </div>
-              </div>
-            </>
-          ) : (
-            <Unauthorized />
-          )}
-        </Col>
-      </Row>
-      {confirmDeleteModal}
-      {deleteSuccessModalContent}
-    </Container>
+              </>
+            ) : role === "WINEMAKER" ? (
+              <>
+                <div className="mb-8">
+                  <h1 className="text-xl font-semibold">Vehicles List</h1>
+                  <div className="mt-4">
+                    <Table
+                      columns={vehicleColumns}
+                      data={vehiclesWithAddress}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Unauthorized />
+            )}
+          </Col>
+        </Row>
+        {confirmDeleteModal}
+        {deleteSuccessModalContent}
+      </Container>
+    </div>
   );
 };
 

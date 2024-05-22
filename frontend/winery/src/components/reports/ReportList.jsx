@@ -148,125 +148,133 @@ const ReportList = () => {
   };
 
   return (
-    <Container>
-      <div className="mb-8">
-        <h1 className="text-xl font-semibold">Report List</h1>
-        <div className="mt-4 mb-4 d-flex justify-content-between">
-          <Link
-            to={getProfileLink()}
-            className="btn view-user-btn btn-lg"
-            style={{ borderWidth: "3px", borderRadius: "20px" }}
-          >
-            <i>
-              <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
-            </i>
-          </Link>
-        </div>
-        <div className="mt-4">
-          <Table columns={reportColumns} data={filteredReports} />
-          {role !== "ADMIN" && (
-            <Button
-              color="danger"
-              onClick={toggleReportModal}
-              className="btn-lg mx-auto d-block mt-4"
-            >
-              Report a Problem
-            </Button>
-          )}
-        </div>
-      </div>
-      {/* Modal components */}
-      {/* Confirm Modal */}
-      <Modal isOpen={confirmModal} toggle={toggleConfirmModal}>
-        <ModalHeader toggle={toggleConfirmModal}>Report Successful</ModalHeader>
-        <ModalBody>
-          <h4>Thank you for your patience!</h4>
-        </ModalBody>
-        <ModalFooter>
-          {role === "CUSTOMER" && (
+    <div>
+      <div className="admin-background"></div>
+      <Container>
+        <div className="mb-8">
+          <h1 className="text-xl font-semibold">Report List</h1>
+          <div className="mt-4 mb-4 d-flex justify-content-between">
             <Link
-              to={`/customer-profile/${username}`}
-              className="view-user-btn"
+              to={getProfileLink()}
+              className="btn view-user-btn btn-lg"
+              style={{ borderWidth: "3px", borderRadius: "20px" }}
             >
-              Go Back
+              <i>
+                <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
+              </i>
             </Link>
-          )}
-          {role === "MANAGER" && (
-            <Button
-              onClick={() => {
-                window.location.href = `/manager-profile/${username}`;
-              }}
-              className="admin-button-black"
-            >
-              Go Back
+          </div>
+          <div className="mt-4">
+            <Table columns={reportColumns} data={filteredReports} />
+            {role !== "ADMIN" && (
+              <Button
+                color="danger"
+                onClick={toggleReportModal}
+                className="btn-lg mx-auto d-block mt-4"
+              >
+                Report a Problem
+              </Button>
+            )}
+          </div>
+        </div>
+        {/* Modal components */}
+        {/* Confirm Modal */}
+        <Modal isOpen={confirmModal} toggle={toggleConfirmModal}>
+          <ModalHeader toggle={toggleConfirmModal}>
+            Report Successful
+          </ModalHeader>
+          <ModalBody>
+            <h4>Thank you for your patience!</h4>
+          </ModalBody>
+          <ModalFooter>
+            {role === "CUSTOMER" && (
+              <Link
+                to={`/customer-profile/${username}`}
+                className="view-user-btn"
+              >
+                Go Back
+              </Link>
+            )}
+            {role === "MANAGER" && (
+              <Button
+                onClick={() => {
+                  window.location.href = `/manager-profile/${username}`;
+                }}
+                className="admin-button-black"
+              >
+                Go Back
+              </Button>
+            )}
+          </ModalFooter>
+        </Modal>
+        {/* Admin Confirm Modal */}
+        <Modal isOpen={adminConfirmModal} toggle={toggleAdminConfirmModal}>
+          <ModalHeader toggle={toggleAdminConfirmModal}>Success</ModalHeader>
+          <ModalBody>
+            <h4>Reply has been sent to the reporter</h4>
+          </ModalBody>
+          <ModalFooter>
+            <ModalFooter>
+              <Button
+                onClick={() => {
+                  window.location.href = `/admin-profile/${username}`;
+                }}
+                className="admin-button-black"
+              >
+                Go Back
+              </Button>
+            </ModalFooter>{" "}
+          </ModalFooter>
+        </Modal>
+        {/* Reply Modal */}
+        <Modal isOpen={replyModal} toggle={toggleReplyModal}>
+          <ModalHeader toggle={toggleReplyModal}>Reply to Report</ModalHeader>
+          <ModalBody>
+            <textarea
+              className="form-control"
+              value={replyText}
+              style={{ boxShadow: "none", borderColor: "black" }}
+              onChange={(e) => setReplyText(e.target.value)}
+              rows="4"
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button className="admin-button-black" onClick={handleReply}>
+              Reply
+            </Button>{" "}
+            <Button color="secondary" onClick={toggleReplyModal}>
+              Cancel
             </Button>
-          )}
-        </ModalFooter>
-      </Modal>
-      {/* Admin Confirm Modal */}
-      <Modal isOpen={adminConfirmModal} toggle={toggleAdminConfirmModal}>
-        <ModalHeader toggle={toggleAdminConfirmModal}>Success</ModalHeader>
-        <ModalBody>
-          <h4>Reply has been sent to the reporter</h4>
-        </ModalBody>
-        <ModalFooter>
+          </ModalFooter>
+        </Modal>
+        {/* Report Modal */}
+        <Modal isOpen={reportModal} toggle={toggleReportModal}>
+          <ModalHeader toggle={toggleReportModal} color="black">
+            Report a Problem
+          </ModalHeader>
+          <ModalBody>
+            <textarea
+              className="form-control"
+              value={newReport}
+              style={{ boxShadow: "none", borderColor: "black" }}
+              onChange={(e) => setNewReport(e.target.value)}
+              rows="4"
+            />
+          </ModalBody>
           <ModalFooter>
             <Button
-              onClick={() => {
-                window.location.href = `/admin-profile/${username}`;
-              }}
               className="admin-button-black"
+              onClick={handleReportProblem}
             >
-              Go Back
+              Submit
+            </Button>{" "}
+            <Button color="secondary" onClick={toggleReportModal}>
+              Cancel
             </Button>
-          </ModalFooter>{" "}
-        </ModalFooter>
-      </Modal>
-      {/* Reply Modal */}
-      <Modal isOpen={replyModal} toggle={toggleReplyModal}>
-        <ModalHeader toggle={toggleReplyModal}>Reply to Report</ModalHeader>
-        <ModalBody>
-          <textarea
-            className="form-control"
-            value={replyText}
-            style={{ boxShadow: "none", borderColor: "black" }}
-            onChange={(e) => setReplyText(e.target.value)}
-            rows="4"
-          />
-        </ModalBody>
-        <ModalFooter>
-          <Button className="admin-button-black" onClick={handleReply}>
-            Reply
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleReplyModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      {/* Report Modal */}
-      <Modal isOpen={reportModal} toggle={toggleReportModal}>
-        <ModalHeader toggle={toggleReportModal} color="black">
-          Report a Problem
-        </ModalHeader>
-        <ModalBody>
-          <textarea
-            className="form-control"
-            value={newReport}
-            style={{ boxShadow: "none", borderColor: "black" }}
-            onChange={(e) => setNewReport(e.target.value)}
-            rows="4"
-          />
-        </ModalBody>
-        <ModalFooter>
-          <Button className="admin-button-black" onClick={handleReportProblem}>
-            Submit
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleReportModal}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </Container>
+          </ModalFooter>
+        </Modal>
+      </Container>
+    </div>
   );
 };
 

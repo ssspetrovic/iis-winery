@@ -123,108 +123,111 @@ const ViewUsers = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 admin-container">
-      <h1 className="mb-5 text-center" style={{ color: "#4a5568" }}>
-        View Users
-      </h1>
-      <div className="mt-4 mb-4 d-flex justify-content-between">
-        <Link
-          to="/register-worker"
-          className="btn view-user-btn btn-lg"
-          style={{ borderWidth: "3px", borderRadius: "20px" }}
-        >
-          <i>
-            <FontAwesomeIcon icon={faPen} className="mr-2" /> Register New
-            Worker{" "}
-          </i>
-        </Link>
+    <div>
+      <div className="admin-background"></div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 admin-container">
+        <h1 className="mb-5 text-center" style={{ color: "#4a5568" }}>
+          View Users
+        </h1>
+        <div className="mt-4 mb-4 d-flex justify-content-between">
+          <Link
+            to="/register-worker"
+            className="btn view-user-btn btn-lg"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
+            <i>
+              <FontAwesomeIcon icon={faPen} className="mr-2" /> Register New
+              Worker{" "}
+            </i>
+          </Link>
 
-        <Link
-          to="/admin-profile/:username"
-          className="btn view-user-btn btn-lg"
-          style={{ borderWidth: "3px", borderRadius: "20px" }}
-        >
-          <i>
-            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
-          </i>
-        </Link>
+          <Link
+            to="/admin-profile/:username"
+            className="btn view-user-btn btn-lg"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
+            <i>
+              <FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Go Back
+            </i>
+          </Link>
 
-        <Link
-          to="/update-worker"
-          className="btn view-user-btn btn-lg"
-          style={{ borderWidth: "3px", borderRadius: "20px" }}
-        >
-          <i>
-            <FontAwesomeIcon icon={faSync} className="mr-2" /> Update Worker{" "}
-          </i>
-        </Link>
+          <Link
+            to="/update-worker"
+            className="btn view-user-btn btn-lg"
+            style={{ borderWidth: "3px", borderRadius: "20px" }}
+          >
+            <i>
+              <FontAwesomeIcon icon={faSync} className="mr-2" /> Update Worker{" "}
+            </i>
+          </Link>
+        </div>
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-xl font-semibold">Customers</h1>
+            <div className="mt-4 mb-4">
+              <div className="search-container">
+                <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                <input
+                  type="text"
+                  className="admin-search"
+                  placeholder="Search..."
+                  value={customerSearchText}
+                  onChange={(e) => setCustomerSearchText(e.target.value)}
+                />
+              </div>
+              <Table
+                columns={customersColumns}
+                data={customersTable.filter((customer) =>
+                  filterCustomers(customer, customerSearchText)
+                )}
+              />
+            </div>
+          </div>
+          <div className="mb-8">
+            <h1 className="text-xl font-semibold">Winemakers</h1>
+            <div className="mt-4 mb-4">
+              <div className="search-container">
+                <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                <input
+                  type="text"
+                  className="admin-search"
+                  placeholder="Search..."
+                  value={winemakerSearchText}
+                  onChange={(e) => setWinemakerSearchText(e.target.value)}
+                />
+              </div>
+              <Table
+                columns={winemakersColumns}
+                data={winemakersTable.filter((winemaker) =>
+                  filterWinemakers(winemaker, winemakerSearchText)
+                )}
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold">Managers</h1>
+            <div className="mt-4 mb-4">
+              <div className="search-container">
+                <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                <input
+                  type="text"
+                  className="admin-search"
+                  placeholder="Search..."
+                  value={managerSearchText}
+                  onChange={(e) => setManagerSearchText(e.target.value)}
+                />
+              </div>
+              <Table
+                columns={managersColumns}
+                data={managersTable.filter((manager) =>
+                  filterManagers(manager, managerSearchText)
+                )}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="whitespace">.</div>
       </div>
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold">Customers</h1>
-          <div className="mt-4 mb-4">
-            <div className="search-container">
-              <FontAwesomeIcon icon={faSearch} className="search-icon" />
-              <input
-                type="text"
-                className="admin-search"
-                placeholder="Search..."
-                value={customerSearchText}
-                onChange={(e) => setCustomerSearchText(e.target.value)}
-              />
-            </div>
-            <Table
-              columns={customersColumns}
-              data={customersTable.filter((customer) =>
-                filterCustomers(customer, customerSearchText)
-              )}
-            />
-          </div>
-        </div>
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold">Winemakers</h1>
-          <div className="mt-4 mb-4">
-            <div className="search-container">
-              <FontAwesomeIcon icon={faSearch} className="search-icon" />
-              <input
-                type="text"
-                className="admin-search"
-                placeholder="Search..."
-                value={winemakerSearchText}
-                onChange={(e) => setWinemakerSearchText(e.target.value)}
-              />
-            </div>
-            <Table
-              columns={winemakersColumns}
-              data={winemakersTable.filter((winemaker) =>
-                filterWinemakers(winemaker, winemakerSearchText)
-              )}
-            />
-          </div>
-        </div>
-        <div>
-          <h1 className="text-xl font-semibold">Managers</h1>
-          <div className="mt-4 mb-4">
-            <div className="search-container">
-              <FontAwesomeIcon icon={faSearch} className="search-icon" />
-              <input
-                type="text"
-                className="admin-search"
-                placeholder="Search..."
-                value={managerSearchText}
-                onChange={(e) => setManagerSearchText(e.target.value)}
-              />
-            </div>
-            <Table
-              columns={managersColumns}
-              data={managersTable.filter((manager) =>
-                filterManagers(manager, managerSearchText)
-              )}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="whitespace">.</div>
     </div>
   );
 };

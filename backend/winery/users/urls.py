@@ -6,7 +6,9 @@ from .views import (
     LogoutAPIView,
     GetUserRoleAPIView,
     AuthenticatedHelloAPIView,
-    password_reset_token_created
+    CustomerViewSet,
+    password_reset_token_created,
+    GenerateAdminPDF
 )
 
 from rest_framework_simplejwt.views import (
@@ -25,5 +27,6 @@ urlpatterns = [
     path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role"),
     path('api/hello-auth/', AuthenticatedHelloAPIView.as_view(), name="hello_auth"),
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('generate-admin-pdf/', GenerateAdminPDF.as_view(), name='generate-all-pdf'),
 ]
 

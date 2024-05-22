@@ -1,0 +1,34 @@
+.carousel-container {
+  max-width: 80%; /* Promenjen maksimalni širina karusela */
+  margin: 0 auto; /* Centriranje karusela */
+  overflow: hidden; /* Skrivanje sadržaja koji prelazi granice karusela */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6); /* Dodajemo senku */
+  position: relative; /* Postavljamo relativni položaj kako bi zasenčenje prekrivalo celu sliku */
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 80px; /* Pomeramo tekst više iznad znakova */
+  left: 0;
+  width: 100%;
+  height: auto; /* Visina prilagođena sadržaju teksta */
+  padding: 20px 20px 40px; /* Dodajemo malo više padding-a na vrh */
+  color: white; /* Beli tekst */
+  transform: translateY(100%); /* Početni položaj: potpuno dole */
+  background-color: rgba(0, 0, 0, 0.5); /* Transparentno crna pozadina */
+  transition: all 0.3s ease; /* Dodajemo glatku tranziciju za ceo element */
+}
+
+.carousel-container:hover .carousel-caption {
+  bottom: 37%; /* Pomeramo tekst ka centru karusela */
+  transform: translateY(-50%); /* Pomeramo tekst u centar */
+  background-color: rgba(0, 0, 0, 0.0); /* Transparentno crna pozadina */
+}
+
+.carousel-container:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6); /* Povećavamo senku kada hoverujemo */
+}
+
+.carousel-container:hover img {
+  filter: brightness(50%); /* Smanjujemo svetlost slike kada hoverujemo */
+}
