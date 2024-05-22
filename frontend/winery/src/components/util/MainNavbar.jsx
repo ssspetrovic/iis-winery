@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 import useAuth from "../../hooks/useAuth";
+import { ROLES } from "../auth/Roles";
 
 const MainNavbar = () => {
   const { auth, logout } = useAuth();
@@ -47,6 +48,13 @@ const MainNavbar = () => {
                   Browse
                 </NavLink>
               </NavItem>
+              {role === ROLES.CUSTOMER && (
+                <NavItem className="mx-md-2">
+                  <NavLink href="/orders" style={{ color: "white" }}>
+                    Orders
+                  </NavLink>
+                </NavItem>
+              )}
               <div className="mx-md-2">
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret style={{ color: "white" }}>

@@ -69,7 +69,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
-            <Route path="/:username/orders" element={<OrderHistory />} />
+            <Route path="/orders" element={<OrderHistory />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>
