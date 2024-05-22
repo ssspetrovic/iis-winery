@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "../api/axios";
 import { ROLES } from "../components/auth/Roles";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext({});
 
@@ -125,7 +126,7 @@ export const AuthProvider = ({ children }) => {
     removeCookie("access_token");
     removeCookie("refresh_token");
     setAuth({});
-    navigate("/");
+    setTimeout(() => navigate("/"), 0);
   };
 
   const register = async (user) => {
@@ -165,6 +166,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthContext;
