@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../../api/axios";
 import {
   Container,
@@ -27,10 +27,11 @@ const mapContainerStyle = {
   width: "100%",
   height: "400px", // Adjust the height as needed
 };
-const defaultCenter = {
-  lat: 45.2671,
-  lng: 19.8335,
-};
+
+// const defaultCenter = {
+//   lat: 45.2671,
+//   lng: 19.8335,
+// };
 
 const WinemakerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -75,8 +76,6 @@ const WinemakerOrdersPage = () => {
     // Fetch winemaker's orders
     const fetchOrders = async () => {
       try {
-        const winemakerResponse = await axios.get(`/winemakers/${username}/`);
-        const winemakerId = winemakerResponse.data.id;
         const response = await axios.get("/orders/");
         const winemakerOrders = [];
 
@@ -84,13 +83,18 @@ const WinemakerOrdersPage = () => {
         for (const order of response.data) {
           let isWinemakerOrder = false;
 
-          // Iteriraj kroz svako vino u narudžbini
-          for (const wineId of order.wines) {
-            // Izvrši Axios GET za vino kako bi se dobio winemaker
-            const wineResponse = await axios.get(`/wines/${wineId}/`);
+          // Fetch item details for each item ID in the order
+          const items = await Promise.all(
+            order.items.map(async (itemId) => {
+              const itemResponse = await axios.get(`/order-items/${itemId}/`);
+              return itemResponse.data;
+            })
+          );
 
+          // Iteriraj kroz svako vino u narudžbini
+          for (const item of items) {
             // Uporedi ID winemakera sa ID-jem trenutno ulogovanog winemakera
-            if (username === wineResponse.data.winemaker) {
+            if (username === item.wine.winemaker) {
               isWinemakerOrder = true;
               break;
             }
@@ -103,16 +107,9 @@ const WinemakerOrdersPage = () => {
               `/customers/${order.customer}/`
             );
             const customerData = customerResponse.data;
-            console.log(customerData);
-            const winesData = [];
-            for (const wineId of order.wines) {
-              const wineResponse = await axios.get(`/wines/${wineId}/`);
-
-              winesData.push(wineResponse.data);
-            }
 
             // Dodaj korisnika (customer-a) u objekat narudžbine
-            const orderWithCustomer = { ...order, customerData, winesData };
+            const orderWithCustomer = { ...order, customerData, items };
 
             // Dodaj narudžbinu u niz
             winemakerOrders.push(orderWithCustomer);
@@ -213,15 +210,13 @@ const WinemakerOrdersPage = () => {
                     <FontAwesomeIcon
                       icon={faWineBottle}
                       style={{
-                        position:
-                          "absolute" /* Postavljamo ikonu na fiksnu poziciju */,
-                        top: "130px" /* Pomeramo ikonu na dno ekrana */,
-                        right: "0" /* Pomeramo ikonu na desni kraj ekrana */,
+                        position: "absolute",
+                        top: "130px",
+                        right: "0",
                         fontSize: "400px",
                         color: "black",
                         opacity: "0.7",
-                        zIndex:
-                          "-1" /* Postavljamo z-index na negativnu vrednost kako bi ikona bila ispod ostalih elemenata */,
+                        zIndex: "-1",
                       }}
                     />
                     <p>
@@ -245,9 +240,9 @@ const WinemakerOrdersPage = () => {
                       <strong>Wines:</strong>
                     </h3>
                     <ul className="list-unstyled row row-cols-3 column column-gap-9">
-                      {order.winesData.map((wine) => (
+                      {order.items.map((item) => (
                         <li
-                          key={wine.id}
+                          key={item.wine.id}
                           className="my-3  p-2 col-md-6 mx-7 mb-3"
                         >
                           <Card
@@ -258,17 +253,17 @@ const WinemakerOrdersPage = () => {
                             }}
                           >
                             <CardBody>
-                              <CardTitle tag="h5">{wine.name}</CardTitle>
+                              <CardTitle tag="h5">{item.wine.name}</CardTitle>
                               <CardText>
-                                <b>Sweetness:</b> {wine.sweetness}
+                                <b>Sweetness:</b> {item.wine.sweetness}
                                 <br />
-                                <b>Alcohol:</b> {wine.alcohol}%
+                                <b>Alcohol:</b> {item.wine.alcohol}%
                                 <br />
-                                <b>Quantity:</b> {wine.quantity}
+                                <b>Quantity:</b> {item.quantity}
                                 <br />
-                                <b>Type:</b> {wine.type}
+                                <b>Type:</b> {item.wine.type}
                                 <br />
-                                <b>Age:</b> {wine.age}
+                                <b>Age:</b> {item.wine.age}
                               </CardText>
                             </CardBody>
                           </Card>
