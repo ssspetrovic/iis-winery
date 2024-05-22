@@ -25,12 +25,6 @@ const MainNavbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleItemClick = (item) => {
-    setRedirectPath(item);
-  };
-
-  const isWinemakerLoggedIn = role === "WINEMAKER";
-
   return (
     <Navbar color="dark" expand="md" className="sticky-top">
       <div className="mx-md-3">
@@ -53,33 +47,33 @@ const MainNavbar = () => {
                   Browse
                 </NavLink>
               </NavItem>
-              {isWinemakerLoggedIn && (
-                <React.Fragment>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/dashboard" style={{ color: "white" }}>
-                      Dashboard
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/cellar" style={{ color: "white" }}>
-                      Cellar
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/materials" style={{ color: "white" }}>
-                      Materials
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink
-                      href="/winemaker-order-page"
-                      style={{ color: "white" }}
-                    >
-                      Winemaker Order Page
-                    </NavLink>
-                  </NavItem>
-                </React.Fragment>
-              )}
+              <div className="mx-md-2">
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret style={{ color: "white" }}>
+                    {username}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>
+                      <NavLink
+                        href={`/${role.toLowerCase()}-profile/${username}`}
+                      >
+                        Profile
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <NavLink onClick={() => logout()}>Log out</NavLink>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </div>
+              <NavItem className="mx-md-2">
+                <NavLink href="/cart">
+                  <i
+                    className="fa fa-shopping-cart"
+                    style={{ color: "white" }}
+                  ></i>
+                </NavLink>
+              </NavItem>
             </Nav>
           ) : (
             <div className="mx-3">
@@ -98,37 +92,6 @@ const MainNavbar = () => {
             </div>
           )}
         </div>
-        {username && (
-          <Nav navbar>
-            <div className="mx-md-2">
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret style={{ color: "white" }}>
-                  {username}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem>
-                    <NavLink
-                      href={`/${role.toLowerCase()}-profile/${username}`}
-                    >
-                      Profile
-                    </NavLink>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <NavLink onClick={() => logout()}>Log out</NavLink>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </div>
-            <NavItem className="mx-md-2">
-              <NavLink href="/cart">
-                <i
-                  className="fa fa-shopping-cart"
-                  style={{ color: "white" }}
-                ></i>
-              </NavLink>
-            </NavItem>
-          </Nav>
-        )}
       </Collapse>
     </Navbar>
   );

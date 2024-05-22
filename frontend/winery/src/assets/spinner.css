@@ -12,11 +12,4 @@
       transform: rotate(360deg);
     }
   }
-
-  .spinner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    height: 100vh;
-  }
   

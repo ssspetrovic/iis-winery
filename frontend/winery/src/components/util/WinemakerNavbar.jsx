@@ -43,9 +43,6 @@ const NavigationBar = () => {
                     <NavLink to="/materials" className="nav-link" onClick={() => handleItemClick('materials')}>
                         <span className={selectedItem === 'materials' ? 'selected' : ''}>Materials</span>
                     </NavLink>
-                    <NavLink to="/winemaker-order-page" className="nav-link" onClick={() => handleItemClick('winemaker-order-page')}>
-                        <span className={selectedItem === 'winemaker-order-page' ? 'selected' : ''}>Winemaker Order Page</span>
-                    </NavLink>
                 </NavItem>
             </Nav>
       </Navbar>
