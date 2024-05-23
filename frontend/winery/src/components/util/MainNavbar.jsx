@@ -20,8 +20,6 @@ const MainNavbar = () => {
   const { auth, logout } = useAuth();
   const { username, role } = auth || {};
   const [isOpen, setIsOpen] = useState(false);
-  const [redirectPath, setRedirectPath] = useState("");
-  const [selectedItem, setSelectedItem] = useState('');
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -50,21 +48,21 @@ const MainNavbar = () => {
               {isWinemakerLoggedIn && (
                 <>
                  <NavItem>
-                    <NavLink href="/dashboard" className="nav-link" onClick={() => handleItemClick('dashboard')} style={{ color: "white" }}>
+                    <NavLink href="/dashboard" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-chart-line me-2"/>
-                      <span className={selectedItem === 'dashboard' ? 'selected' : ''}>Dashboard</span>
+                      <span>Dashboard</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/cellar" className="nav-link" onClick={() => handleItemClick('cellar')} style={{ color: "white" }}>
+                    <NavLink href="/cellar" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-wine-bottle me-2"/>
-                      <span className={selectedItem === 'cellar' ? 'selected' : ''}>Cellar</span>
+                      <span>Cellar</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/materials" className="nav-link" onClick={() => handleItemClick('materials')} style={{ color: "white" }}>
+                    <NavLink href="/materials" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-toolbox me-2"/>
-                      <span className={selectedItem === 'materials ml-2' ? 'selected' : ''}>Materials</span>
+                      <span>Materials</span>
                     </NavLink>
                   </NavItem>
                   <NavItem className="mx-md-2">

@@ -53,8 +53,6 @@ class FermentationDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FermentationBatchSerializer(serializers.ModelSerializer):
-    data = FermentationDataSerializer(many=True, read_only=True)
-
     class Meta:
         model = FermentationBatch
         fields = '__all__'
