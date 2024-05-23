@@ -74,14 +74,12 @@ const MainNavbar = () => {
                   </NavItem>
                 </>
               )}
-              {role === ROLES.CUSTOMER && (
-                <NavItem className="mx-md-2">
-                  <NavLink href="/orders" style={{ color: "white" }}>
-                    Orders
-                  </NavLink>
-                </NavItem>
-              )}
-            </Nav>
+              <NavItem className="mx-md-2">
+                <NavLink href="/orders" style={{ color: "white" }}>
+                  Orders
+                </NavLink>
+              </NavItem>
+              </Nav>
           ) : (
             <div className="mx-3">
               <Nav navbar>
