@@ -1,5 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from datetime import datetime
+import random
 
 class FermentationDataConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -21,19 +23,24 @@ class FermentationDataConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        command = text_data_json.get('command')
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'fermentation_data_message',
-                'message': message
+        if command == 'check_fermentation':
+            simulated_data = {
+                'timestamp': datetime.now().isoformat() + 'Z',
+                'temperature': round(random.uniform(20.0, 35.0), 2),
+                'sugar_level': round(random.uniform(0.5, 5.0), 2),
+                'pH': round(random.uniform(2.8, 4.2), 2),
             }
-        )
 
-    async def fermentation_data_message(self, event):
-        message = event['message']
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'send_fermentation_data',
+                    'data': simulated_data
+                }
+            )
 
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+    async def send_fermentation_data(self, event):
+        data = event['data']
+        await self.send(text_data=json.dumps(data))

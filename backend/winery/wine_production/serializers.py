@@ -47,12 +47,13 @@ class WineRackingSerializer(serializers.ModelSerializer):
         model = WineRacking
         fields = '__all__'
 
-class FermentationDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FermentationData
-        fields = '__all__'
-
 class FermentationBatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = FermentationBatch
+        fields = '__all__'
+
+class FermentationDataSerializer(serializers.ModelSerializer):
+    batch = FermentationBatchSerializer()
+    class Meta:
+        model = FermentationData
         fields = '__all__'
