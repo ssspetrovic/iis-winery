@@ -2,7 +2,6 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "../api/axios";
-import { ROLES } from "../components/auth/Roles";
 import PropTypes from "prop-types";
 
 const AuthContext = createContext({});
@@ -15,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     "role",
     "access_token",
     "refresh_token",
-    "cart_id",
   ]);
 
   const [auth, setAuth] = useState({
@@ -66,33 +64,6 @@ export const AuthProvider = ({ children }) => {
       setCookie("role", role, { path: "/" });
       setCookie("access_token", accessToken, { path: "/" });
       setCookie("refresh_token", refreshToken, { path: "/" });
-
-      if (role == ROLES.CUSTOMER) {
-        const customerResponse = await axios.get("/customers/", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        const customer = customerResponse.data.find(
-          (customer) => customer.username === username
-        );
-        const customerId = customer ? customer.id : null;
-
-        const cartResponse = await axios.get("/carts/", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        const userCart = cartResponse.data.find(
-          (cart) => cart.customer === customerId
-        );
-
-        if (userCart) {
-          setCookie("cart_id", userCart.id, { path: "/" });
-          console.log("FOUND ID:", userCart.id);
-        } else {
-          console.log("No matching cart found for user:", username);
-        }
-      }
-
       return { success: true, message: "" };
     } catch (error) {
       let errorMessage = "";
