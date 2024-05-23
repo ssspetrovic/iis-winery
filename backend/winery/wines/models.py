@@ -64,17 +64,35 @@ class Order(models.Model):
         verbose_name='Total Price', decimal_places=2, max_digits=10, default=0)
     is_accepted = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, to_field='username')
+    customer = models.ForeignKey(
+        User, on_delete=models.CASCADE, to_field='username')
     driver = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True)
     datetime = models.DateTimeField(default=now)
 
     def __str__(self):
         return f"Order by {self.customer.username}"
 
+
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name='items')
     wine = models.ForeignKey(Wine, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     def __str__(self):
         return f"{self.quantity} of {self.wine.name} for {self.order}"
+
+
+class Wishlist(models.Model):
+    customer = models.OneToOneField(
+        Customer, verbose_name="Customer", on_delete=models.CASCADE, related_name="wishlist"
+    )
+
+
+class WishlistItem(models.Model):
+    wishlist = models.ForeignKey(
+        Wishlist, verbose_name="wishlist", on_delete=models.CASCADE, related_name="items"
+    )
+    wine = models.ForeignKey(
+        Wine, verbose_name="wishlist item", on_delete=models.CASCADE, related_name="wishlist_items"
+    )
