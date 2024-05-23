@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem
+from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem
 from users.models import User
 
 
@@ -86,3 +86,20 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCart
         fields = ['id', 'customer', 'items']
+
+
+class WishlistItemSerializer(serializers.ModelSerializer):
+    wine_id = serializers.IntegerField(write_only=True)
+    wine = WineSerializer(read_only=True)
+
+    class Meta:
+        model = WishlistItem
+        fields = '__all__'
+
+
+class WishlistSerializer(serializers.ModelSerializer):
+    items = WishlistItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Wishlist
+        fields = '__all__'

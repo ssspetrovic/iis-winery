@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
-from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, ShoppingCartViewSet, OrderItemViewSet
+from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, ShoppingCartViewSet, OrderItemViewSet, WishlistViewSet, WishlistItemViewSet
 from wine_production.views import WineCellarViewSet, WineTankViewSet, FermentationBatchViewSet, FermentationDataViewSet
 from venues.views import VenueViewSet
 from events.views import EventViewSet
@@ -49,6 +49,8 @@ router.register(r'events', EventViewSet)
 router.register(r'partners', PartnerViewSet)
 router.register(r'batches', FermentationBatchViewSet)
 router.register(r'ferm-data', FermentationDataViewSet)
+router.register(r'wishlists', WishlistViewSet)
+router.register(r'wishlist-items', WishlistItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

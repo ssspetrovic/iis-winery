@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import User, Customer, City, Winemaker, Manager, Admin, Report
-from wines.models import ShoppingCart
+from wines.models import ShoppingCart, Wishlist
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -65,6 +65,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
         # Create shopping cart for the customer
         ShoppingCart.objects.create(customer=customer)
+        # Create wishlist for the customer
+        Wishlist.objects.create(customer=customer)
 
         return customer
 
