@@ -47,19 +47,22 @@ const MainNavbar = () => {
               </NavItem>
               {isWinemakerLoggedIn && (
                 <>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/dashboard" style={{ color: "white" }}>
-                      Dashboard
+                  <NavItem>
+                    <NavLink href="/dashboard" className="nav-link" onClick={() => handleItemClick('dashboard')} style={{ color: "white" }}>
+                      <i className="fas fa-chart-line me-2"/>
+                      <span>Dashboard</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/cellar" style={{ color: "white" }}>
-                      Cellar
+                  <NavItem>
+                    <NavLink href="/cellar" className="nav-link" onClick={() => handleItemClick('cellar')} style={{ color: "white" }}>
+                      <i className="fas fa-wine-bottle me-2"/>
+                      <span>Cellar</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/materials" style={{ color: "white" }}>
-                      Materials
+                  <NavItem>
+                    <NavLink href="/materials" className="nav-link" onClick={() => handleItemClick('materials')} style={{ color: "white" }}>
+                      <i className="fas fa-toolbox me-2"/>
+                      <span>Materials</span>
                     </NavLink>
                   </NavItem>
                   <NavItem className="mx-md-2">
