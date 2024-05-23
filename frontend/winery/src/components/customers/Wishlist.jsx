@@ -106,7 +106,7 @@ const Wishlist = () => {
               <div className="d-flex flex-column justify-content-center align-items-center h-100">
                 <h2>Your wishlist is currently empty</h2>
                 <p>
-                  Please <a href="/browse">click here</a> to browse for items.
+                  Please <a href="/browse">click here</a> to wishlist items.
                 </p>
               </div>
             )}
