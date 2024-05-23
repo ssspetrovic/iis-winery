@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from .models import Partner, Partnership
 from .serializers import PartnerSerializer, PartnershipSerializer
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from users.models import City
 from django.core.mail import send_mail
+
 
 # Create your views here.
 
@@ -56,9 +57,11 @@ class PartnershipCreateAPIView(CreateAPIView):
         partner_email = partnership.partner.email
         partner_name = partnership.partner.name
         terms = partnership.terms
+        token = partnership.token
+        sign_contract_url = self.request.build_absolute_uri('http://localhost:5173/' + f'sign-contract/{token}')
 
         subject = 'Contract Information'
-        message = f'Hello {partner_name},\n\nHere are the terms of your contract:\n\n{terms}'
+        message = f'Hello {partner_name},\n\nHere are the terms of your contract:\n\n{terms}\n\nPlease sign the contract here: {sign_contract_url}'
         from_email = 'info@winery.com'
         recipient_list = [partner_email]
 
@@ -72,3 +75,25 @@ class PartnershipCreateAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class PartnershipDetailAPIView(RetrieveAPIView):
+    queryset = Partnership.objects.all()
+    serializer_class = PartnershipSerializer
+    lookup_field = 'token'
+
+class PartnershipSignAPIView(UpdateAPIView):
+    queryset = Partnership.objects.all()
+    serializer_class = PartnershipSerializer
+    lookup_field = 'token'
+
+    def post(self, request, *args, **kwargs):
+        partnership = self.get_object()
+        partnership.signature = request.data.get('signature')
+        partnership.status = 'ACTIVE'
+        partnership.save()
+        return Response({'status': 'Contract signed'}, status=status.HTTP_200_OK)
+
+class PartnerDetailAPIView(RetrieveAPIView):
+    queryset = Partner.objects.all()
+    serializer_class = PartnerSerializer
+    lookup_field = 'pk'

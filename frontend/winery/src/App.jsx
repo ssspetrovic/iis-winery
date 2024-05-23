@@ -39,6 +39,7 @@ import UpcomingEvents from "./components/events/UpcomingEvents";
 import AddPartner from "./components/partnerships/AddPartner";
 import PartnerList from "./components/partnerships/PartnerList";
 import SendContract from "./components/partnerships/SendContract";
+import SignContract from "./components/partnerships/SignContract";
 
 function App() {
   return (
@@ -206,6 +207,7 @@ function App() {
           <Route path="/add-partner" element={<AddPartner/>}/>
           <Route path="/view-partners" element={<PartnerList/>}/>
           <Route path="/send-contract/:partnerId" element={<SendContract/>}/>
+          <Route path="/sign-contract/:token" element={<SignContract/>}/>
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}

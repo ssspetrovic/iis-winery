@@ -2,6 +2,7 @@ from django.db import models
 from users.models import City
 from datetime import date
 from django.conf import settings
+import uuid
 
 class Partner(models.Model):
 
@@ -28,6 +29,8 @@ class Partnership(models.Model):
     end_date = models.DateField()
     terms = models.TextField()
     status = models.CharField(max_length=10, choices=ContractStatus.choices, default=ContractStatus.PENDING)
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    signature = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f'Partnership with {self.partner.name} ({self.status})'
