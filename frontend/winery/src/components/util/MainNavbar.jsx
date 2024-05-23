@@ -14,7 +14,6 @@ import {
 } from "reactstrap";
 
 import useAuth from "../../hooks/useAuth";
-import { ROLES } from "../auth/Roles";
 
 const MainNavbar = () => {
   const { auth, logout } = useAuth();
@@ -47,20 +46,20 @@ const MainNavbar = () => {
               </NavItem>
               {isWinemakerLoggedIn && (
                 <>
-                  <NavItem>
-                    <NavLink href="/dashboard" className="nav-link" onClick={() => handleItemClick('dashboard')} style={{ color: "white" }}>
+                 <NavItem>
+                    <NavLink href="/dashboard" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-chart-line me-2"/>
                       <span>Dashboard</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/cellar" className="nav-link" onClick={() => handleItemClick('cellar')} style={{ color: "white" }}>
+                    <NavLink href="/cellar" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-wine-bottle me-2"/>
                       <span>Cellar</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/materials" className="nav-link" onClick={() => handleItemClick('materials')} style={{ color: "white" }}>
+                    <NavLink href="/materials" className="nav-link" style={{ color: "white" }}>
                       <i className="fas fa-toolbox me-2"/>
                       <span>Materials</span>
                     </NavLink>
