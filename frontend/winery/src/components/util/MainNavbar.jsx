@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 import useAuth from "../../hooks/useAuth";
+import { ROLES } from "../auth/Roles";
 
 const MainNavbar = () => {
   const { auth, logout } = useAuth();
@@ -39,28 +40,49 @@ const MainNavbar = () => {
         <div style={{ marginLeft: "auto" }}>
           {username ? (
             <Nav navbar>
-              <NavItem className="mx-md-2">
-                <NavLink href="/browse" style={{ color: "white" }}>
-                  Browse
-                </NavLink>
-              </NavItem>
+              {role == ROLES.CUSTOMER && (
+                <NavItem className="mx-md-2">
+                  <NavLink href="/profile/wishlist" style={{ color: "white" }}>
+                    Wishlist
+                  </NavLink>
+                </NavItem>
+              )}
+              {role == ROLES.CUSTOMER && (
+                <NavItem className="mx-md-2">
+                  <NavLink href="/browse" style={{ color: "white" }}>
+                    Browse
+                  </NavLink>
+                </NavItem>
+              )}
               {isWinemakerLoggedIn && (
                 <>
-                 <NavItem>
-                    <NavLink href="/dashboard" className="nav-link" style={{ color: "white" }}>
-                      <i className="fas fa-chart-line me-2"/>
+                  <NavItem>
+                    <NavLink
+                      href="/dashboard"
+                      className="nav-link"
+                      style={{ color: "white" }}
+                    >
+                      <i className="fas fa-chart-line me-2" />
                       <span>Dashboard</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/cellar" className="nav-link" style={{ color: "white" }}>
-                      <i className="fas fa-wine-bottle me-2"/>
+                    <NavLink
+                      href="/cellar"
+                      className="nav-link"
+                      style={{ color: "white" }}
+                    >
+                      <i className="fas fa-wine-bottle me-2" />
                       <span>Cellar</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink href="/materials" className="nav-link" style={{ color: "white" }}>
-                      <i className="fas fa-toolbox me-2"/>
+                    <NavLink
+                      href="/materials"
+                      className="nav-link"
+                      style={{ color: "white" }}
+                    >
+                      <i className="fas fa-toolbox me-2" />
                       <span>Materials</span>
                     </NavLink>
                   </NavItem>
@@ -74,12 +96,14 @@ const MainNavbar = () => {
                   </NavItem>
                 </>
               )}
-              <NavItem className="mx-md-2">
-                <NavLink href="/orders" style={{ color: "white" }}>
-                  Orders
-                </NavLink>
-              </NavItem>
-              </Nav>
+              {role == ROLES.CUSTOMER && (
+                <NavItem className="mx-md-2">
+                  <NavLink href="/orders" style={{ color: "white" }}>
+                    Orders
+                  </NavLink>
+                </NavItem>
+              )}
+            </Nav>
           ) : (
             <div className="mx-3">
               <Nav navbar>
@@ -114,14 +138,16 @@ const MainNavbar = () => {
                 </DropdownMenu>
               </UncontrolledDropdown>
             </div>
-            <NavItem className="mx-md-2">
-              <NavLink href="/cart">
-                <i
-                  className="fa fa-shopping-cart"
-                  style={{ color: "white" }}
-                ></i>
-              </NavLink>
-            </NavItem>
+            {role == ROLES.CUSTOMER && (
+              <NavItem className="mx-md-2">
+                <NavLink href="/cart">
+                  <i
+                    className="fa fa-shopping-cart"
+                    style={{ color: "white" }}
+                  ></i>
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
         )}
       </Collapse>
