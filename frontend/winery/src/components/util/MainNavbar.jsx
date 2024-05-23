@@ -140,7 +140,7 @@ const MainNavbar = () => {
             </div>
             {role == ROLES.CUSTOMER && (
               <NavItem className="mx-md-2">
-                <NavLink href="/cart">
+                <NavLink href="/profile/cart">
                   <i
                     className="fa fa-shopping-cart"
                     style={{ color: "white" }}

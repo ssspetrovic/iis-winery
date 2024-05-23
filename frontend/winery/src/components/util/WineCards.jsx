@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -13,20 +13,53 @@ import {
   Row,
 } from "reactstrap";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { useCookies } from "react-cookie";
+import useAuth from "../../hooks/useAuth";
 
 const WineCards = ({ filteredWines }) => {
   const axiosPrivate = useAxiosPrivate();
-  const [cookies] = useCookies(["cart_id"]);
+  const { auth } = useAuth();
+  const { username } = auth || {};
 
+  const [cartId, setCartId] = useState();
+  const [wishlistId, setWishlistId] = useState();
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [buttonTexts, setButtonTexts] = useState({});
   const [buttonDisabled, setButtonDisabled] = useState({});
+  const [wishlistItems, setWishlistItems] = useState(new Set());
+  const [wishlistMap, setWishlistMap] = useState({});
+
+  const fetchData = async () => {
+    try {
+      const cartsResponse = await axiosPrivate.get(
+        `/carts/?customer=${username}`
+      );
+      const wishlistResponse = await axiosPrivate.get(
+        `/wishlists/?customer=${username}`
+      );
+      setCartId(cartsResponse.data[0].id);
+      setWishlistId(wishlistResponse.data[0].id);
+      const wishlistItemsData = wishlistResponse.data[0].items;
+      const wishlistItemIds = new Set(
+        wishlistItemsData.map((item) => item.wine.id)
+      );
+      const wishlistItemMap = wishlistItemsData.reduce((acc, item) => {
+        acc[item.wine.id] = item.id;
+        return acc;
+      }, {});
+      setWishlistItems(wishlistItemIds);
+      setWishlistMap(wishlistItemMap);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [username]);
 
   const addToCart = async (wine) => {
     try {
       const selectedQuantity = selectedQuantities[wine.id] || 1;
-      const cartId = cookies.cart_id;
       const response = await axiosPrivate.post("/cart-items/", {
         shopping_cart: cartId,
         wine_id: wine.id,
@@ -39,6 +72,37 @@ const WineCards = ({ filteredWines }) => {
         setButtonTexts({ ...buttonTexts, [wine.id]: "Add to cart" });
         setButtonDisabled({ ...buttonDisabled, [wine.id]: false });
       }, 1500);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const toggleWishlist = async (wine) => {
+    try {
+      if (wishlistItems.has(wine.id)) {
+        // Remove from wishlist
+        const wishlistItemId = wishlistMap[wine.id];
+        await axiosPrivate.delete(`/wishlist-items/${wishlistItemId}/`);
+        setWishlistItems((prev) => {
+          const updated = new Set(prev);
+          updated.delete(wine.id);
+          return updated;
+        });
+        setWishlistMap((prev) => {
+          const updated = { ...prev };
+          delete updated[wine.id];
+          return updated;
+        });
+      } else {
+        // Add to wishlist
+        const response = await axiosPrivate.post("/wishlist-items/", {
+          wishlist: wishlistId,
+          wine_id: wine.id,
+        });
+        console.log(response.data);
+        setWishlistItems((prev) => new Set(prev).add(wine.id));
+        setWishlistMap((prev) => ({ ...prev, [wine.id]: response.data.id }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -77,7 +141,12 @@ const WineCards = ({ filteredWines }) => {
                         </Col>
                         <Col md={2}>
                           <div className="d-flex justify-content-center align-items-center h-100">
-                            <i className="fa fa-heart"></i>
+                            <i
+                              className={`fa-heart fa-lg cursor-pointer text-danger ${
+                                wishlistItems.has(wine.id) ? "fa" : "fa-regular"
+                              }`}
+                              onClick={() => toggleWishlist(wine)}
+                            />
                           </div>
                         </Col>
                       </Row>
