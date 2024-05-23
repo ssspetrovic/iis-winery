@@ -37,6 +37,10 @@ import EventCreationForm from "./components/events/EventCreateionForm";
 import Events from "./components/events/Events";
 import SendInvitation from "./components/events/SendInvitation";
 import UpcomingEvents from "./components/events/UpcomingEvents";
+import AddPartner from "./components/partnerships/AddPartner";
+import PartnerList from "./components/partnerships/PartnerList";
+import SendContract from "./components/partnerships/SendContract";
+import SignContract from "./components/partnerships/SignContract";
 
 function App() {
   return (
@@ -136,6 +140,10 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/send-invitations/:id" element={<SendInvitation />} />
           <Route path="/upcoming-events" element={<UpcomingEvents />} />
+          <Route path="/add-partner" element={<AddPartner/>}/>
+          <Route path="/view-partners" element={<PartnerList/>}/>
+          <Route path="/send-contract/:partnerId" element={<SendContract/>}/>
+          <Route path="/sign-contract/:token" element={<SignContract/>}/>
           <Route
             path="/winemaker-order-page"
             element={<WinemakerOrdersPage />}

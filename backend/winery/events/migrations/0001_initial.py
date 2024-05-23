@@ -9,18 +9,11 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('users', '0001_initial'),
         ('venues', '0001_initial'),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Invitation',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('token', models.CharField(max_length=32, unique=True)),
-                ('sent', models.BooleanField(default=False)),
-            ],
-        ),
         migrations.CreateModel(
             name='Event',
             fields=[
@@ -30,6 +23,16 @@ class Migration(migrations.Migration):
                 ('date_and_time', models.DateTimeField()),
                 ('number_of_guests', models.PositiveIntegerField()),
                 ('venue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='venues.venue')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Invitation',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('token', models.CharField(max_length=32, unique=True)),
+                ('sent', models.BooleanField(default=False)),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.customer')),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='events.event')),
             ],
         ),
     ]

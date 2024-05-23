@@ -25,6 +25,7 @@ from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, Shop
 from wine_production.views import WineCellarViewSet, WineTankViewSet
 from venues.views import VenueViewSet
 from events.views import EventViewSet
+from partnerships.views import PartnerViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -45,6 +46,7 @@ router.register(r'cart-items', ShoppingCartItemViewSet)
 router.register(r'order-items', OrderItemViewSet)
 router.register(r'venues', VenueViewSet)
 router.register(r'events', EventViewSet)
+router.register(r'partners', PartnerViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -56,6 +58,7 @@ urlpatterns = [
     path('api/venues/', include('venues.urls'), name='venues'),
     path('api/event/', include('events.urls'), name='events'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/partnerships/', include('partnerships.urls'), name='partnerships'),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 
 ]
