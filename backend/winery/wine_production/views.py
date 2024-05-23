@@ -13,6 +13,16 @@ class WineCellarViewSet(viewsets.ModelViewSet):
     queryset = WineCellar.objects.all()
     serializer_class = WineCellarSerializer
 
+class WineCellarDeleteAPIView(DestroyAPIView):
+    queryset = WineCellar.objects.all()
+    serializer_class = WineCellarSerializer
+    lookup_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 class WineTankViewSet(viewsets.ModelViewSet):
     queryset = WineTank.objects.all()
     serializer_class = WineTankSerializer
@@ -84,3 +94,4 @@ class WineRackingViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+

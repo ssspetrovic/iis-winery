@@ -13,6 +13,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 
+import { ROLES } from "../auth/Roles";
 import useAuth from "../../hooks/useAuth";
 import { ROLES } from "../auth/Roles";
 
@@ -20,6 +21,8 @@ const MainNavbar = () => {
   const { auth, logout } = useAuth();
   const { username, role } = auth || {};
   const [isOpen, setIsOpen] = useState(false);
+  const [redirectPath, setRedirectPath] = useState("");
+  const [selectedItem, setSelectedItem] = useState('');
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -40,6 +43,30 @@ const MainNavbar = () => {
         <div style={{ marginLeft: "auto" }}>
           {username ? (
             <Nav navbar>
+              <div className="d-flex justify-content-center">
+              {role === ROLES.WINEMAKER && (
+                <>
+                  <NavItem>
+                    <NavLink href="/dashboard" className="nav-link" onClick={() => handleItemClick('dashboard')} style={{ color: "white" }}>
+                      <i className="fas fa-chart-line me-2"/>
+                      <span className={selectedItem === 'dashboard' ? 'selected' : ''}>Dashboard</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/cellar" className="nav-link" onClick={() => handleItemClick('cellar')} style={{ color: "white" }}>
+                      <i className="fas fa-wine-bottle me-2"/>
+                      <span className={selectedItem === 'cellar' ? 'selected' : ''}>Cellar</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/materials" className="nav-link" onClick={() => handleItemClick('materials')} style={{ color: "white" }}>
+                      <i className="fas fa-toolbox me-2"/>
+                      <span className={selectedItem === 'materials ml-2' ? 'selected' : ''}>Materials</span>
+                    </NavLink>
+                  </NavItem>
+                </>
+              )}
+              </div>
               <NavItem className="mx-md-2">
                 <NavLink href="/browse" style={{ color: "white" }}>
                   Browse
