@@ -15,7 +15,6 @@ import {
 
 import { ROLES } from "../auth/Roles";
 import useAuth from "../../hooks/useAuth";
-import { ROLES } from "../auth/Roles";
 
 const MainNavbar = () => {
   const { auth, logout } = useAuth();
@@ -43,10 +42,14 @@ const MainNavbar = () => {
         <div style={{ marginLeft: "auto" }}>
           {username ? (
             <Nav navbar>
-              <div className="d-flex justify-content-center">
-              {role === ROLES.WINEMAKER && (
+              <NavItem className="mx-md-2">
+                <NavLink href="/browse" style={{ color: "white" }}>
+                  Browse
+                </NavLink>
+              </NavItem>
+              {isWinemakerLoggedIn && (
                 <>
-                  <NavItem>
+                 <NavItem>
                     <NavLink href="/dashboard" className="nav-link" onClick={() => handleItemClick('dashboard')} style={{ color: "white" }}>
                       <i className="fas fa-chart-line me-2"/>
                       <span className={selectedItem === 'dashboard' ? 'selected' : ''}>Dashboard</span>
@@ -62,31 +65,6 @@ const MainNavbar = () => {
                     <NavLink href="/materials" className="nav-link" onClick={() => handleItemClick('materials')} style={{ color: "white" }}>
                       <i className="fas fa-toolbox me-2"/>
                       <span className={selectedItem === 'materials ml-2' ? 'selected' : ''}>Materials</span>
-                    </NavLink>
-                  </NavItem>
-                </>
-              )}
-              </div>
-              <NavItem className="mx-md-2">
-                <NavLink href="/browse" style={{ color: "white" }}>
-                  Browse
-                </NavLink>
-              </NavItem>
-              {isWinemakerLoggedIn && (
-                <>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/dashboard" style={{ color: "white" }}>
-                      Dashboard
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/cellar" style={{ color: "white" }}>
-                      Cellar
-                    </NavLink>
-                  </NavItem>
-                  <NavItem className="mx-md-2">
-                    <NavLink href="/materials" style={{ color: "white" }}>
-                      Materials
                     </NavLink>
                   </NavItem>
                   <NavItem className="mx-md-2">

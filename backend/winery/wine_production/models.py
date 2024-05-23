@@ -2,11 +2,11 @@ from django.db import models
 from wines.models import Wine
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from users.models import Winemaker
 
 class WineCellar(models.Model):
     name = models.CharField(max_length=100, unique=True)
     area = models.DecimalField(max_digits=10, decimal_places=2)
-
 
 class WineTank(models.Model):
     TANK_TYPE = [
@@ -38,3 +38,16 @@ class WineRacking(models.Model):
 
     def __str__(self):
         return f'Wine Racking from {self.from_tank} to {self.to_tank}'
+
+class FermentationBatch(models.Model):
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField(auto_now_add=True)
+    winemaker = models.ForeignKey(Winemaker, on_delete=models.CASCADE)
+    wine = models.ForeignKey(Wine, on_delete=models.CASCADE)
+
+class FermentationData(models.Model):
+    batch = models.ForeignKey(FermentationBatch, on_delete=models.CASCADE, related_name='data')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    temperature = models.FloatField()
+    sugar_level = models.FloatField()
+    pH = models.FloatField()
