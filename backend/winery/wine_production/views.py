@@ -98,7 +98,7 @@ class WineRackingViewSet(viewsets.ModelViewSet):
 class FermentationBatchViewSet(viewsets.ModelViewSet):
     queryset = FermentationBatch.objects.all()
     serializer_class = FermentationBatchSerializer
-
+    
 class FermentationDataViewSet(viewsets.ModelViewSet):
     queryset = FermentationData.objects.all()
     serializer_class = FermentationDataSerializer
