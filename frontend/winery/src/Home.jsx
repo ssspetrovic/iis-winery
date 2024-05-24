@@ -12,7 +12,7 @@ const Home = () => {
       case "ADMIN":
         return `/admin-profile/${username}`;
       case "CUSTOMER":
-        return `/profile/${username}`;
+        return `/customer-profile/${username}`;
       case "MANAGER":
         return `/manager-profile/${username}`;
       default:
