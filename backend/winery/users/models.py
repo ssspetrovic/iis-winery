@@ -33,6 +33,8 @@ class Customer(User):
         verbose_name="Street Number", default=0)
     date_of_birth = models.DateField(
         verbose_name="Date of Birth", default=date.today)
+    is_allowing_notifications = models.BooleanField(
+        verbose_name='is allowing notifications', default=False)
 
     class Meta:
         verbose_name = 'Customer'
