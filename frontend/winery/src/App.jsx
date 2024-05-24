@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "./components/auth/Register";
-import Test from "./components/Test";
+import TestPage from "./components/Test";
 import Login from "./components/auth/Login";
 import AdminProfile from "./components/users/AdminProfile";
 import ViewUsers from "./components/users/ViewUsers";
@@ -26,13 +26,10 @@ import FermentationDashboard from "./components/wm_dashboard/FermentationDashboa
 import OrderPage from "./components/orders/OrderPage";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
-import Home from "../Home";
+import Home from "./Home";
 import Orders from "./components/orders/OrderTest";
 import AdminReport from "./components/pdf/AdminReport";
 import OrderHistory from "./components/customers/OrdersHistory";
-import { ROLES } from "./components/auth/Roles";
-import "./index.css";
-import "./assets/styles.css";
 import VenueList from "./components/venues/VenueList";
 import EventCreationForm from "./components/events/EventCreateionForm";
 import Events from "./components/events/Events";
@@ -43,6 +40,9 @@ import PartnerList from "./components/partnerships/PartnerList";
 import SendContract from "./components/partnerships/SendContract";
 import SignContract from "./components/partnerships/SignContract";
 import Wishlist from "./components/customers/Wishlist";
+import { ROLES } from "./components/auth/Roles";
+import "./index.css";
+import "./assets/styles.css";
 
 function App() {
   return (
@@ -52,7 +52,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           {/* Unprotected */}
           <Route path="/" element={<Home />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/test" element={<TestPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />

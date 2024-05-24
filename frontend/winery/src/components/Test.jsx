@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "reactstrap";
 import useAuth from "../hooks/useAuth";
 import useRefreshToken from "../hooks/useRefreshToken";
@@ -7,7 +6,7 @@ import profileRedirects from "./users/ProfileRedirect";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const Home = () => {
+const TestPage = () => {
   const { auth, logout } = useAuth();
   const { username, role, accessToken, refreshToken } = auth || {};
   const refresh = useRefreshToken();
@@ -113,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TestPage;

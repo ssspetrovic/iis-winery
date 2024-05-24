@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import useAuth from "./src/hooks/useAuth";
+import useAuth from "./hooks/useAuth";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Home = () => {
       case "ADMIN":
         return `/admin-profile/${username}`;
       case "CUSTOMER":
-        return `/customer-profile/${username}`;
+        return `/profile/${username}`;
       case "MANAGER":
         return `/manager-profile/${username}`;
       default:
@@ -68,7 +68,7 @@ const Home = () => {
             <div
               className="border shadow rounded my-5 p-5 cursor-pointer bg-dark color-light"
               onClick={() => {
-                navigate("/cart");
+                navigate("/profile/cart");
               }}
             >
               <div className="mx-auto text-center">
