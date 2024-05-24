@@ -102,3 +102,12 @@ class FermentationBatchViewSet(viewsets.ModelViewSet):
 class FermentationDataViewSet(viewsets.ModelViewSet):
     queryset = FermentationData.objects.all()
     serializer_class = FermentationDataSerializer
+
+    def list(self, request):
+        batch_id = request.query_params.get('batch')
+        if batch_id:
+            queryset = FermentationData.objects.filter(batch=batch_id)
+        else:
+            queryset = FermentationData.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

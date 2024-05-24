@@ -63,7 +63,7 @@ function BatchManagement () {
                                     <p>{batch.description}</p>
                                 </div>
                                 <div>
-                                    <button className="btn btn-warning mr-2" onClick={() => handleUpdateBatch(batch.id)}>Update</button>
+                                    <button className="btn mr-2" onClick={() => handleUpdateBatch(batch.id)}>Update</button>
                                     <button className="btn btn-danger" onClick={() => handleDeleteBatch(batch.id)}>Delete</button>
                                 </div>
                             </li>
