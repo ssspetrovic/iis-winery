@@ -90,13 +90,16 @@ class CustomerSerializer(serializers.ModelSerializer):
             password = validated_data.pop('password')
             instance.set_password(password)
 
+        instance.is_allowing_notifications = validated_data.get(
+            'is_allowing_notifications', instance.is_allowing_notifications)
+
         instance.save()
         return instance
 
     class Meta:
         model = Customer
         fields = ['id', 'username', 'password', 'first_name', 'last_name', 'date_of_birth',
-                  'email', 'address', 'street_number', 'city']
+                  'email', 'address', 'is_allowing_notifications', 'street_number', 'city']
         extra_kwargs = {
             'password': {'write_only': True},
         }

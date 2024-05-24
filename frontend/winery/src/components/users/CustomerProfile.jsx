@@ -22,6 +22,7 @@ import wineImage1 from "../../assets/images/wine_01.jpg";
 import wineImage2 from "../../assets/images/wine_02.jpg";
 import wineImage3 from "../../assets/images/wine_03.jpg";
 import ConfirmModal from "../util/ConfirmModal";
+import NotificationPreferencesModal from "../customers/NotificationPreferencesModal";
 
 const CustomerProfile = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -36,13 +37,19 @@ const CustomerProfile = () => {
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState(0);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isNotificationsModalOpen, setIsNotificationsModalOpen] =
+    useState(false);
 
   const togglePasswordChangeModal = () => {
     setIsPasswordChangeModalOpen(!isPasswordChangeModalOpen);
   };
 
-  const toggleConfirmModalOpen = () => {
+  const toggleConfirmModal = () => {
     setIsConfirmModalOpen(!isConfirmModalOpen);
+  };
+
+  const toggleNotificationsModal = () => {
+    setIsNotificationsModalOpen(!isNotificationsModalOpen);
   };
 
   const [modalData, setModalData] = useState({
@@ -102,7 +109,7 @@ const CustomerProfile = () => {
         header: "Success!",
         body: "Information successfully updated!",
       });
-      toggleConfirmModalOpen();
+      toggleConfirmModal();
     } catch (error) {
       console.log(error);
       // alert("Failed to update the information :(\nPlease try again.");
@@ -110,7 +117,7 @@ const CustomerProfile = () => {
         header: "Editing info failed!",
         body: "Failed to update the profile info!",
       });
-      toggleConfirmModalOpen();
+      toggleConfirmModal();
     }
   };
 
@@ -133,7 +140,7 @@ const CustomerProfile = () => {
         header: "Success!",
         body: "Password successfully changed!",
       });
-      toggleConfirmModalOpen();
+      toggleConfirmModal();
       setIsPasswordChangeModalOpen(false);
     } catch (error) {
       console.log(error);
@@ -144,7 +151,7 @@ const CustomerProfile = () => {
   return (
     <div className="mx-4">
       <Row className="my-4">
-        <Col md="1" className="text-start">
+        <Col md={1} className="text-start">
           <div>
             <div className="text-center">
               <i className="fa-3x fa-solid fa-circle-user" />
@@ -152,10 +159,19 @@ const CustomerProfile = () => {
             <div className="text-center">{username}</div>
           </div>
         </Col>
-        <Col md="10" className="text-center">
+        <Col md={10} className="text-center">
           <h1>Customer Profile</h1>
         </Col>
-        <Col md="1" />
+        <Col md={1}>
+          <div className="cursor-pointer" onClick={toggleNotificationsModal}>
+            <div className="text-center">
+              <i className="fa fa-2x fa-bell text-warning" />
+            </div>
+            <div className="text-center">
+              <span>Preferences</span>
+            </div>
+          </div>
+        </Col>
       </Row>
       <Row>
         <Col>
@@ -163,7 +179,7 @@ const CustomerProfile = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Col md="6">
+                  <Col md={6}>
                     <Label className="form-label" for="customer-first-name">
                       First name
                     </Label>
@@ -177,7 +193,7 @@ const CustomerProfile = () => {
                       onChange={(e) => setFirstName(e.target.value)}
                     />
                   </Col>
-                  <Col md="6">
+                  <Col md={6}>
                     <Label className="form-label" for="customer-last-name">
                       Last name
                     </Label>
@@ -195,7 +211,7 @@ const CustomerProfile = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="6">
+                  <Col md={6}>
                     <Label
                       id="customer-country-label"
                       className="form-label"
@@ -219,7 +235,7 @@ const CustomerProfile = () => {
                       disabled
                     />
                   </Col>
-                  <Col md="6">
+                  <Col md={6}>
                     <Label
                       id="customer-dob-label"
                       className="form-label"
@@ -247,7 +263,7 @@ const CustomerProfile = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="9">
+                  <Col md={9}>
                     <Label className="form-label" for="customer-address">
                       Address
                     </Label>
@@ -261,7 +277,7 @@ const CustomerProfile = () => {
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </Col>
-                  <Col md="3">
+                  <Col md={3}>
                     <Label className="form-label" for="customer-streetno">
                       Street no.
                     </Label>
@@ -279,7 +295,7 @@ const CustomerProfile = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-                  <Col md="9">
+                  <Col md={9}>
                     <Label className="form-label" for="customer-city">
                       City
                     </Label>
@@ -293,7 +309,7 @@ const CustomerProfile = () => {
                       onChange={(e) => setCity(e.target.value)}
                     />
                   </Col>
-                  <Col md="3">
+                  <Col md={3}>
                     <Label className="form-label" for="customer-postal-code">
                       Postal Code
                     </Label>
@@ -311,7 +327,7 @@ const CustomerProfile = () => {
               </FormGroup>
             </Form>
             <Row className="mt-4">
-              <Col md="12" className="text-center">
+              <Col md={12} className="text-center">
                 <Button
                   className="w-50"
                   color="dark"
@@ -321,7 +337,7 @@ const CustomerProfile = () => {
                   Edit
                 </Button>
               </Col>
-              <Col md="6" className=" text-center">
+              <Col md={6} className=" text-center">
                 <Button
                   className="w-100"
                   color="success"
@@ -331,7 +347,7 @@ const CustomerProfile = () => {
                   Save
                 </Button>
               </Col>
-              <Col md="6" className="text-center">
+              <Col md={6} className="text-center">
                 <Button
                   className="w-100"
                   color="danger"
@@ -343,7 +359,7 @@ const CustomerProfile = () => {
               </Col>
             </Row>
             <Row>
-              <Col md="12" className="text-center mt-2">
+              <Col md={12} className="text-center mt-2">
                 <p>
                   Looking to change the password?
                   <Link className="mx-1" onClick={togglePasswordChangeModal}>
@@ -361,8 +377,12 @@ const CustomerProfile = () => {
         </Col>
         <ConfirmModal
           isOpen={isConfirmModalOpen}
-          toggle={toggleConfirmModalOpen}
+          toggle={toggleConfirmModal}
           data={modalData}
+        />
+        <NotificationPreferencesModal
+          isOpen={isNotificationsModalOpen}
+          toggle={toggleNotificationsModal}
         />
       </Row>
       <hr className="my-4" />
@@ -371,7 +391,7 @@ const CustomerProfile = () => {
       </Row>
       <Row>
         <CardGroup>
-          <Col md="4">
+          <Col md={4}>
             <Card className="mx-2">
               <CardImg
                 src={wineImage1}
@@ -392,7 +412,7 @@ const CustomerProfile = () => {
               </CardBody>
             </Card>
           </Col>
-          <Col md="4">
+          <Col md={4}>
             <Card className="mx-2">
               <CardImg
                 src={wineImage2}
@@ -413,7 +433,7 @@ const CustomerProfile = () => {
               </CardBody>
             </Card>
           </Col>
-          <Col md="4">
+          <Col md={4}>
             <Card className="mx-2">
               <CardImg
                 src={wineImage3}
