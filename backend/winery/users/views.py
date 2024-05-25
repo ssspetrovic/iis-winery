@@ -467,7 +467,7 @@ class GenerateAdminPDF(APIView):
             signature_and_stamp = [signature, stamp]
             elements.extend(signature_and_stamp)
         else:
-            print("Greška prilikom preuzimanja slike:", response.status_code)
+            print("Greška prilikom preuzimanja slike:", HttpResponse.status_code)
         
         doc.build(elements)
         buffer.seek(0)

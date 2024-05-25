@@ -1,12 +1,51 @@
 from rest_framework import serializers
 from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem, CustomerNotificationSubscription
 from users.models import User
+from django.core.mail import send_mail
+from rest_framework.response import Response
 
 
 class WineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wine
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        old_quantity = instance.quantity
+        instance = super().update(instance, validated_data)
+        new_quantity = instance.quantity
+
+        if old_quantity <= 0 and new_quantity > 0:
+            self.notify_subscribed_users(instance)
+
+        return instance
+
+    def notify_subscribed_users(self, wine):
+        subscriptions = CustomerNotificationSubscription.objects.filter(
+            wine=wine)
+        notified_customers = []
+        notifications_disabled = []
+
+        for subscription in subscriptions:
+            customer = subscription.customer
+            if customer.is_allowing_notifications:
+                send_mail(
+                    'Wine Back in Stock',
+                    f'Dear {customer.name},\n\nThe wine "{
+                        wine.name}" is back in stock!',
+                    'noreply@winery.com',
+                    [customer.email],
+                    fail_silently=False,
+                )
+                notified_customers.append(customer.email)
+                subscription.delete()
+            else:
+                notifications_disabled.append(customer.email)
+
+        return Response({
+            'notified_customers': notified_customers,
+            'notifications_disabled': notifications_disabled
+        })
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -109,3 +148,10 @@ class CustomerNotificationSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerNotificationSubscription
         fields = '__all__'
+
+    def validate(self, data):
+        wine = data.get('wine')
+        if wine.quantity > 0:
+            raise serializers.ValidationError(
+                'Cannot subscribe to a wine that is in stock.')
+        return data
