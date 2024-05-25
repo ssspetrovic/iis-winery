@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem
+from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem, CustomerNotificationSubscription
 from users.models import User
 
 
@@ -102,4 +102,10 @@ class WishlistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wishlist
+        fields = '__all__'
+
+
+class CustomerNotificationSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerNotificationSubscription
         fields = '__all__'

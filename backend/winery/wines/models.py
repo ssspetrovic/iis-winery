@@ -96,3 +96,17 @@ class WishlistItem(models.Model):
     wine = models.ForeignKey(
         Wine, verbose_name="wishlist item", on_delete=models.CASCADE, related_name="wishlist_items"
     )
+
+
+class CustomerNotificationSubscription(models.Model):
+    customer = models.ForeignKey(
+        Customer, verbose_name='customer', on_delete=models.CASCADE)
+    wine = models.ForeignKey(Wine, verbose_name='wine',
+                             on_delete=models.CASCADE)
+    subscription_time = models.DateTimeField(default=now)
+
+    class Meta:
+        unique_together = ('customer', 'wine')
+
+    def __str__(self):
+        return f'{self.customer} subscribed to {self.wine}'

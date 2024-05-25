@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem
-from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer, OrderItemSerializer, WishlistSerializer, WishlistItemSerializer
+from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem, CustomerNotificationSubscription
+from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer, OrderItemSerializer, WishlistSerializer, WishlistItemSerializer, CustomerNotificationSubscriptionSerializer
 
 
 # import googlemaps
@@ -40,6 +40,10 @@ class WishlistViewSet(viewsets.ModelViewSet):
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
 
+
+class CustomerNotificationSubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = CustomerNotificationSubscription.objects.all()
+    serializer_class = CustomerNotificationSubscriptionSerializer
 
 # def optimize_delivery_route(request, order_id):
 #     try:
