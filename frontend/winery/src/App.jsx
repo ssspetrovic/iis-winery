@@ -22,7 +22,7 @@ import WinemakerProfile from "./components/users/WinemakerProfile";
 import PasswordResetForm from "./components/auth/PasswordResetForm";
 import PasswordResetConfirmForm from "./components/auth/PasswordResetConfirmForm";
 import WineRoomsPage from "./components/wine_cellar/WineRoomPage";
-import FermentationDashboard from "./components/wm_dashboard/FermentationDashboard";
+import WinemakerDashboard from "./components/wm_dashboard/WinemakerDashboard";
 import OrderPage from "./components/orders/OrderPage";
 import BrowseWines from "./components/customers/BrowseWines";
 import ShoppingCart from "./components/customers/ShoppingCart";
@@ -114,7 +114,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
-            <Route path="/dashboard" element={<FermentationDashboard />} />
+            <Route path="/dashboard" element={<WinemakerDashboard />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.WINEMAKER} />}>
