@@ -41,6 +41,7 @@ import SendContract from "./components/partnerships/SendContract";
 import SignContract from "./components/partnerships/SignContract";
 import Wishlist from "./components/customers/Wishlist";
 import WineQuantity from "./components/util/WineQuantity";
+import WineRecommendations from "./components/customers/WineRecommendations";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -84,6 +85,13 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
             <Route path="/profile/wishlist" element={<Wishlist />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={ROLES.CUSTOMER} />}>
+            <Route
+              path="/profile/recommendations"
+              element={<WineRecommendations />}
+            />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={ROLES.ADMIN} />}>

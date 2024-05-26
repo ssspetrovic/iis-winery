@@ -1,8 +1,13 @@
+from .serializers import WineSerializer
+from .models import OrderItem, WishlistItem, Wine
 from rest_framework import viewsets
 from .models import Order, Wine, ShoppingCart, ShoppingCartItem, OrderItem, Wishlist, WishlistItem, CustomerNotificationSubscription
 from .serializers import OrderSerializer, WineSerializer, ShoppingCartItemSerializer, ShoppingCartSerializer, OrderItemSerializer, WishlistSerializer, WishlistItemSerializer, CustomerNotificationSubscriptionSerializer
-
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count
+import random
 # import googlemaps
 
 
@@ -45,39 +50,50 @@ class CustomerNotificationSubscriptionViewSet(viewsets.ModelViewSet):
     queryset = CustomerNotificationSubscription.objects.all()
     serializer_class = CustomerNotificationSubscriptionSerializer
 
-# def optimize_delivery_route(request, order_id):
-#     try:
-#         # Pronađi narudžbinu na osnovu ID-ja
-#         order = Order.objects.get(id=order_id)
-#         print(order.is_accepted)
-#         # Proveri da li je narudžbina prihvaćena
-#         if order.is_accepted:
-#             # Pripremi adrese kupca i vinara
-#             customer_address = order.customer.address
-#             winemaker_address = order.wines.first().winemaker.address
 
-#             # Dodaj brojeve ulica
-#             customer_street_number = order.customer.street_number
-#             winemaker_street_number = order.wines.first().winemaker.street_number
+class WineRecommendationView(APIView):
+    permission_classes = [IsAuthenticated]
 
-#             # Poveži se sa Google Maps API-jem
-#             gmaps = googlemaps.Client(key='AIzaSyBAx-8HIskKSQ2T4uE4SewJxYNtrzVeKDM')
+    def get(self, request):
+        customer = request.user
 
-#             # Napravi listu parova adresa i brojeva ulica za kupca i vinara
-#             customer_location = f"{customer_address}, {customer_street_number}"
-#             winemaker_location = f"{winemaker_address}, {winemaker_street_number}"
+        # Get wine IDs from OrderItems related to the customer's orders
+        order_wines = OrderItem.objects.filter(
+            order__customer=customer).values_list('wine', flat=True)
 
-#             # Izračunaj optimalnu rutu
-#             directions = gmaps.directions(origin=winemaker_location,
-#                                         destination=customer_location,
-#                                         mode='driving')
+        # Get wine IDs from WishlistItems related to the customer's wishlist
+        wishlist_wines = WishlistItem.objects.filter(
+            wishlist__customer=customer).values_list('wine', flat=True)
 
-#             # Analiziraj rezultate i ažuriraj status isporuke narudžbine
-#             distance = directions[0]['legs'][0]['distance']['text']
-#             duration = directions[0]['legs'][0]['duration']['text']
-#             # Ažuriraj status isporuke narudžbine ili bazu podataka sa podacima o ruti
-#             return JsonResponse({'message': 'Delivery route optimized successfully.', 'is_accepted': True})
-#         else:
-#             return JsonResponse({'error': 'Order is not accepted.'}, status=400)
-#     except Order.DoesNotExist:
-#         return JsonResponse({'error': 'Order not found.'}, status=404)
+        # Combine wines from orders and wishlist
+        wine_ids = list(set(order_wines) | set(wishlist_wines))
+
+        # Fetch all wines
+        wines = Wine.objects.filter(id__in=wine_ids)
+
+        # If there are no preferred wine types, return random wines from the entire wine list
+        if not wines.exists():
+            all_wines = Wine.objects.order_by('?')
+        else:
+            # Analyze preferences
+            wine_type_counts = wines.values('type').annotate(
+                count=Count('type')).order_by('-count')
+            preferred_type = wine_type_counts.first()['type'] if wine_type_counts else None
+
+            # Recommend wines of the same type if a preferred type is identified
+            if preferred_type:
+                all_wines = Wine.objects.filter(type=preferred_type).exclude(id__in=wine_ids).order_by('?')
+            else:
+                # Fallback to recommend random wines if no preferences found
+                all_wines = Wine.objects.exclude(id__in=wine_ids).order_by('?')
+
+        # Add count based on quantity for the preferred type
+        preferred_wine_count = all_wines.filter(type=preferred_type).count() if preferred_type else 0
+        all_wines = all_wines.annotate(total_quantity=Count('id') + preferred_wine_count)
+
+        # Now slice the QuerySet
+        recommendations = all_wines[:3]
+
+        # Serialize and return recommendations
+        serializer = WineSerializer(recommendations, many=True)
+        return Response(serializer.data)
