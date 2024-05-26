@@ -40,6 +40,7 @@ import PartnerList from "./components/partnerships/PartnerList";
 import SendContract from "./components/partnerships/SendContract";
 import SignContract from "./components/partnerships/SignContract";
 import Wishlist from "./components/customers/Wishlist";
+import WineQuantity from "./components/util/WineQuantity";
 import { ROLES } from "./components/auth/Roles";
 import "./index.css";
 import "./assets/styles.css";
@@ -57,6 +58,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/ordertest" element={<Orders />} />
+          <Route path="/wine-quantity" element={<WineQuantity />} />
 
           <Route path="/reset-password" element={<PasswordResetForm />} />
           <Route
