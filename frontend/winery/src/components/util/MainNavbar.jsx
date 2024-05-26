@@ -98,7 +98,7 @@ const MainNavbar = () => {
               )}
               {role == ROLES.CUSTOMER && (
                 <NavItem className="mx-md-2">
-                  <NavLink href="/orders" style={{ color: "white" }}>
+                  <NavLink href="/profile/orders" style={{ color: "white" }}>
                     Orders
                   </NavLink>
                 </NavItem>

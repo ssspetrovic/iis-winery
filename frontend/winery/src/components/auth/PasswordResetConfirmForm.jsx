@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Form,
@@ -106,7 +106,7 @@ const PasswordResetConfirmForm = () => {
           </Row>
           <Row>
             <div className="text-center mt-2">
-              <Button className="w-100" color="primary">
+              <Button className="w-100" color="dark">
                 Reset Password
               </Button>
             </div>

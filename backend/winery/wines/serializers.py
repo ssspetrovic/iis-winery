@@ -28,10 +28,12 @@ class WineSerializer(serializers.ModelSerializer):
 
         for subscription in subscriptions:
             customer = subscription.customer
+            print(customer.is_allowing_notifications)
             if customer.is_allowing_notifications:
+                print("sent mail")
                 send_mail(
                     'Wine Back in Stock',
-                    f'Dear {customer.name},\n\nThe wine "{
+                    f'Dear {customer.first_name},\n\nThe wine "{
                         wine.name}" is back in stock!',
                     'noreply@winery.com',
                     [customer.email],
@@ -150,8 +152,12 @@ class CustomerNotificationSubscriptionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
+        customer = data.get('customer')
         wine = data.get('wine')
         if wine.quantity > 0:
             raise serializers.ValidationError(
                 'Cannot subscribe to a wine that is in stock.')
+        if not customer.is_allowing_notifications:
+            raise serializers.ValidationError(
+                'Notifications not allowed. Please allow them in profile notification preferences.')
         return data

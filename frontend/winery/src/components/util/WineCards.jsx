@@ -14,12 +14,14 @@ import {
 } from "reactstrap";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
+import ConfirmModal from "./ConfirmModal";
 
 const WineCards = ({ filteredWines }) => {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const { username } = auth || {};
 
+  const [customerId, setCustomerId] = useState(null);
   const [cartId, setCartId] = useState();
   const [wishlistId, setWishlistId] = useState();
   const [selectedQuantities, setSelectedQuantities] = useState({});
@@ -27,17 +29,37 @@ const WineCards = ({ filteredWines }) => {
   const [buttonDisabled, setButtonDisabled] = useState({});
   const [wishlistItems, setWishlistItems] = useState(new Set());
   const [wishlistMap, setWishlistMap] = useState({});
+  const [subscriptions, setSubscriptions] = useState(new Set());
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    header: "",
+    body: "",
+    func: () => {},
+  });
+
+  const toggleConfirmModalOpen = () => {
+    setIsConfirmModalOpen(!isConfirmModalOpen);
+  };
 
   const fetchData = async () => {
     try {
+      const customerResponse = await axiosPrivate.get(
+        `/customers/${username}/`
+      );
+      const customerId = customerResponse.data.id;
+      setCustomerId(customerId);
+
       const cartsResponse = await axiosPrivate.get(
-        `/carts/?customer=${username}`
+        `/carts/?customer=${customerId}`
       );
       const wishlistResponse = await axiosPrivate.get(
-        `/wishlists/?customer=${username}`
+        `/wishlists/?customer=${customerId}`
       );
+
       setCartId(cartsResponse.data[0].id);
       setWishlistId(wishlistResponse.data[0].id);
+
       const wishlistItemsData = wishlistResponse.data[0].items;
       const wishlistItemIds = new Set(
         wishlistItemsData.map((item) => item.wine.id)
@@ -46,8 +68,18 @@ const WineCards = ({ filteredWines }) => {
         acc[item.wine.id] = item.id;
         return acc;
       }, {});
+
       setWishlistItems(wishlistItemIds);
       setWishlistMap(wishlistItemMap);
+
+      // Fetch customer subscriptions
+      const subscriptionsResponse = await axiosPrivate.get(
+        `/customer-subscriptions/?customer=${username}`
+      );
+      const subscriptionsData = subscriptionsResponse.data;
+      setSubscriptions(new Set(subscriptionsData));
+
+      console.log("Subscriptions:", subscriptionsData);
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +150,52 @@ const WineCards = ({ filteredWines }) => {
     });
   };
 
+  const toggleSubscription = async (wine) => {
+    try {
+      const subscription = Array.from(subscriptions).find(
+        (sub) => sub.wine === wine.id
+      );
+      if (subscription) {
+        // Unsubscribe
+        await axiosPrivate.delete(
+          `/customer-subscriptions/${subscription.id}/`
+        );
+        setSubscriptions((prev) => {
+          const updated = new Set(prev);
+          updated.delete(subscription);
+          return updated;
+        });
+      } else {
+        // Subscribe
+        const response = await axiosPrivate.post("/customer-subscriptions/", {
+          customer: customerId,
+          wine: wine.id,
+        });
+        console.log(response.data);
+        setSubscriptions((prev) => new Set([...prev, response.data]));
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.data) {
+        let errorMessage =
+          "Failed to update subscription. Please try again later.";
+        if (error.response.data.non_field_errors) {
+          errorMessage = error.response.data.non_field_errors.join(" ");
+        } else if (error.response.data.detail) {
+          errorMessage = error.response.data.detail;
+        }
+        setModalData({
+          header: "Notifications Preference",
+          body: errorMessage,
+        });
+        toggleConfirmModalOpen();
+        // alert(errorMessage);
+      } else {
+        alert("Failed to update subscription. Please try again later.");
+      }
+    }
+  };
+
   return filteredWines.length > 0 ? (
     filteredWines.map(
       (wine, outerIndex) =>
@@ -170,50 +248,82 @@ const WineCards = ({ filteredWines }) => {
                         <p className="mb-1 text-center">
                           <b>In stock:</b> {wine.quantity}
                         </p>
-                        <Row className="mt-3">
-                          <Col md={4}>
-                            <div className="d-flex justify-content-center align-items-center h-100">
-                              <Form>
-                                <Input
-                                  id={`wine-quantity-${wine.id}`}
-                                  type="number"
-                                  min="1"
-                                  max={wine.quantity}
-                                  className="text-center px-1"
-                                  value={selectedQuantities[wine.id] || "1"}
-                                  onChange={(e) => {
-                                    updateQuantity(
-                                      wine.id,
-                                      e.target.value,
-                                      wine.quantity
-                                    );
-                                  }}
-                                />
-                              </Form>
-                            </div>
-                          </Col>
-                          <Col md={8}>
-                            <div className="text-center my-auto">
+                        {wine.quantity === 0 ? (
+                          <Row className="mt-3">
+                            <div className="text-center">
                               <Button
                                 color="dark"
-                                className="w-100"
-                                disabled={buttonDisabled[wine.id]}
-                                onClick={() => {
-                                  addToCart(wine);
-                                }}
+                                onClick={() => toggleSubscription(wine)}
                               >
-                                <small>
-                                  {buttonTexts[wine.id] || "Add to cart"}
-                                </small>
+                                <div>
+                                  {Array.from(subscriptions).some(
+                                    (sub) => sub.wine === wine.id
+                                  ) ? (
+                                    <div>
+                                      <i className="fa fa-bell-slash mx-1 text-warning" />
+                                      <span className="mx-1">Unsubscribe</span>
+                                    </div>
+                                  ) : (
+                                    <div>
+                                      <i className="fa fa-bell mx-1 text-warning" />
+                                      <span className="mx-1">Subscribe</span>
+                                    </div>
+                                  )}
+                                </div>
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </Row>
+                        ) : (
+                          <Row className="mt-3">
+                            <Col md={4}>
+                              <div className="d-flex justify-content-center align-items-center h-100">
+                                <Form>
+                                  <Input
+                                    id={`wine-quantity-${wine.id}`}
+                                    type="number"
+                                    min="1"
+                                    max={wine.quantity}
+                                    className="text-center px-1"
+                                    value={selectedQuantities[wine.id] || "1"}
+                                    onChange={(e) => {
+                                      updateQuantity(
+                                        wine.id,
+                                        e.target.value,
+                                        wine.quantity
+                                      );
+                                    }}
+                                  />
+                                </Form>
+                              </div>
+                            </Col>
+                            <Col md={8}>
+                              <div className="text-center my-auto">
+                                <Button
+                                  color="dark"
+                                  className="w-100"
+                                  disabled={buttonDisabled[wine.id]}
+                                  onClick={() => {
+                                    addToCart(wine);
+                                  }}
+                                >
+                                  <small>
+                                    {buttonTexts[wine.id] || "Add to cart"}
+                                  </small>
+                                </Button>
+                              </div>
+                            </Col>
+                          </Row>
+                        )}
                       </div>
                     </CardBody>
                   </Card>
                 </Col>
               ))}
+            <ConfirmModal
+              isOpen={isConfirmModalOpen}
+              toggle={toggleConfirmModalOpen}
+              data={modalData}
+            />{" "}
           </Row>
         )
     )
