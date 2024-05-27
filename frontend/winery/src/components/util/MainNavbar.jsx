@@ -76,16 +76,6 @@ const MainNavbar = () => {
                       <span>Cellar</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem>
-                    <NavLink
-                      href="/materials"
-                      className="nav-link"
-                      style={{ color: "white" }}
-                    >
-                      <i className="fas fa-toolbox me-2" />
-                      <span>Materials</span>
-                    </NavLink>
-                  </NavItem>
                   <NavItem className="mx-md-2">
                     <NavLink
                       href="/winemaker-order-page"

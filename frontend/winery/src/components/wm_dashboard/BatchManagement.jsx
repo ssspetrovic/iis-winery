@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import axios from "../../api/axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import BatchCreationForm from './BatchCreateForm.jsx'
 
 function BatchManagement () {
     const [batches, setBatches] = useState([]);
-    const [newBatch, setNewBatch] = useState({ name: '', description: '' });
+    const [modalOpen, setModalOpen] = useState(false);
+
+    function toggleModal () {
+        setModalOpen(!modalOpen);
+    };
 
     useEffect(() => {
         fetchBatches();
@@ -13,12 +19,6 @@ function BatchManagement () {
     const fetchBatches = async () => {
         const response = await axios.get("/batches/");
         setBatches(response.data);
-    };
-
-    const handleCreateBatch = async () => {
-        const response = await axios.post("/batches/", newBatch);
-        setBatches([...batches, response.data]);
-        setNewBatch({ name: '', description: '' });
     };
 
     const handleUpdateBatch = async (batchId) => {
@@ -39,22 +39,6 @@ function BatchManagement () {
             <div className="card mb-4">
                 <div className="card-body">
                     <h3 className="card-title">Batch Management</h3>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Batch Name"
-                            value={newBatch.name}
-                            onChange={(e) => setNewBatch({ ...newBatch, name: e.target.value })}
-                        />
-                        <textarea
-                            className="form-control mt-2"
-                            placeholder="Batch Description"
-                            value={newBatch.description}
-                            onChange={(e) => setNewBatch({ ...newBatch, description: e.target.value })}
-                        />
-                        <button className="btn btn-success mt-2" onClick={handleCreateBatch}>Create Batch</button>
-                    </div>
                     <ul className="list-group">
                         {batches.map(batch => (
                             <li key={batch.id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -69,6 +53,13 @@ function BatchManagement () {
                             </li>
                         ))}
                     </ul>
+                    <button className="btn btn-primary mt-2" onClick={toggleModal}>Create</button>
+                    <Modal isOpen={modalOpen} toggle={toggleModal}>
+                        <ModalHeader toggle={toggleModal}><h2 className="mb-3">Add New Batch</h2></ModalHeader>
+                        <ModalBody>
+                        <BatchCreationForm toggleModal={toggleModal} fetchBatches={fetchBatches}/>
+                        </ModalBody>
+                    </Modal>
                 </div>
             </div>
         </div>
