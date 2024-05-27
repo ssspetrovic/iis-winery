@@ -7,8 +7,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count
-import random
-# import googlemaps
 
 
 class WineViewSet(viewsets.ModelViewSet):
@@ -78,18 +76,16 @@ class WineRecommendationView(APIView):
             # Analyze preferences
             wine_type_counts = wines.values('type').annotate(
                 count=Count('type')).order_by('-count')
-            preferred_type = wine_type_counts.first()['type'] if wine_type_counts else None
+            preferred_type = wine_type_counts.first(
+            )['type'] if wine_type_counts else None
 
             # Recommend wines of the same type if a preferred type is identified
             if preferred_type:
-                all_wines = Wine.objects.filter(type=preferred_type).exclude(id__in=wine_ids).order_by('?')
+                all_wines = Wine.objects.filter(
+                    type=preferred_type).order_by('?')
             else:
                 # Fallback to recommend random wines if no preferences found
-                all_wines = Wine.objects.exclude(id__in=wine_ids).order_by('?')
-
-        # Add count based on quantity for the preferred type
-        preferred_wine_count = all_wines.filter(type=preferred_type).count() if preferred_type else 0
-        all_wines = all_wines.annotate(total_quantity=Count('id') + preferred_wine_count)
+                all_wines = Wine.objects.order_by('?')
 
         # Now slice the QuerySet
         recommendations = all_wines[:3]
