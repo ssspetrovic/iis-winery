@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import WineCellar, WineTank, WineRacking, FermentationData, FermentationBatch
 from .serializers import WineCellarSerializer, WineTankSerializer, WineRackingSerializer, FermentationBatchSerializer, FermentationDataSerializer
+from users.models import Winemaker
 from rest_framework.generics import UpdateAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
@@ -98,6 +99,25 @@ class WineRackingViewSet(viewsets.ModelViewSet):
 class FermentationBatchViewSet(viewsets.ModelViewSet):
     queryset = FermentationBatch.objects.all()
     serializer_class = FermentationBatchSerializer
+
+    def create(self, request, *args, **kwargs):
+        winemaker_username = request.data['winemaker_username']
+
+        winemaker = Winemaker.objects.get(username=winemaker_username)
+
+        request.data['winemaker'] = winemaker.id
+        del request.data['winemaker_username']
+
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid()
+        
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
     
 class FermentationDataViewSet(viewsets.ModelViewSet):
     queryset = FermentationData.objects.all()

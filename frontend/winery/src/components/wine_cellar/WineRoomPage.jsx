@@ -34,7 +34,7 @@ function WineRoomsPage () {
       ))}
       <div className="d-flex justify-content-end">
         <span className="d-flex align-items-center me-3">Create Wine Cellar</span>
-        <i class="bi bi-plus-circle-fill" style={{ fontSize: '4rem', cursor: 'pointer' }} onClick={toggleModal}/>
+        <i className="bi bi-plus-circle-fill" style={{ fontSize: '4rem', cursor: 'pointer' }} onClick={toggleModal}/>
       </div>
       <Modal isOpen={modalOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}><h2 className="mb-3">Create Wine Cellar</h2></ModalHeader>
