@@ -20,8 +20,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib.enums import TA_RIGHT
+from collections import Counter
 
-from wines.models import Order, OrderItem
+from wines.models import Order, OrderItem, Wishlist, WishlistItem
 
 from vehicles.models import Vehicle
 from django.db.models import Count
@@ -512,6 +513,7 @@ class GenerateAdminPDF(APIView):
         return HttpResponse(buffer, content_type='application/pdf')
 
 
+# Custom style for centered headings
 centered_heading_style = ParagraphStyle(
     name="CenteredHeading", parent=styles['Heading2'], alignment=1)
 
@@ -621,7 +623,76 @@ class GenerateCustomerReport(APIView):
         else:
             elements.append(Paragraph("No orders found", styles['Normal']))
 
+        elements.append(Spacer(1, 20))
+
+        elements.append(Paragraph("Order Statistics", centered_heading_style))
+        elements.append(Spacer(1, 10))
+
+        # Generate Pie Charts
+        pie_charts = [
+            self.add_pie_chart(elements, orders, "Wine Type", "type"),
+            self.add_pie_chart(
+                elements, orders, "Wine Sweetness", "sweetness"),
+            self.add_pie_chart(elements, orders, "Wine Age", "age")
+        ]
+
+        # Add the pie charts to a table so they appear in the same row
+        pie_chart_table = Table([pie_charts], colWidths=[200, 200, 200])
+        elements.append(pie_chart_table)
+
+        elements.append(Spacer(1, 50))
+        elements.append(
+            Paragraph("Wishlist Statistics", centered_heading_style))
+        elements.append(Spacer(1, 10))
+
+        # Fetch wishlist items for the user
+        wishlist_items = WishlistItem.objects.filter(wishlist__customer=user)
+
+        if wishlist_items:
+            # Generate Pie Charts for wishlist items
+            wishlist_pie_charts = [
+                self.add_pie_chart(elements, wishlist_items,
+                                   "Wine Type", "type"),
+                self.add_pie_chart(elements, wishlist_items,
+                                   "Wine Sweetness", "sweetness"),
+                self.add_pie_chart(elements, wishlist_items, "Wine Age", "age")
+            ]
+            # Add the pie charts to a table so they appear in the same row
+            wishlist_pie_chart_table = Table(
+                [wishlist_pie_charts], colWidths=[200, 200, 200])
+            elements.append(wishlist_pie_chart_table)
+        else:
+            elements.append(
+                Paragraph("No wishlist items found", styles['Normal']))
+
         doc.build(elements)
         buffer.seek(0)
 
         return HttpResponse(buffer, content_type='application/pdf')
+
+    def add_pie_chart(self, elements, orders, title, attribute):
+        # Collect data
+        attribute_data = []
+        for order in orders:
+            order_items = OrderItem.objects.filter(order=order)
+            for item in order_items:
+                attribute_data.append(getattr(item.wine, attribute))
+
+        if attribute_data:
+            counter = Counter(attribute_data)
+            labels, sizes = zip(*counter.items())
+
+            # Set the figure size to ensure the pie chart is not stretched
+            fig, ax = plt.subplots(figsize=(6, 6))
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+            # Equal aspect ratio ensures that pie is drawn as a circle.
+            ax.axis('equal')
+            plt.title(title, fontsize=20)
+
+            img_buffer = io.BytesIO()
+            plt.savefig(img_buffer, format='png')
+            img_buffer.seek(0)
+            plt.close(fig)
+
+            # Return the Image object
+            return Image(img_buffer, width=200, height=200)
