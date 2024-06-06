@@ -88,6 +88,26 @@ const CustomerProfile = () => {
     setIsEditing(true);
   };
 
+  const generateReport = async () => {
+    try {
+      const response = await axiosPrivate.get(
+        `/customer/generate-report/?username=${username}`,
+        {
+          responseType: "blob",
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "customer-report.pdf");
+      document.body.appendChild(link);
+      link.click();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const confirm = async () => {
     setIsEditing(false);
 
@@ -326,15 +346,27 @@ const CustomerProfile = () => {
                 </Row>
               </FormGroup>
             </Form>
-            <Row className="mt-4">
-              <Col md={12} className="text-center">
+            <Row className="mt-4 mx-3">
+              <Col md={6} className="text-center">
                 <Button
-                  className="w-50"
+                  className="w-100"
                   color="dark"
                   hidden={isEditing}
                   onClick={edit}
                 >
                   Edit
+                </Button>
+              </Col>
+              <Col md={6} className="text-center">
+                <Button
+                  className="w-100"
+                  color="secondary"
+                  onClick={generateReport}
+                >
+                  <span>
+                    Generate Report
+                    <i className="fa fa-file-pdf px-2" />
+                  </span>
                 </Button>
               </Col>
               <Col md={6} className=" text-center">

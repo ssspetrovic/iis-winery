@@ -1,14 +1,15 @@
 from django.urls import path, include
 
 from .views import (
-    ReportCreateAPIView, 
-    ReportDetailAPIView, 
+    ReportCreateAPIView,
+    ReportDetailAPIView,
     LogoutAPIView,
     GetUserRoleAPIView,
     AuthenticatedHelloAPIView,
     CustomerViewSet,
     password_reset_token_created,
-    GenerateAdminPDF
+    GenerateAdminPDF,
+    GenerateCustomerReport
 )
 
 from rest_framework_simplejwt.views import (
@@ -26,7 +27,9 @@ urlpatterns = [
     path('logout/', LogoutAPIView.as_view(), name='logout'),
     path('api/<str:username>/role/', GetUserRoleAPIView.as_view(), name="get_role"),
     path('api/hello-auth/', AuthenticatedHelloAPIView.as_view(), name="hello_auth"),
-    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('api/password_reset/',
+         include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('generate-admin-pdf/', GenerateAdminPDF.as_view(), name='generate-all-pdf'),
+    path('api/customer/generate-report/',
+         GenerateCustomerReport.as_view(), name='generate-customer-report')
 ]
-
