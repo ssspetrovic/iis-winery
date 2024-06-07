@@ -12,7 +12,7 @@ function TaskManagement() {
 
     const fetchTasks = async () => {
         try {
-            const response = await axios.get(`/tasks/`);
+            //const response = await axios.get(`/tasks/`);
             setTasks(response.data);
         } catch (error) {
             console.error("Error fetching tasks:", error);
@@ -22,7 +22,7 @@ function TaskManagement() {
     const addTask = async () => {
         if (!newTask) return;
         try {
-            const response = await axios.post('/wine-prod/tasks', { description: newTask });
+            //const response = await axios.post('/wine-prod/tasks', { description: newTask });
             setTasks([...tasks, response.data]);
             setNewTask('');
         } catch (error) {
@@ -32,8 +32,8 @@ function TaskManagement() {
 
     const markTaskAsComplete = async (taskId) => {
         try {
-            await axios.patch(`/wine-prod/tasks/${taskId}`, { completed: true });
-            setTasks(tasks.map(task => task.id === taskId ? { ...task, completed: true } : task));
+            //await axios.patch(`/wine-prod/tasks/${taskId}`, { completed: true });
+            //setTasks(tasks.map(task => task.id === taskId ? { ...task, completed: true } : task));
         } catch (error) {
             console.error("Error marking task as complete:", error);
         }
