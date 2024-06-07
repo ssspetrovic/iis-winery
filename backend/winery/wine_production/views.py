@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import WineCellar, WineTank, WineRacking, FermentationData, FermentationBatch
-from .serializers import WineCellarSerializer, WineTankSerializer, WineRackingSerializer, FermentationBatchSerializer, FermentationDataSerializer
-from users.models import Winemaker
+from .models import WineCellar, WineTank, WineRacking, FermentationData, FermentationBatch, Task
+from .serializers import WineCellarSerializer, WineTankSerializer, WineRackingSerializer, FermentationBatchSerializer, FermentationDataSerializer, TaskSerializer
+from users.models import Winemaker, User
 from rest_framework.generics import UpdateAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
@@ -131,3 +131,24 @@ class FermentationDataViewSet(viewsets.ModelViewSet):
             queryset = FermentationData.objects.all()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+    def list(self, request):
+        queryset = Task.objects.all()
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Call the create method of the serializer
+            task = serializer.create(serializer.validated_data)
+            return Response({'message': 'Task created successfully'}, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

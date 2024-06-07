@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import WineTankViewSet, WineRackingViewSet, WineCellarDeleteAPIView, FermentationDataViewSet, FermentationBatchViewSet
+from .views import WineTankViewSet, WineRackingViewSet, WineCellarDeleteAPIView, FermentationDataViewSet, FermentationBatchViewSet, TaskViewSet
 
 urlpatterns = [
     path('wine-tanks/<int:room>/<str:tank_id>/', WineTankViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='winetank-retrieve-update-destroy'),
