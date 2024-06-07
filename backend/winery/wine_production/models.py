@@ -2,7 +2,7 @@ from django.db import models
 from wines.models import Wine
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from users.models import Winemaker
+from users.models import Winemaker, User
 
 class WineCellar(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -62,3 +62,13 @@ class FermentationData(models.Model):
     temperature = models.FloatField()
     sugar_level = models.FloatField()
     pH = models.FloatField()
+
+class Task(models.Model):
+    description = models.CharField(max_length=255)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
+
+    def __str__(self):
+        return self.description

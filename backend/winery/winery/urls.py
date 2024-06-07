@@ -22,7 +22,7 @@ from rest_framework import routers
 from users.views import UserViewSet, CustomerViewSet, WinemakerViewSet, ManagerViewSet, AdminViewSet, CityViewSet, ReportViewSet
 from vehicles.views import VehicleViewSet
 from wines.views import OrderViewSet, WineViewSet, ShoppingCartItemViewSet, ShoppingCartViewSet, OrderItemViewSet, WishlistViewSet, WishlistItemViewSet, CustomerNotificationSubscriptionViewSet
-from wine_production.views import WineCellarViewSet, WineTankViewSet, FermentationBatchViewSet, FermentationDataViewSet
+from wine_production.views import WineCellarViewSet, WineTankViewSet, FermentationBatchViewSet, FermentationDataViewSet, TaskViewSet
 from venues.views import VenueViewSet
 from events.views import EventViewSet
 from partnerships.views import PartnerViewSet
@@ -53,6 +53,7 @@ router.register(r'wishlists', WishlistViewSet)
 router.register(r'wishlist-items', WishlistItemViewSet)
 router.register(r'customer-subscriptions',
                 CustomerNotificationSubscriptionViewSet)
+router.register(r'tasks', TaskViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

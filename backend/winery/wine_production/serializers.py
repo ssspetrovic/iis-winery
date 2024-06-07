@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import WineTank, WineCellar, WineRacking, FermentationBatch, FermentationData
+from .models import WineTank, WineCellar, WineRacking, FermentationBatch, FermentationData, Task
 from wines.models import Wine
 from wines.serializers import WineSerializer
 from django.core.exceptions import ValidationError
@@ -56,4 +56,9 @@ class FermentationDataSerializer(serializers.ModelSerializer):
     batch = FermentationBatchSerializer()
     class Meta:
         model = FermentationData
+        fields = '__all__'
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
         fields = '__all__'
