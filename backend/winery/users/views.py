@@ -630,10 +630,9 @@ class GenerateCustomerReport(APIView):
 
         # Generate Pie Charts
         pie_charts = [
-            self.add_pie_chart(elements, orders, "Wine Type", "type"),
-            self.add_pie_chart(
-                elements, orders, "Wine Sweetness", "sweetness"),
-            self.add_pie_chart(elements, orders, "Wine Age", "age")
+            self.add_pie_chart(orders, "Wine Type", "type"),
+            self.add_pie_chart(orders, "Wine Sweetness", "sweetness"),
+            self.add_pie_chart(orders, "Wine Age", "age")
         ]
 
         # Add the pie charts to a table so they appear in the same row
@@ -651,11 +650,12 @@ class GenerateCustomerReport(APIView):
         if wishlist_items:
             # Generate Pie Charts for wishlist items
             wishlist_pie_charts = [
-                self.add_pie_chart(elements, wishlist_items,
-                                   "Wine Type", "type"),
-                self.add_pie_chart(elements, wishlist_items,
-                                   "Wine Sweetness", "sweetness"),
-                self.add_pie_chart(elements, wishlist_items, "Wine Age", "age")
+                self.add_pie_chart(
+                    wishlist_items, "Wine Type", "type", wishlist=True),
+                self.add_pie_chart(
+                    wishlist_items, "Wine Sweetness", "sweetness", wishlist=True),
+                self.add_pie_chart(
+                    wishlist_items, "Wine Age", "age", wishlist=True)
             ]
             # Add the pie charts to a table so they appear in the same row
             wishlist_pie_chart_table = Table(
@@ -670,29 +670,33 @@ class GenerateCustomerReport(APIView):
 
         return HttpResponse(buffer, content_type='application/pdf')
 
-    def add_pie_chart(self, elements, orders, title, attribute):
-        # Collect data
+    def add_pie_chart(self, items, title, attribute, wishlist=False):
+    # Collect data
         attribute_data = []
-        for order in orders:
-            order_items = OrderItem.objects.filter(order=order)
-            for item in order_items:
+        for item in items:
+            if wishlist:
                 attribute_data.append(getattr(item.wine, attribute))
+            else:
+                order_items = OrderItem.objects.filter(order=item)
+                for order_item in order_items:
+                    attribute_data.append(getattr(order_item.wine, attribute))
 
         if attribute_data:
             counter = Counter(attribute_data)
             labels, sizes = zip(*counter.items())
 
             # Set the figure size to ensure the pie chart is not stretched
-            fig, ax = plt.subplots(figsize=(6, 6))
-            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+            fig, ax = plt.subplots(figsize=(6, 6), dpi=300)  # Increase DPI for higher resolution
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, textprops={'fontsize': 14})
             # Equal aspect ratio ensures that pie is drawn as a circle.
             ax.axis('equal')
             plt.title(title, fontsize=20)
 
             img_buffer = io.BytesIO()
-            plt.savefig(img_buffer, format='png')
+            plt.savefig(img_buffer, format='png', dpi=300)  # Save with high DPI
             img_buffer.seek(0)
             plt.close(fig)
 
             # Return the Image object
             return Image(img_buffer, width=200, height=200)
+
